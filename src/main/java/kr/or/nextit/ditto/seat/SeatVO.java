@@ -1,4 +1,4 @@
-package seat;
+package kr.or.nextit.ditto.seat;
 
 import lombok.Data;
 
