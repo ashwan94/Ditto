@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(true);
@@ -31,14 +32,15 @@ const Header = () => {
     >
       <div className="bb ze ki xn 2xl:ud-px-0 oo wf yf i">
         <div className="vd to/4 tc wf yf">
-          <a href="#">
+          <Link to="/">
             <img className="om" src="/images/logo-light.svg" alt="Logo Light" />
             <img
               className="xc nm"
               src="/images/logo-dark.svg"
               alt="Logo Dark"
             />
-          </a>
+            <div>Ditto 팀의 로고는 이곳에 넣으면 됩니다</div>
+          </Link>
           <button
             className="po rc"
             onClick={() => setNavigationOpen(!navigationOpen)}
@@ -97,33 +99,6 @@ const Header = () => {
                     <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
                   </svg>
                 </a>
-                <ul className="a">
-                  <li>
-                    <a href="blog-grid.html" className="xl">
-                      Blog Grid
-                    </a>
-                  </li>
-                  <li>
-                    <a href="blog-single.html" className="xl">
-                      Blog Single
-                    </a>
-                  </li>
-                  <li>
-                    <a href="signin.html" className="xl">
-                      Sign In
-                    </a>
-                  </li>
-                  <li>
-                    <a href="signup.html" className="xl">
-                      Sign Up
-                    </a>
-                  </li>
-                  <li>
-                    <a href="404.html" className="xl">
-                      404
-                    </a>
-                  </li>
-                </ul>
               </li>
               <li>
                 <a href="index.html#support" className="xl">
@@ -162,12 +137,8 @@ const Header = () => {
               </label>
             </div>
 
-            <a href="signin.html" className="ek pk xl">
-              Sign In
-            </a>
-            <a href="signup.html" className="lk gh dk rg tc wf xf _l gi hi">
-              Sign Up
-            </a>
+            <Link to="/SignIn">Sign in</Link>
+            <Link to="/SignUp">Sign up</Link>
           </div>
         </div>
       </div>
