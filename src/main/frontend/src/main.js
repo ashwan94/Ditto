@@ -5,44 +5,28 @@ const Main = () => {
     <main>
       <section className="gj do ir hj sp jr i pg">
         <div className="xc fn zd/2 2xl:ud-w-187.5 bd 2xl:ud-h-171.5 h q r">
-          <img
-            src="/images/shape-01.svg"
-            alt="shape"
-            className="xc 2xl:ud-block h t -ud-left-[10%] ua"
-          />
-          <img
-            src="/images/shape-02.svg"
-            alt="shape"
-            className="xc 2xl:ud-block h u p va"
-          />
-          <img
-            src="/images/shape-03.svg"
-            alt="shape"
-            className="xc 2xl:ud-block h v w va"
-          />
-          <img src="/images/shape-04.svg" alt="shape" className="h q r" />
-          <img src="/images/hero.png" alt="Woman" className="h q r ua" />
+          <img src="/images/shape-04.svg" alt="shape" className="h q r"/>
+          <img src="/images/hero.png" alt="Woman" className="h q r ua w-full"/>
         </div>
+
 
         <div className="bb ze ki xn 2xl:ud-px-0">
           <div className="tc _o">
             <div className="animate_left jn/2">
               <h1 className="fk vj zp or kk wm wb">
-                We specialize in UI/UX, Web Development, Digital Marketing.
-              </h1>
+                [한석줍쇼] 는 새롭게 일하는 경험 입니다.</h1>
               <p className="fq">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-                fringilla magna mauris. Nulla fermentum viverra sem eu rhoncus
-                consequat varius nisi quis, posuere magna.
+                성과는 집중과 업무의 질, 그리고 환경에 의해 결정되는 시대 입니다.
+                다양한 라이프 스타일을 즐기듯, 업무에도 다채로운 환경과 공간, 지속 가능한 성과를 위한 변화가 필요 합니다.
               </p>
               <div className="tc tf yo zf mb">
                 <a href="#" className="ek jk lk gh gi hi rg ml il vc _d _l">
-                  Get Started Now
+                  지금 시작하기
                 </a>
                 <span className="tc sf">
                   <a href="#" className="inline-block ek xj kk wm">
                     {" "}
-                    Call us (0123) 456 – 789{" "}
+                    Call us 010 - 4567 – 7890{" "}
                   </a>
                   <span className="inline-block">
                     For any question or concern
@@ -62,8 +46,9 @@ const Main = () => {
                 <img src="images/icon-01.svg" alt="Icon" />
               </div>
               <div>
-                <h4 className="ek yj go kk wm xb">24/7 Support</h4>
-                <p>Lorem ipsum dolor sit amet conse adipiscing elit.</p>
+                <h4 className="ek yj go kk wm xb">연중무휴 지원</h4>
+                <p>비즈니스 환경의 변화에 따라 고객의 필요와 기대도 다양해지고 있습니다.
+                  이러한 변화에 대응하기 위해 고객 지원 서비스를 더욱 강화하고 있습니다.</p>
               </div>
             </div>
             <div className="animate_top kn to/3 tc cg oq">
@@ -71,8 +56,9 @@ const Main = () => {
                 <img src="images/icon-02.svg" alt="Icon" />
               </div>
               <div>
-                <h4 className="ek yj go kk wm xb">Take Ownership</h4>
-                <p>Lorem ipsum dolor sit amet conse adipiscing elit.</p>
+                <h4 className="ek yj go kk wm xb">회원제 서비스</h4>
+                <p>비즈니스 환경의 변화함에 따라 사무실 사용에 대한 니즈(needs)도 다양해 지고 있습니다.
+                자신에게 맞는 적절한 회원제 서비스를 이용해 보세요.</p>
               </div>
             </div>
             <div className="animate_top kn to/3 tc cg oq">
@@ -80,8 +66,8 @@ const Main = () => {
                 <img src="images/icon-03.svg" alt="Icon" />
               </div>
               <div>
-                <h4 className="ek yj go kk wm xb">Team Work</h4>
-                <p>Lorem ipsum dolor sit amet conse adipiscing elit.</p>
+                <h4 className="ek yj go kk wm xb">팟캐스트 서비스</h4>
+                <p>팟캐스트는 다양한 주제를 다루며, 누구나 쉽게 접근하고 구독할 수 있습니다.</p>
               </div>
             </div>
           </div>
@@ -99,7 +85,7 @@ const Main = () => {
                   className="h -ud-left-5 x"
                 />
                 <img src="images/about-01.png" alt="About" className="ib" />
-                <img src="images/about-02.png" alt="About" />
+                <img src="images/AD.29620316.1.jpg" alt="About" style={{borderRadius:"10  px"}}/>
               </div>
               <div>
                 <img src="images/shape-06.svg" alt="Shape" />
@@ -110,15 +96,14 @@ const Main = () => {
             <div className="animate_right jn/2">
               <h4 className="ek yj mk gb">Why Choose Us</h4>
               <h2 className="fk vj zp pr kk wm qb">
-                We Make Our customers happy by giving Best services.
+                고객을 위한 특별한 이벤트 서비스
               </h2>
               <p className="uo">
-                It is a long established fact that a reader will be distracted
-                by the readable content of a page when looking at its layout.
-                The point of using Lorem Ipsum.
+                우리의 목표는 고객 여러분께 최고의 즐거움을 제공하는 것입니다.
+                이를 위해 저희는 실시간 라이브 팟캐스트와 릴레이 소설 같은 다양한 이벤트성 서비스를 마련하였습니다.
               </p>
               <a
-                href="https://www.youtube.com/watch?v=xcJtL7QggTI"
+                href="https://tailwindcss.com/"
                 data-fslightbox
                 className="vc wf hg mb"
               >
@@ -215,7 +200,7 @@ const Main = () => {
                   </div>
                 </div>
               </div>
-              <h4 className="yj go kk wm ob zb">Olivia Andrium</h4>
+              <h4 className="yj go kk wm ob zb">김태완</h4>
               <p>Product Manager</p>
             </div>
 
@@ -282,7 +267,7 @@ const Main = () => {
                   </div>
                 </div>
               </div>
-              <h4 className="yj go kk wm ob zb">Jon Doerack</h4>
+              <h4 className="yj go kk wm ob zb">박연지</h4>
               <p>Product Manager</p>
             </div>
 
@@ -349,7 +334,7 @@ const Main = () => {
                   </div>
                 </div>
               </div>
-              <h4 className="yj go kk wm ob zb">Olivia Andrium</h4>
+              <h4 className="yj go kk wm ob zb">안승환</h4>
               <p>Product Manager</p>
             </div>
           </div>
