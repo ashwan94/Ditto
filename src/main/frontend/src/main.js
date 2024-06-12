@@ -3,39 +3,37 @@ import React from "react";
 const Main = () => {
   return (
     <main>
-      <section className="gj do ir hj sp jr i pg">
+      <section className="gj do ir hj sp jr i pg mb-24">
         <div className="xc fn zd/2 2xl:ud-w-187.5 bd 2xl:ud-h-171.5 h q r">
           <img src="/images/shape-04.svg" alt="shape" className="h q r"/>
-          <img src="/images/hero.png" alt="Woman" className="h q r ua w-full"/>
+          <img src="/images/hero.png" alt="Woman" className="h q r ua"/>
         </div>
-
-
         <div className="bb ze ki xn 2xl:ud-px-0">
           <div className="tc _o">
             <div className="animate_left jn/2">
-              <h1 className="fk vj zp or kk wm wb">
-                [한석줍쇼] 는 새롭게 일하는 경험 입니다.</h1>
-              <p className="fq">
-                성과는 집중과 업무의 질, 그리고 환경에 의해 결정되는 시대 입니다.
-                다양한 라이프 스타일을 즐기듯, 업무에도 다채로운 환경과 공간, 지속 가능한 성과를 위한 변화가 필요 합니다.
-              </p>
-              <div className="tc tf yo zf mb">
-                <a href="#" className="ek jk lk gh gi hi rg ml il vc _d _l">
-                  지금 시작하기
-                </a>
-                <span className="tc sf">
-                  <a href="#" className="inline-block ek xj kk wm">
-                    {" "}
-                    Call us 010 - 4567 – 7890{" "}
+            <h1 className="fk vj zp or kk wm wb">
+                  [한석줍쇼] 는 새롭게 일하는 경험 입니다.</h1>
+                <p className="fq">
+                  성과는 집중과 업무의 질, 그리고 환경에 의해 결정되는 시대 입니다.
+                  다양한 라이프 스타일을 즐기듯, 업무에도 다채로운 환경과 공간, 지속 가능한 성과를 위한 변화가 필요 합니다.
+                </p>
+                <div className="tc tf yo zf mb">
+                  <a href="#" className="ek jk lk gh gi hi rg ml il vc _d _l">
+                    지금 시작하기
                   </a>
-                  <span className="inline-block">
-                    For any question or concern
+                  <span className="tc sf">
+                    <a href="#" className="inline-block ek xj kk wm">
+                      {" "}
+                      Call us 010 - 4567 – 7890{" "}
+                    </a>
+                    <span className="inline-block">
+                      For any question or concern
+                    </span>
                   </span>
-                </span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
       </section>
 
       <section id="features">
@@ -78,22 +76,22 @@ const Main = () => {
         <div className="bb ze ki xn wq">
           <div className="tc wf gg qq">
             <div className="animate_left xc gn gg jn/2 i">
-              <div>
+              <div style={{width:"40rem"}}>
                 <img
                   src="images/shape-05.svg"
                   alt="Shape"
                   className="h -ud-left-5 x"
                 />
-                <img src="images/about-01.png" alt="About" className="ib" />
-                <img src="images/AD.29620316.1.jpg" alt="About" style={{borderRadius:"10  px"}}/>
+                <img src="images/istockphoto-1262283524-612x612.jpg" alt="About" className="ib" style={{borderRadius:"10px", height:"30%"}}/>
+                <img src="images/360_F_281818128_N2vO4wgyMUG8dHy8WLPxcQZPou6WnLm0.jpg" alt="About" style={{borderRadius:"10px", height:"25%"}}/>
               </div>
               <div>
                 <img src="images/shape-06.svg" alt="Shape" />
-                <img src="images/about-03.png" alt="About" className="ob gb" />
+                <img src="images/photo-1663524789625-b8d2ed6cac2b.jpg" alt="About" className="ob gb" style={{borderRadius:"10px", height:"40%"}} />
                 <img src="images/shape-07.svg" alt="Shape" className="bb" />
               </div>
             </div>
-            <div className="animate_right jn/2">
+            <div className="animate_right jn/2 mb-72">
               <h4 className="ek yj mk gb">Why Choose Us</h4>
               <h2 className="fk vj zp pr kk wm qb">
                 고객을 위한 특별한 이벤트 서비스
