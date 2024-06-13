@@ -4,7 +4,7 @@
   import Footer from "./pages/common/Footer";
   import SignIn from "./pages/common/SignIn";
   import SignUp from "./pages/common/SignUp";
-  import FreeBoard from "./pages/community/freeBoard/list";
+  import FreeBoard from "./pages/community/freeboard/list";
   import RelayBoard from "./pages/community/relayBoard/list";
   import Notice from "./pages/community/notice/list";
   import Podcast from "./pages/community/podcast/list";
