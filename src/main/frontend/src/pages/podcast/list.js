@@ -26,6 +26,7 @@ export default function PodcastList() {
   return (
     <>
       <div>리스트!!!!</div>
+      <div>테슽 성공</div>
       {podcasts &&
         podcasts.map((v, i) => {
           return (

@@ -20,7 +20,7 @@ public class PodcastController {
     @GetMapping("/podcast/list")
     public List<PodcastVO> select() {
         List<PodcastVO> vo = service.selectPodcast();
-        log.debug("팟캐스트 목록 조회 : {}", vo);
+        log.info("팟캐스트 목록 조회 : {}", vo);
         return vo;
     }
 
@@ -28,7 +28,7 @@ public class PodcastController {
     @GetMapping("/podcast/add")
     public List<PodcastVO> add() {
         List<PodcastVO> vo = service.selectPodcast();
-        log.debug("팟캐스트 채널 생성 : {}", vo);
+        log.info("팟캐스트 채널 생성 : {}", vo);
         return vo;
     }
 
