@@ -39,7 +39,6 @@ const Header = () => {
               src="/images/logo-dark.svg"
               alt="Logo Dark"
             />
-            <div>Ditto 팀의 로고는 이곳에 넣으면 됩니다</div>
           </Link>
           <button
             className="po rc"
@@ -80,7 +79,7 @@ const Header = () => {
                     className="xl tc wf yf bg"
                     onClick={(e) => e.preventDefault()}
                 >
-                  Ditto
+                  한석줍쇼
                   <svg
                       className="th mm we fd pf"
                       xmlns="http://www.w3.org/2000/svg"
