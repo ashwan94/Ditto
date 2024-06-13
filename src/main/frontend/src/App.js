@@ -5,6 +5,8 @@ import Footer from "./pages/common/Footer";
 import SignIn from "./pages/common/SignIn";
 import SignUp from "./pages/common/SignUp";
 import "./css/style.css";
+import BookList from "./pages/book/list";
+import Intro from "./pages/introduce/intro";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/book/list" element={<BookList />} />
+          <Route path="/intro" element={<Intro />} />
           <Route path="/SignIn" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
         </Routes>
