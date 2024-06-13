@@ -5,8 +5,10 @@ const Header = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [stickyMenu, setStickyMenu] = useState(false);
   const [navigationOpen, setNavigationOpen] = useState(false);
+  const [loginLog, setLoginLog] = useState(sessionStorage.getItem("login")); // Session 에서 가져온 로그인된 유저 정보
 
   useEffect(() => {
+    console.log("로그인 유저 정보 : ", loginLog);
     const savedDarkMode = JSON.parse(localStorage.getItem("darkMode"));
     if (savedDarkMode !== null) {
       setDarkMode(savedDarkMode);
@@ -26,6 +28,12 @@ const Header = () => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
+  // 로그아웃
+  const goLogout = () => {
+    sessionStorage.removeItem("login");
+    setLoginLog(sessionStorage.getItem("login")); // page rendering 을 위한 hook
+  }
+
   return (
     <header
       className={`g s r vd ya cj ${stickyMenu ? "hh sm _k dj bl ll" : ""}`}
@@ -33,12 +41,7 @@ const Header = () => {
       <div className="bb ze ki xn 2xl:ud-px-0 oo wf yf i">
         <div className="vd to/4 tc wf yf">
           <Link to="/">
-            <img className="om" src="/images/logo-light.svg" alt="Logo Light" />
-            <img
-              className="xc nm"
-              src="/images/logo-dark.svg"
-              alt="Logo Dark"
-            />
+            <img className="om w-48" src="/images/hansukjupshow_logo.png" alt="Logo Light" />
           </Link>
           <button
             className="po rc"
@@ -90,8 +93,9 @@ const Header = () => {
                   </svg>
                 </a>
                 <ul className="a">
-                  <li><Link to="/" className="xl">FAQ</Link></li>
-                  <li><Link to="/" className="xl">한석줍쇼 소개</Link></li>
+                  <li><Link to="/info" className="xl">한석줍쇼란?</Link></li>
+                  <li><Link to="/membership/info" className="xl">멤버십 소개</Link></li>
+                  <li><Link to="/faq" className="xl">FAQ</Link></li>
                 </ul>
               </li>
               <li className="c i" x-data="{ dropdown: false }">
@@ -111,10 +115,10 @@ const Header = () => {
                   </svg>
                 </a>
                 <ul className="a">
-                  <li><Link to="/" className="xl">자유게시판</Link></li>
-                  <li><Link to="/" className="xl">릴레이 소설</Link></li>
-                  <li><Link to="/" className="xl">공지사항</Link></li>
-                  <li><Link to="/" className="xl">팟캐스트</Link></li>
+                  <li><Link to="/community/notice/list" className="xl">공지사항</Link></li>
+                  <li><Link to="/community/freeBoard/list" className="xl">자유게시판</Link></li>
+                  <li><Link to="/community/relayBoard/list" className="xl">릴레이 소설</Link></li>
+                  <li><Link to="/community/podcast/list" className="xl">팟캐스트</Link></li>
                 </ul>
               </li>
               <li className="c i" x-data="{ dropdown: false }">
@@ -134,13 +138,13 @@ const Header = () => {
                   </svg>
                 </a>
                 <ul className="a">
-                  <li><Link to="/" className="xl">도서 목록 조회</Link></li>
-                  <li><Link to="/" className="xl">도서 상세보기</Link></li>
-                  <li><Link to="/" className="xl">도서 대출 주의사항 안내</Link></li>
+                  <li><Link to="/book/list" className="xl">도서 목록 조회</Link></li>
+                  <li><Link to="/book/view" className="xl">도서 상세보기</Link></li>
+                  <li><Link to="/book/warn" className="xl">도서 대출 주의사항 안내</Link></li>
                 </ul>
               </li>
               <li>
-                <Link to="/">좌석 배치도</Link>
+                <Link to="/seat/list">열람실</Link>
               </li>
             </ul>
           </nav>
@@ -174,8 +178,10 @@ const Header = () => {
               </label>
             </div>
 
-            <Link to="/SignIn">Sign in</Link>
-            <Link to="/SignUp">Sign up</Link>
+            {sessionStorage.getItem("login") ?
+                <button className="lk gh dk rg tc wf xf _l gi hi font-extrabold" onClick={goLogout}>로그아웃</button> :
+                <Link to="/SignIn" className="lk gh dk rg tc wf xf _l gi hi font-extrabold">로그인</Link>
+            }
           </div>
         </div>
       </div>
