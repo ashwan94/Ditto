@@ -6,8 +6,6 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@Getter
-//Setter
 public class BookVO {
     private int bookNo;
     private String bookName;

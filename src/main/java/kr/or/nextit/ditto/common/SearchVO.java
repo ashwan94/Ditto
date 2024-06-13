@@ -1,5 +1,6 @@
 package kr.or.nextit.ditto.common;
 
+
 public class SearchVO {
 	private String searchType;
 	private String searchWord;
