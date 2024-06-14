@@ -45,6 +45,22 @@
             AND a.STATUS = 'Y'
     </select>
 
+    <select id="getBoardDetail" resultMap="freeBoardResultMap">
+        SELECT
+            FREE_BOARD_NO,
+            MEMBER_ID,
+            FREE_TITLE,
+            FREE_CONTENT,
+            HITS,
+            REGISTER_TIME,
+            MODIFY_TIME,
+            STATUS
+        FROM
+            FREE_BOARD
+        WHERE
+            FREE_BOARD_NO = #{freeBoardNo}
+    </select>
+
    <!-- <insert id="createPost">
         INSERT INTO FREE_BOARD (MEMBER_ID, FREE_TITLE, FREE_CONTENT, REGISTER_TIME, STATUS)
         VALUES (#{memberId}, #{freeTitle}, #{freeContent}, CURRENT_TIMESTAMP, 'Y') &lt;!&ndash; 새로운 게시물을 생성하는 SQL 쿼리 &ndash;&gt;

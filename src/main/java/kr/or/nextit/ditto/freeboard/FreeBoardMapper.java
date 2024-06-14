@@ -8,6 +8,7 @@ import java.util.List;
 public interface FreeBoardMapper {
     List<FreeBoardVO> getBoardList(); // 모든 게시물을 조회하는 메서드
     List<FreeBoardVO> searchBoardList(@Param("keyword") String keyword); // 제목을 기준으로 게시물을 검색하는 메서드
+    FreeBoardVO getBoardDetail(@Param("freeBoardNo") int freeBoardNo);
 //    void createPost(FreeBoardVO post); // 새로운 게시물을 생성하는 메서드
 //    void updatePost(FreeBoardVO post); // 기존 게시물을 수정하는 메서드
 //    void deletePost(int freeBoardNo); // 게시물을 삭제하는 메서드

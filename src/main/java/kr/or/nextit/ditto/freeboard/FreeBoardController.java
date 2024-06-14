@@ -30,6 +30,12 @@ public class FreeBoardController {
         return vo;
     }
 
+    @GetMapping("/freeboard/view/{freeBoardNo}")
+    @ResponseBody
+    public FreeBoardVO getBoardDetail(@PathVariable int freeBoardNo) {
+        return freeBoardService.getBoardDetail(freeBoardNo);
+    }
+
 //    @PostMapping
 //    public void createPost(@RequestBody FreeBoardVO post) {
 //        freeBoardService.createPost(post); // 새로운 게시물을 생성합니다.

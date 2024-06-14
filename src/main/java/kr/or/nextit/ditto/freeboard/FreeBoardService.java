@@ -13,8 +13,11 @@ public class FreeBoardService {
 
     public List<FreeBoardVO> getBoardList(){
         return mapper.getBoardList();
-    }; // 모든 게시물을 조회하는 메서드
+    } // 모든 게시물을 조회하는 메서드
     public List<FreeBoardVO> searchBoardList(@Param("keyword") String keyword){
         return mapper.searchBoardList(keyword);
-    };
+    }
+    public FreeBoardVO getBoardDetail(int freeBoardNo) {
+        return mapper.getBoardDetail(freeBoardNo);
+    }
 }

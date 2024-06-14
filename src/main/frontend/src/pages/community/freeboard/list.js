@@ -68,14 +68,18 @@ export default function List () {
                             </tr>
                             </thead>
                             <tbody>
-                            {boardList.map((board, i) => (
-                                <tr key={board.freeBoardNo}>
-                                    <td>{i + 1}</td>
-                                    <th>{board.freeTitle}</th>
-                                    <td>{board.memberId}</td>
-                                    <td>{new Date(board.registerTime).toLocaleString()}</td>
-                                    <td>{board.hits}</td>
-                                </tr>
+                            {boardList.map(board => (
+                                    <tr key={board.freeBoardNo}>
+                                            <td>{board.freeBoardNo}</td>
+                                            <th>
+                                                <Link to={`/community/freeBoard/view/${board.freeBoardNo}`}>
+                                                    {board.freeTitle}
+                                                </Link>
+                                            </th>
+                                            <td>{board.memberId}</td>
+                                            <td>{new Date(board.registerTime).toLocaleString()}</td>
+                                            <td>{board.hits}</td>
+                                    </tr>
                             ))}
                             </tbody>
                         </table>
