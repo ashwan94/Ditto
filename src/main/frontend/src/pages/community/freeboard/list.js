@@ -25,9 +25,7 @@ export default function List () {
         const res = await axios.get(`/freeboard/search?keyword=${keyword}`)
         console.log("데이터 결과 : ", res.data);
         if (res.data) {
-            if(res.data != ""){
-                setBoardList(res.data);
-            }
+            setBoardList(res.data)
         }
     }
 
@@ -42,7 +40,7 @@ export default function List () {
                 <div id="board-search">
                     <div className="container">
                         <div className="search-window">
-                            <form action="">
+
                                 <div className="search-wrap">
                                     <label htmlFor="search" className="blind">공지사항 내용 검색</label>
                                     <input
@@ -50,9 +48,9 @@ export default function List () {
                                         id="search" type="text" placeholder="검색어를 입력해주세요." value={keyword} />
                                     <button
                                         onClick={handleSearch}
-                                        type="submit" className="btn btn-dark">검색</button>
+                                       className="btn btn-dark">검색</button>
                                 </div>
-                            </form>
+
                         </div>
                     </div>
                 </div>

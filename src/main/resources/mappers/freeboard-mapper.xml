@@ -42,6 +42,7 @@
             FREE_BOARD a
         WHERE
             a.FREE_TITLE LIKE CONCAT('%', #{keyword}, '%')
+            AND a.STATUS = 'Y'
     </select>
 
    <!-- <insert id="createPost">

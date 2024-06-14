@@ -26,6 +26,7 @@ public class FreeBoardController {
     @ResponseBody
     public List<FreeBoardVO> searchBoardList(@RequestParam String keyword) {
         List<FreeBoardVO> vo = freeBoardService.searchBoardList(keyword); // 제목을 기준으로 게시물을 검색합니다.
+        log.info("결과: {}", vo);
         return vo;
     }
 
