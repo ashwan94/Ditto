@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../../css/board.css';
+import {Link} from "react-router-dom";
 
 export default function List () {
     const [boardList, setBoardList] = useState([]);
@@ -67,17 +68,18 @@ export default function List () {
                             </tr>
                             </thead>
                             <tbody>
-                                {boardList.map((board,i) => (
-                                    <tr key={board.freeBoardNo}>
-                                        <td>{i + 1}</td>
-                                        <th>{board.freeTitle}</th>
-                                        <td>{board.memberId}</td>
-                                        <td>{new Date(board.registerTime).toLocaleString()}</td>
-                                        <td>{board.hits}</td>
-                                    </tr>
-                                ))}
+                            {boardList.map((board, i) => (
+                                <tr key={board.freeBoardNo}>
+                                    <td>{i + 1}</td>
+                                    <th>{board.freeTitle}</th>
+                                    <td>{board.memberId}</td>
+                                    <td>{new Date(board.registerTime).toLocaleString()}</td>
+                                    <td>{board.hits}</td>
+                                </tr>
+                            ))}
                             </tbody>
                         </table>
+                            <Link to="/community/freeBoard/add" className="btn">게시글 등록</Link>
                     </div>
                 </div>
             </section>
