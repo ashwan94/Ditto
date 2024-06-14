@@ -24,5 +24,9 @@ public class BookService {
         return mapper.selectBooks(vo);
     }
 
+    public BookVO getBook(int bookNo) {
+        return mapper.getBook(bookNo);
+    }
+
 
 }

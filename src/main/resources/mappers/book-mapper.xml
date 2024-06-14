@@ -49,7 +49,18 @@
         </where>
 
     ) C
-<!--        WHERE C.BOOK_NO BETWEEN #{firstRecordIndex} AND #{lastRecordIndex}-->
-        LIMIT #{firstRecordIndex}, 10
+        WHERE C.BOOK_NO BETWEEN #{firstRecordIndex} AND #{lastRecordIndex}
+<!--        LIMIT #{firstRecordIndex}, 10-->
+<!--        LIMIT 로 하면 가장 첫번째 도서가 누락됩니다. . . -->
+    </select>
+
+
+<!--  getBook 도서 정보 상세보기 쿼리문   -->
+    <select id="getBook" parameterType="int" resultType="bookVO">
+        SELECT *
+        FROM
+            book
+        WHERE
+            BOOK_NO = #{bookNo}
     </select>
 </mapper>
