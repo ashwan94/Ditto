@@ -19,7 +19,7 @@ public class BookController {
 
     @GetMapping("/book/list")
     public HashMap<String, Object> selectBooks(SearchVO vo, @RequestParam(value = "currentPageNo", defaultValue = "1") int currentPageNo) {
-        // 페이지네이션 기본 설정 (정적, 변동X)
+
         int totalCount = service.getBookListCount(vo);
         List<BookVO> list = service.selectBooks(vo);
 //

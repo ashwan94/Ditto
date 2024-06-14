@@ -1,17 +1,15 @@
 package kr.or.nextit.ditto.common;
 
+import lombok.Data;
 
+@Data
 public class SearchVO {
 	private String searchType;
 	private String searchWord;
 	private int firstRecordIndex;
 	private int lastRecordIndex;
-	public SearchVO() {
-	}
-	public SearchVO(String searchType, String searchWord) {
-		this.searchType = searchType;
-		this.searchWord = searchWord;
-	}
+
+
 	public String getSearchType() {
 		return searchType;
 	}

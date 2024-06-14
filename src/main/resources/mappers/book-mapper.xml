@@ -8,11 +8,22 @@
             COUNT(*) CNT
         FROM
             BOOK
+
+      <!--  WHERE
+            <if test="searchWord 비어있지 않을 떄">
+                <if test='searchType == "title"'>
+                    A.BOOK_NAME LIKE '%' || #{searchWord} || '%'
+                </if>
+                <if test='searchType == "content"'>
+                    A.BOOK_AUTHOR LIKE '%' || #{searchWord} || '%'
+                </if>
+            </if>-->
+
         <where>
-            <if test="searchType == 'title'">
+            <if test='searchType == "bookName"'>
                 A.BOOK_NAME LIKE '%' || #{searchWord} || '%'
             </if>
-            <if test="searchType == 'content'">
+            <if test='searchType == "bookAuthor"'>
                 A.BOOK_AUTHOR LIKE '%' || #{searchWord} || '%'
             </if>
         </where>
@@ -40,11 +51,11 @@
         )
             B
         <where>
-            <if test="searchType == 'title'">
-                B.BOOK_NAME LIKE '%' || #{searchWord} || '%'
+            <if test="searchType == 'bookName'">
+                BOOK_NAME LIKE '%' || #{searchWord} || '%'
             </if>
-            <if test="searchType == 'content'">
-                B.BOOK_AUTHOR LIKE '%' || #{searchWord} || '%'
+            <if test="searchType == 'bookAuthor'">
+                BOOK_AUTHOR LIKE '%' || #{searchWord} || '%'
             </if>
         </where>
 
