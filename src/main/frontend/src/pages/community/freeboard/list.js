@@ -2,23 +2,34 @@ import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../../css/board.css';
 
-const FreeBoard = () => {
-    const [posts, setPosts] = useState([]);
-    const [searchBoard, setSearchBoard] = useState("");
+export default function List () {
+    const [boardList, setBoardList] = useState([]);
+    const [keyword, setKeyword] = useState("");
 
-    const searchBoardOnChangeHandler = useCallback((e) => {
-        setSearchBoard(e.target.value);
+    const searchKeywordOnChangeHandler = useCallback((e) => {
+        setKeyword(e.target.value);
     }, []);
+
+    const getData = async () => {
+        const res = await axios.get('/freeboard/list')
+        if (res.data) {
+            setBoardList(res.data);
+        }
+    }
 
     useEffect(() => {
-        axios.get('/freeboard/list')
-            .then(response => {
-                setPosts(response.data);
-            })
-            .catch(error => {
-                console.error('에러 발생:', error);
-            });
+        getData();
     }, []);
+
+    const handleSearch = async  () => {
+        const res = await axios.get(`/freeboard/search?keyword=${keyword}`)
+        console.log("데이터 결과 : ", res.data);
+        if (res.data) {
+            if(res.data != ""){
+                setBoardList(res.data);
+            }
+        }
+    }
 
     return (
         <div>
@@ -35,9 +46,11 @@ const FreeBoard = () => {
                                 <div className="search-wrap">
                                     <label htmlFor="search" className="blind">공지사항 내용 검색</label>
                                     <input
-                                        onChange={searchBoardOnChangeHandler}
-                                        id="search" type="search" placeholder="검색어를 입력해주세요." value={searchBoard} />
-                                    <button type="submit" className="btn btn-dark">검색</button>
+                                        onChange={searchKeywordOnChangeHandler}
+                                        id="search" type="text" placeholder="검색어를 입력해주세요." value={keyword} />
+                                    <button
+                                        onClick={handleSearch}
+                                        type="submit" className="btn btn-dark">검색</button>
                                 </div>
                             </form>
                         </div>
@@ -50,19 +63,19 @@ const FreeBoard = () => {
                             <tr>
                                 <th scope="col" className="th-num">번호</th>
                                 <th scope="col" className="th-title">제목</th>
-                                <th scope="col" className="th-nick-name">닉네임</th>
+                                <th scope="col" className="th-id">아이디</th>
                                 <th scope="col" className="th-date">등록일</th>
                                 <th scope="col" className="th-hits">조회수</th>
                             </tr>
                             </thead>
                             <tbody>
-                                {posts.map((post,index) => (
-                                    <tr key={index}>
-                                        <td>{post.freeBoardNo}</td>
-                                        <th>{post.freeTitle}</th>
-                                        <td>{post.memberId}</td>
-                                        <td>{new Date(post.registerTime).toLocaleString()}</td>
-                                        <td>{post.hits}</td>
+                                {boardList.map((board,i) => (
+                                    <tr key={board.freeBoardNo}>
+                                        <td>{i + 1}</td>
+                                        <th>{board.freeTitle}</th>
+                                        <td>{board.memberId}</td>
+                                        <td>{new Date(board.registerTime).toLocaleString()}</td>
+                                        <td>{board.hits}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -73,5 +86,3 @@ const FreeBoard = () => {
         </div>
     );
 };
-
-export default FreeBoard;

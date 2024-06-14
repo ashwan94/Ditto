@@ -1,7 +1,20 @@
 package kr.or.nextit.ditto.freeboard;
 
+import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
-public interface FreeBoardService {
-    List<FreeBoardVO> getAllFreeBoards(); // 모든 게시글을 조회하는 서비스 메서드
+@Service
+@RequiredArgsConstructor
+public class FreeBoardService {
+    private final FreeBoardMapper mapper;
+
+    public List<FreeBoardVO> getBoardList(){
+        return mapper.getBoardList();
+    }; // 모든 게시물을 조회하는 메서드
+    public List<FreeBoardVO> searchBoardList(@Param("keyword") String keyword){
+        return mapper.searchBoardList(keyword);
+    };
 }

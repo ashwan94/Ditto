@@ -4,23 +4,61 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.or.nextit.ditto.freeboard.FreeBoardMapper">
-    <!-- Mapper 인터페이스와 연결된 XML 파일 -->
 
-    <select id="getAllFreeBoards" resultType="kr.or.nextit.ditto.freeboard.FreeBoardVO">
-        <!-- 모든 활성화된 게시글을 조회하는 SQL 쿼리 -->
+    <resultMap id="freeBoardResultMap" type="kr.or.nextit.ditto.freeboard.FreeBoardVO">
+        <id property="freeBoardNo" column="FREE_BOARD_NO"/> <!-- 게시판 번호 매핑 -->
+        <result property="memberId" column="MEMBER_ID"/> <!-- 회원 ID 매핑 -->
+        <result property="freeTitle" column="FREE_TITLE"/> <!-- 게시물 제목 매핑 -->
+        <result property="freeContent" column="FREE_CONTENT"/> <!-- 게시물 내용 매핑 -->
+        <result property="hits" column="HITS"/> <!-- 조회수 매핑 -->
+        <result property="registerTime" column="REGISTER_TIME"/> <!-- 등록 시간 매핑 -->
+        <result property="modifyTime" column="MODIFY_TIME"/> <!-- 수정 시간 매핑 -->
+        <result property="status" column="STATUS"/> <!-- 상태 매핑 -->
+    </resultMap>
+
+    <!-- 모든 게시물을 조회하는 SQL 쿼리 -->
+    <select id="getBoardList" resultMap="freeBoardResultMap">
         SELECT
-            free_board_no,
-            member_id,
-            free_title,
-            free_content,
-            hits,
-            register_time,
-            modify_time,
-            status
+            a.FREE_BOARD_NO,
+            a.MEMBER_ID,
+            a.FREE_TITLE,
+            a.HITS,
+            a.REGISTER_TIME
         FROM
-            FREE_BOARD
+            FREE_BOARD a
         WHERE
-            STATUS = 'Y'
+            a.STATUS = 'Y'
     </select>
+
+    <!-- 제목에 검색어가 포함된 게시물을 조회하는 SQL 쿼리 -->
+    <select id="searchBoardList" resultMap="freeBoardResultMap">
+        SELECT
+            a.FREE_BOARD_NO,
+            a.FREE_TITLE,
+            a.MEMBER_ID,
+            a.REGISTER_TIME,
+            a.HITS
+        FROM
+            FREE_BOARD a
+        WHERE
+            a.FREE_TITLE LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+   <!-- <insert id="createPost">
+        INSERT INTO FREE_BOARD (MEMBER_ID, FREE_TITLE, FREE_CONTENT, REGISTER_TIME, STATUS)
+        VALUES (#{memberId}, #{freeTitle}, #{freeContent}, CURRENT_TIMESTAMP, 'Y') &lt;!&ndash; 새로운 게시물을 생성하는 SQL 쿼리 &ndash;&gt;
+    </insert>
+
+    <update id="updatePost">
+        UPDATE FREE_BOARD SET
+        FREE_TITLE = #{freeTitle},
+        FREE_CONTENT = #{freeContent},
+        MODIFY_TIME = CURRENT_TIMESTAMP
+        WHERE FREE_BOARD_NO = #{freeBoardNo} &lt;!&ndash; 기존 게시물을 수정하는 SQL 쿼리 &ndash;&gt;
+    </update>
+
+    <delete id="deletePost">
+        DELETE FROM FREE_BOARD WHERE FREE_BOARD_NO = #{freeBoardNo} &lt;!&ndash; 게시물을 삭제하는 SQL 쿼리 &ndash;&gt;
+    </delete>-->
 
 </mapper>
