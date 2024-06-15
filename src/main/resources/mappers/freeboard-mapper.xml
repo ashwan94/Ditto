@@ -31,7 +31,21 @@
     </select>
 
     <!-- 제목에 검색어가 포함된 게시물을 조회하는 SQL 쿼리 -->
-    <select id="searchBoardList" resultMap="freeBoardResultMap">
+    <select id="searchBoardListByTitle" resultMap="freeBoardResultMap">
+        SELECT
+        a.FREE_BOARD_NO,
+        a.FREE_TITLE,
+        a.MEMBER_ID,
+        a.REGISTER_TIME,
+        a.HITS
+        FROM
+        FREE_BOARD a
+        WHERE
+        a.FREE_TITLE LIKE CONCAT('%', #{keyword}, '%')
+        AND a.STATUS = 'Y'
+    </select>
+    <!-- 아이디가 검색어에 포함되있는경우 -->
+    <select id="searchBoardListByMemberId" resultMap="freeBoardResultMap">
         SELECT
             a.FREE_BOARD_NO,
             a.FREE_TITLE,
@@ -41,7 +55,7 @@
         FROM
             FREE_BOARD a
         WHERE
-            a.FREE_TITLE LIKE CONCAT('%', #{keyword}, '%')
+            a.MEMBER_ID LIKE CONCAT('%', #{keyword}, '%')
             AND a.STATUS = 'Y'
     </select>
 
@@ -61,21 +75,27 @@
             FREE_BOARD_NO = #{freeBoardNo}
     </select>
 
-   <!-- <insert id="createPost">
-        INSERT INTO FREE_BOARD (MEMBER_ID, FREE_TITLE, FREE_CONTENT, REGISTER_TIME, STATUS)
-        VALUES (#{memberId}, #{freeTitle}, #{freeContent}, CURRENT_TIMESTAMP, 'Y') &lt;!&ndash; 새로운 게시물을 생성하는 SQL 쿼리 &ndash;&gt;
-    </insert>
+<!--   <insert id="createPost">-->
+<!--        INSERT INTO FREE_BOARD (MEMBER_ID, FREE_TITLE, FREE_CONTENT, REGISTER_TIME, STATUS)-->
+<!--        VALUES (#{memberId}, #{freeTitle}, #{freeContent}, CURRENT_TIMESTAMP, 'Y')-->
+<!--    </insert>-->
 
-    <update id="updatePost">
-        UPDATE FREE_BOARD SET
-        FREE_TITLE = #{freeTitle},
-        FREE_CONTENT = #{freeContent},
-        MODIFY_TIME = CURRENT_TIMESTAMP
-        WHERE FREE_BOARD_NO = #{freeBoardNo} &lt;!&ndash; 기존 게시물을 수정하는 SQL 쿼리 &ndash;&gt;
-    </update>
+<!--    <update id="updatePost">-->
+<!--        UPDATE-->
+<!--            FREE_BOARD-->
+<!--        SET-->
+<!--            FREE_TITLE = #{freeTitle},-->
+<!--            FREE_CONTENT = #{freeContent},-->
+<!--            MODIFY_TIME = CURRENT_TIMESTAMP-->
+<!--        WHERE-->
+<!--            FREE_BOARD_NO = #{freeBoardNo}-->
+<!--    </update>-->
 
-    <delete id="deletePost">
-        DELETE FROM FREE_BOARD WHERE FREE_BOARD_NO = #{freeBoardNo} &lt;!&ndash; 게시물을 삭제하는 SQL 쿼리 &ndash;&gt;
-    </delete>-->
+<!--    <delete id="deletePost">-->
+<!--        DELETE FROM-->
+<!--            FREE_BOARD-->
+<!--        WHERE-->
+<!--            FREE_BOARD_NO = #{freeBoardNo}-->
+<!--    </delete>-->
 
 </mapper>

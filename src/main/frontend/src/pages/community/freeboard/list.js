@@ -1,14 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
-import '../../../css/board.css';
+// import '../../../css/board.css';
+import '../../../css/boardView.css'
 import {Link} from "react-router-dom";
 
 export default function List () {
     const [boardList, setBoardList] = useState([]);
     const [keyword, setKeyword] = useState("");
+    const [searchType, setSearchType] = useState("freeTitle");
 
     const searchKeywordOnChangeHandler = useCallback((e) => {
         setKeyword(e.target.value);
+    }, []);
+
+    const searchTypeOnChangeHandler = useCallback((e) => {
+        setSearchType(e.target.value);
     }, []);
 
     const getData = async () => {
@@ -23,70 +29,75 @@ export default function List () {
     }, []);
 
     const handleSearch = async  () => {
-        const res = await axios.get(`/freeboard/search?keyword=${keyword}`)
+        const res = await axios.get(`/freeboard/search?keyword=${keyword}&type=${searchType}`)
         console.log("데이터 결과 : ", res.data);
         if (res.data) {
             setBoardList(res.data)
         }
     }
 
+    const allList = () =>{
+        getData();
+    }
+
     return (
-        <div>
-            <section className="notice">
-                <div className="page-title">
-                    <div className="container">
-                        <h3>자유게시판</h3>
-                    </div>
-                </div>
-                <div id="board-search">
-                    <div className="container">
-                        <div className="search-window">
-
-                                <div className="search-wrap">
-                                    <label htmlFor="search" className="blind">공지사항 내용 검색</label>
-                                    <input
-                                        onChange={searchKeywordOnChangeHandler}
-                                        id="search" type="text" placeholder="검색어를 입력해주세요." value={keyword} />
-                                    <button
-                                        onClick={handleSearch}
-                                       className="btn btn-dark">검색</button>
-                                </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div id="board-list">
-                    <div className="container">
-                        <table className="board-table">
-                            <thead>
-                            <tr>
-                                <th scope="col" className="th-num">번호</th>
-                                <th scope="col" className="th-title">제목</th>
-                                <th scope="col" className="th-id">아이디</th>
-                                <th scope="col" className="th-date">등록일</th>
-                                <th scope="col" className="th-hits">조회수</th>
+        <article className="mt-32 ml-32 mr-32">
+            <div>
+                <Link to={`/community/freeBoard/list`} onClick={allList}><h3 className="center">자유게시판</h3></Link><br/>
+                <hr className="hr1" noshade/>
+                <span>총 {boardList.length} 개의 게시물이 있습니다.</span>
+                <span className="right">
+                    <span className="grey" id="strong">SELECT</span>
+                    <select onChange={searchTypeOnChangeHandler}>
+                        <option value="제목">제목</option>
+                        <option value="글쓴이">글쓴이</option>
+                    </select>
+                    <input
+                        onChange={searchKeywordOnChangeHandler}
+                        type="text" value={keyword}/>
+                    <button
+                        onClick={handleSearch}
+                        name="검색" className="gradient">
+                        검색
+                    </button>
+                </span><br/>
+                <table>
+                    <thead>
+                        <tr>
+                            <th className="small-col">번호</th>
+                            <th className="large-col">제목</th>
+                            <th className="sl-col">글쓴이</th>
+                            <th className="middle-col">일시</th>
+                            <th className="small-col">조회수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {boardList.map((board,i)=> (
+                            <tr key={board.freeBoardNo}>
+                                <td className="center small-col">{board.freeBoardNo}</td>
+                                <td className="left large-col">
+                                    <Link to={`/community/freeBoard/view/${board.freeBoardNo}`}>
+                                        {board.freeTitle}
+                                    </Link>
+                                </td>
+                                <td className="center small-col">{board.memberId}</td>
+                                <td className="center sl-col">{new Date(board.registerTime).toLocaleString()}</td>
+                                <td className="center small-col">{board.hits}</td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {boardList.map(board => (
-                                    <tr key={board.freeBoardNo}>
-                                            <td>{board.freeBoardNo}</td>
-                                            <th>
-                                                <Link to={`/community/freeBoard/view/${board.freeBoardNo}`}>
-                                                    {board.freeTitle}
-                                                </Link>
-                                            </th>
-                                            <td>{board.memberId}</td>
-                                            <td>{new Date(board.registerTime).toLocaleString()}</td>
-                                            <td>{board.hits}</td>
-                                    </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                            <Link to="/community/freeBoard/add" className="btn">게시글 등록</Link>
-                    </div>
+                        ))}
+                    </tbody>
+                </table>
+                <br/>
+                <div className="center">
+                    <a href="https://www.naver.com">◀ 이전</a>
+                    <a href="https://www.naver.com">1</a>
+                    <a href="https://www.naver.com">다음 ▶</a>
                 </div>
-            </section>
-        </div>
+                <span className="right">
+                    <Link to={`/community/freeBoard/list`}><button className="greylist" onClick={allList}>목록</button></Link>
+                    <Link to={`/community/freeBoard/add`}><button className="gradient">글쓰기</button></Link>
+                </span>
+            </div>
+        </article>
     );
 };
