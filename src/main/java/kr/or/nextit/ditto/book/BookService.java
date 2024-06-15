@@ -17,7 +17,6 @@ public class BookService {
     }
 
     public int getBookListCount(SearchVO vo) {
-        System.out.println(vo.getSearchType());
         return mapper.getBookListCount(vo);
     }
 

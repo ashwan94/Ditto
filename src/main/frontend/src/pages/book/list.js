@@ -23,7 +23,8 @@ export default function BookList() {
                 params: {
                     firstRecordIndex: fristRecordIndex,
                     lastRecordIndex: lastRecordIndex,
-                    searchWord:searchWord
+                    searchWord:"희미한",
+                    searchType:"bookName"
                 }
             });
             setBookList(res.data.list);
@@ -31,7 +32,7 @@ export default function BookList() {
             // 도서 총 개수
             // const totalCount = res.data.totalCount;
             // 335개이므로 34개의 페이지 버튼이 있어야함
-
+            console.log(searchWord);
             console.log("도서 목록 : ", res.data.list);
             // console.log(res.data);
             // console.log(totalCount)

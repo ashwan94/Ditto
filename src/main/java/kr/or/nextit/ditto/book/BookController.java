@@ -19,7 +19,7 @@ public class BookController {
 
     @GetMapping("/book/list")
     public HashMap<String, Object> selectBooks(SearchVO vo, @RequestParam(value = "currentPageNo", defaultValue = "1") int currentPageNo) {
-
+        System.out.println(vo);
         int totalCount = service.getBookListCount(vo);
         List<BookVO> list = service.selectBooks(vo);
 //

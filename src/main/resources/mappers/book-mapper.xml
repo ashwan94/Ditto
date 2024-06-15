@@ -7,17 +7,7 @@
         SELECT
             COUNT(*) CNT
         FROM
-            BOOK
-
-      <!--  WHERE
-            <if test="searchWord 비어있지 않을 떄">
-                <if test='searchType == "title"'>
-                    A.BOOK_NAME LIKE '%' || #{searchWord} || '%'
-                </if>
-                <if test='searchType == "content"'>
-                    A.BOOK_AUTHOR LIKE '%' || #{searchWord} || '%'
-                </if>
-            </if>-->
+            BOOK A
 
         <where>
             <if test='searchType == "bookName"'>
