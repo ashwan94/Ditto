@@ -12,8 +12,8 @@ export default function BookList() {
     const [currentPage, setCurrentPage] = useState(1);
     // 한 페이지에 보일 게시글의 개수
     const recordsPerPage = 10;
-    const pageCount = 10;
 
+    /* 화면에 도서 목록을 그리는 getData 함수 */
     const getData = async () => {
         try {
             // console.log(currentPage);
@@ -23,16 +23,12 @@ export default function BookList() {
                 params: {
                     firstRecordIndex: fristRecordIndex,
                     lastRecordIndex: lastRecordIndex,
-                    searchWord:"희미한",
-                    searchType:"bookName"
+                    searchWord:searchWord,
+                    searchType:searchType
                 }
             });
             setBookList(res.data.list);
             setCurrentPage(currentPage);
-            // 도서 총 개수
-            // const totalCount = res.data.totalCount;
-            // 335개이므로 34개의 페이지 버튼이 있어야함
-            console.log(searchWord);
             console.log("도서 목록 : ", res.data.list);
             // console.log(res.data);
             // console.log(totalCount)
@@ -40,10 +36,28 @@ export default function BookList() {
             console.error("Error fetching data:", error);
         }
     };
+
+
+
+    /* 검색 기능을 위한 검색 키워드, 검색 타이틀 체인지 핸들러 */
     const [searchWord, setSearchWord] = useState("")
-    const selectedOnChangeHandler = (e) =>{
+    const [searchType, setSearchType] = useState("bookName")
+    const searchWordOnChangeHandler = (e) =>{
         setSearchWord(e.target.value)
+
     }
+    const searchTypeOnChangeHandler = (e) =>{
+        setSearchType(e.target.value)
+
+    }
+
+    useEffect(() => {
+        console.log("검색 기능 타입과 키워드 확인용")
+        console.log(searchWord)
+        console.log(searchType)
+    }, [searchWord,searchType]);
+
+    /* 현재 페이지가 바뀔때마다 도서 목록을 교체하기 위한 useEffect 훅 */
     useEffect(() => {
         getData();
         // getPageNumList();
@@ -52,7 +66,7 @@ export default function BookList() {
     /* 페이징처리 */
     const totalCount = 335; //책목록 전체건수
     const [pageNumList, setPageNumList] = useState([]); //페이지번호 목록
-    const pageNumListSize = 10; //페이지번호 목록(10개)
+    const pageNumListSize = 10; //페이지 번호 목록(10개)
 
     //페이지 번호 목록 생성
     const getPageNumList = (startNum) => {
@@ -68,11 +82,13 @@ export default function BookList() {
         setPageNumList(list)
         setCurrentPage(startNum)
     }
+
+    /* 처음에 pageNumList가 비어있는 값이면 버튼을 그리지 못하므로 1로 default 값 주기 */
     useEffect(() => {
         getPageNumList(1)
     }, []);
 
-    //이전
+    /* 이전 버튼 클릭 이벤트 */
     const goClickPrev = () => {
         window.scrollTo({
             top: 0,
@@ -87,6 +103,7 @@ export default function BookList() {
             return  alert("정보가 없습니다.");
         }
     }
+    /* 이후 버튼 클릭 이벤트 */
     const goClickNext = () => {
         window.scrollTo({
             top: 0,
@@ -99,32 +116,39 @@ export default function BookList() {
         }
     }
 
+    /* 페이지 변경 확인용 훅
     useEffect(() => {
         console.log("페이지 변경 => ", currentPage)
     }, [currentPage]);
+    */
 
+    /* 검색 버튼 이벤트 */
+    const searchBook = () => {
+        getData();
+    }
 
     return (
         <main>
             <section className="gj do ir hj sp jr i pg rundry">
                 <div className="bb ze ki xn 2xl:ud-px-0">
-                    <form action="/book/list" method="get">
+                    <form action={`/book/list?searchWord=${searchWord}`} method="get">
                         <label>
-                            <select name="searchType">
+                            <select name="searchType" onChange={searchTypeOnChangeHandler}>
                                 <option value="bookName">제목</option>
                                 <option value="bookAuthor">저자</option>
                             </select>
                         </label>
                         <label>
-                            <input onChange={selectedOnChangeHandler} type="text" name="searchWord" placeholder="검색어"/>
+                            <input onChange={searchWordOnChangeHandler} type="text" name="searchWord" placeholder="검색어"/>
                         </label>
-                        <button>검색</button>
+                        <button type="text" onClick={searchBook}>검색</button>
                     </form>
 
                     {bookList && bookList.length > 0 ? (
                         bookList.map((v, i) => (
                             <ul role="list" className="divide-y divide-gray-100"  key={`bookList`+i}>
-                                <Link to={`/book/view/${v.bookNo}`}>
+                                {/*<Link to={`/book/view/${v.bookNo}`}>*/}
+                                <Link to={`/book/view?bookNo=${v.bookNo}`}>
                                     <li className="flex justify-between gap-x-6 py-5">
                                         <div className="flex min-w-0 gap-x-4">
                                             <img className="h-60 w-60 flex-none rounded-md bg-gray-50 border-2 p-1"

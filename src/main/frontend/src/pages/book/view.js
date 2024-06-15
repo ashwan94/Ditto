@@ -1,14 +1,16 @@
 import {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams, useSearchParams} from "react-router-dom";
 import axios from "axios";
 import "../../css/board.css"
 
 export default function BookView() {
-    const {bookNo} = useParams();
+    // const {bookNo} = useParams();
+    const [searchParams, setSearchParams] = useSearchParams()
     const [book, setBook] = useState({});
     const [bookRent, setBookRent] = useState(true);
 
     console.log("BookView");
+    const bookNo = searchParams.get("bookNo");
     console.log(bookNo);
 
     const getBook = async () => {

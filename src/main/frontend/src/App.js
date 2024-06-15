@@ -17,7 +17,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/book/list" element={<BookList />} />
-          <Route path="/book/view/:bookNo" element={<BookView />} />
+
+          {/* view의 parameter 가져오는 방법을 전환하는 작업 진행중 */}
+          {/*<Route path="/book/view/:bookNo" element={<BookView />} />*/}
+          <Route path="/book/view" element={<BookView />} />
+
+
           <Route path="/intro" element={<Intro />} />
           <Route path="/SignIn" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
