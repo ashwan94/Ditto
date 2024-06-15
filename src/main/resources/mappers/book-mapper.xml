@@ -11,14 +11,14 @@
 
         <where>
             <!--   아무런 검색 키워드를 입력하지 않은 경우 그냥 전체 목록 띄우기   -->
-            <if test='searchWord == ""' >
+            <if test='searchWord == ""'>
 
             </if>
             <if test='searchType == "bookName"'>
-                A.BOOK_NAME LIKE '%' || #{searchWord} || '%'
+                A.BOOK_NAME LIKE CONCAT('%', #{searchWord} ,'%')
             </if>
             <if test='searchType == "bookAuthor"'>
-                A.BOOK_AUTHOR LIKE '%' || #{searchWord} || '%'
+                A.BOOK_AUTHOR LIKE CONCAT('%', #{searchWord} ,'%')
             </if>
         </where>
     </select>
@@ -46,14 +46,14 @@
             B
         <where>
             <!--   아무런 검색을 하지 않을 경우 그냥 전체 목록 띄우기   -->
-            <if test='searchType != "bookName" and searchWord == ""' >
+            <if test='searchWord == ""'>
 
             </if>
             <if test='searchType == "bookName"'>
-                B.BOOK_NAME LIKE '%' || #{searchWord} || '%'
+                B.BOOK_NAME LIKE CONCAT('%', #{searchWord} ,'%')
             </if>
             <if test='searchType == "bookAuthor"'>
-                B.BOOK_AUTHOR LIKE '%' || #{searchWord} || '%'
+                B.BOOK_AUTHOR LIKE CONCAT('%', #{searchWord} ,'%')
             </if>
         </where>
 

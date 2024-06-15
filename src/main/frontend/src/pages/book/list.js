@@ -3,7 +3,6 @@ import axios from "axios";
 import {Link} from "react-router-dom";
 
 
-
 export default function BookList() {
 
     // 도서 리스트
@@ -23,10 +22,12 @@ export default function BookList() {
                 params: {
                     firstRecordIndex: fristRecordIndex,
                     lastRecordIndex: lastRecordIndex,
-                    searchWord:searchWord,
-                    searchType:searchType
+                    searchWord: searchWord,
+                    searchType: searchType
                 }
             });
+            console.log(searchType)
+            console.log(searchWord)
             setBookList(res.data.list);
             setCurrentPage(currentPage);
             console.log("도서 목록 : ", res.data.list);
@@ -38,15 +39,14 @@ export default function BookList() {
     };
 
 
-
     /* 검색 기능을 위한 검색 키워드, 검색 타이틀 체인지 핸들러 */
     const [searchWord, setSearchWord] = useState("")
     const [searchType, setSearchType] = useState("bookName")
-    const searchWordOnChangeHandler = (e) =>{
+    const searchWordOnChangeHandler = (e) => {
         setSearchWord(e.target.value)
 
     }
-    const searchTypeOnChangeHandler = (e) =>{
+    const searchTypeOnChangeHandler = (e) => {
         setSearchType(e.target.value)
 
     }
@@ -55,7 +55,7 @@ export default function BookList() {
         console.log("검색 기능 타입과 키워드 확인용")
         console.log(searchWord)
         console.log(searchType)
-    }, [searchWord,searchType]);
+    }, [searchWord, searchType]);
 
     /* 현재 페이지가 바뀔때마다 도서 목록을 교체하기 위한 useEffect 훅 */
     useEffect(() => {
@@ -96,11 +96,10 @@ export default function BookList() {
         });
         if (currentPage > 1) {
             getPageNumList(pageNumList[0] - 10);
-        }
-        else {
+        } else {
             // 1 ~ 10 페이지보다 더 앞 페이지는 없으므로 막기
             getPageNumList(1);
-            return  alert("정보가 없습니다.");
+            return alert("정보가 없습니다.");
         }
     }
     /* 이후 버튼 클릭 이벤트 */
@@ -123,30 +122,38 @@ export default function BookList() {
     */
 
     /* 검색 버튼 이벤트 */
-    const searchBook = () => {
+    const searchBook = (e) => {
         getData();
+        e.preventDefault();
     }
 
     return (
         <main>
             <section className="gj do ir hj sp jr i pg rundry">
                 <div className="bb ze ki xn 2xl:ud-px-0">
-                    <form action={`/book/list?searchWord=${searchWord}`} method="get">
-                        <label>
-                            <select name="searchType" onChange={searchTypeOnChangeHandler}>
-                                <option value="bookName">제목</option>
-                                <option value="bookAuthor">저자</option>
-                            </select>
-                        </label>
-                        <label>
-                            <input onChange={searchWordOnChangeHandler} type="text" name="searchWord" placeholder="검색어"/>
-                        </label>
-                        <button type="text" onClick={searchBook}>검색</button>
-                    </form>
+
+                    <div id="board-search">
+
+                        <form action={`/book/list?searchWord=${searchWord}`} method="get">
+                            <label>
+                                <select name="searchType" onChange={searchTypeOnChangeHandler}>
+                                    <option value="bookName">제목</option>
+                                    <option value="bookAuthor">저자</option>
+                                </select>
+                            </label>
+                            <label>
+                                <input onChange={searchWordOnChangeHandler} type="text" name="searchWord"
+                                       placeholder="검색어를 입력해주세요."/>
+                            </label>
+                            <button type="text" onClick={searchBook}  className="btn btn-dark">검색</button>
+                        </form>
+                    </div>
+
+                    <div className="border-2 mt-5" />
 
                     {bookList && bookList.length > 0 ? (
                         bookList.map((v, i) => (
-                            <ul role="list" className="divide-y divide-gray-100"  key={`bookList`+i}>
+                            <ul role="list" className="divide-y divide-gray-100" key={`bookList` + i}>
                                 {/*<Link to={`/book/view/${v.bookNo}`}>*/}
                                 <Link to={`/book/view?bookNo=${v.bookNo}`}>
                                     <li className="flex justify-between gap-x-6 py-5">
@@ -158,7 +165,8 @@ export default function BookList() {
                                                 <p className="text-xl font-bold leading-6 text-gray-900">
                                                     {v.bookName}
                                                 </p>
-                                                <p className="text-sm font-bold leading-6 text-black">저자 : {v.bookAuthor}</p>
+                                                <p className="text-sm font-bold leading-6 text-black">저자
+                                                    : {v.bookAuthor}</p>
                                                 <p className="text-sm font-bold text-black">출판사 : {v.bookCompany}</p>
                                                 <p className="mt-1 text-sm leading-5 text-gray-500">출판날짜
                                                     : {v.bookRelease}</p>
@@ -177,8 +185,8 @@ export default function BookList() {
                     )
                     }
                     {/* 페이지 버튼 시작 */}
-                    <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}
-                        className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
+                    <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
+                         className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
 
                         <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
                              aria-label="Pagination">
@@ -198,7 +206,7 @@ export default function BookList() {
                                     return (
                                         <Link
                                             className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                            key={`page`+i}
+                                            key={`page` + i}
                                             to={`/book/list?currentPageNo=${v}`} onClick={() => {
                                             // 버튼 클릭 시 현재 페이지 번호 변화
                                             setCurrentPage(v)
