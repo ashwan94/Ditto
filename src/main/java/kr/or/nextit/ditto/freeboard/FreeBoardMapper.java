@@ -4,13 +4,14 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
-@Mapper // MyBatis 매퍼 인터페이스임을 명시
+@Mapper
 public interface FreeBoardMapper {
-    List<FreeBoardVO> getBoardList(); // 모든 게시물을 조회하는 메서드
-    List<FreeBoardVO> searchBoardListByTitle(@Param("keyword") String keyword); // 제목을 기준으로 게시물을 검색하는 메서드
-    List<FreeBoardVO> searchBoardListByMemberId(@Param("keyword") String keyword);
-    FreeBoardVO getBoardDetail(@Param("freeBoardNo") int freeBoardNo);
-    void addBoard(FreeBoardVO post); // 새로운 게시물을 생성하는 메서드
-//    void updatePost(FreeBoardVO post); // 기존 게시물을 수정하는 메서드
-//    void deletePost(int freeBoardNo); // 게시물을 삭제하는 메서드
+    List<FreeBoardVO> getBoardList();                                               // 모든 게시글 조회
+    List<FreeBoardVO> searchBoardListByTitle(@Param("keyword") String keyword);     // 제목으로 게시글 검색
+    List<FreeBoardVO> searchBoardListByMemberId(@Param("keyword") String keyword);  // 작성자로 게시글 검색
+    FreeBoardVO getBoardDetail(int freeBoardNo);                                    // 게시글 상세보기
+    void incrementHits(int freeBoardNo);                                            // 게시글 조회수
+    int addBoard(FreeBoardVO post);     // 게시글 쓰기
+    void updatePost(FreeBoardVO vo);    // 게시글 수정
+    void deletePost(int freeBoardNo);   // 게시글 삭제
 }

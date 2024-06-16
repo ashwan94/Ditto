@@ -2,59 +2,75 @@ package kr.or.nextit.ditto.freeboard;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequiredArgsConstructor// Lombok을 사용하여 생성자를 자동으로 생성하고 의존성을 주입
+@RequiredArgsConstructor
+@RequestMapping("/freeBoard")
 public class FreeBoardController {
 
-    private final FreeBoardService freeBoardService; // FreeBoardService를 주입
+    private final FreeBoardService freeBoardService;
 
-    @GetMapping("/freeboard/list")
-    @ResponseBody // json 형식으로 보내주기 위해 필요함 @Controller썼을떄고 @RestController 사용 했을떄는  @ResponseBody 안붙여도됨
-    // GET 방식으로 보낼떄만 RestController 사용
+    // 전체 게시글 조회
+    @GetMapping("/list")
     public List<FreeBoardVO> getBoardList() {
-        List<FreeBoardVO> vo = freeBoardService.getBoardList(); // 모든 게시물을 조회=
+        List<FreeBoardVO> vo = freeBoardService.getBoardList();
         return vo;
     }
 
-    @GetMapping("/freeboard/search")
-    @ResponseBody
-    public List<FreeBoardVO> searchBoardList(@RequestParam String keyword, @RequestParam String type) {
+    // 게시글 검색
+    @GetMapping("/search")
+    public List<FreeBoardVO> searchBoardList(String keyword, String type) {
         List<FreeBoardVO> vo;
         if ("글쓴이".equals(type)){
-            vo = freeBoardService.searchBoardListByMemberId(keyword); // 제목을 기준으로 게시물 검색
+            vo = freeBoardService.searchBoardListByMemberId(keyword); // 제목 기준 검색
         }else{
-            vo = freeBoardService.searchBoardListByTitle(keyword); // 검색어를 기준으로 게시물 검색
+            vo = freeBoardService.searchBoardListByTitle(keyword); // 검색어 기준 검색
         }
         return vo;
     }
 
-    @GetMapping("/freeboard/view/{freeBoardNo}")
-    @ResponseBody
-    public FreeBoardVO getBoardDetail(@PathVariable int freeBoardNo) {
-        return freeBoardService.getBoardDetail(freeBoardNo);
+    // TODO
+    // 1. 자유게시판 조회수, 게시글 작성에 대해 Controller 에서 param, Mapping 정보를 변경하였으므로 수정 필요
+    // 2. 조회수 중복 증가 방지 처리
+
+    // 조회수 증가 + 게시글 상세조회
+    @GetMapping("/view")
+    public FreeBoardVO getBoardDetail(int freeBoardNo) {
+        freeBoardService.incrementHits(freeBoardNo);
+        return  freeBoardService.getBoardDetail(freeBoardNo);
     }
 
-    @PostMapping("/freeboard")
-    @ResponseBody
-    public ResponseEntity<String> addBoard(@RequestBody FreeBoardVO post) {
-        freeBoardService.addBoard(post); // 새로운 게시물을 생성
-        return ResponseEntity.ok("포스트 생성 성고옹!");
+    // 게시글 작성
+    @PostMapping("/register")
+    public ResponseEntity<?> addBoard(@RequestBody FreeBoardVO post) {
+        freeBoardService.addBoard(post); // useGeneratedKeys 속성을 이용해 post.getFreeBoardNo 가
+                                         // 방금 insert 된 data 의 freeBoardNo 로 변경됨 => 따로 변수에 담지 않아도 됨!
+        return ResponseEntity.ok(post.getFreeBoardNo());
     }
-//
-//    @PutMapping
-//    public void updatePost(@RequestBody FreeBoardVO post) {
-//        freeBoardService.updatePost(post); // 기존 게시물을 수정
-//    }
-//
-//    @DeleteMapping("/freeboard/{freeBoardNo}")
-//    public void deletePost(@PathVariable int freeBoardNo) {
-//        freeBoardService.deletePost(freeBoardNo); // 게시물을 삭제
-//    }
+
+    // 게시글 수정
+    // * 이 부분이 제일 난해했다
+    // 계속 400, 415 등 이상한 에러가 발생함
+    // 대표적으로 Content-Type 'application/x-www-form-urlencoded;charset=UTF-8' 를 지원하지 않는다고 나온다
+    // @RequestBody 를 삭제했고 axios.post(url, config) 로 썼다가 axios.post(url, null, config) 로 수정하니
+    // controller 에서 제대로 데이터를 받아올 수 있게 됐다
+    // React-Quill 같은 라이브러리와 합쳐진 상태로 게시판을 작성하려니 머리가 터진다
+    // 이미지 처리 때문에 자잘한 에러가 많이 발생하는듯함!
+    @PostMapping("/update")
+    public void updatePost(FreeBoardVO vo) {
+        log.info("글 번호 : {}", vo);
+        freeBoardService.updatePost(vo);
+    }
+
+    // 게시글 삭제
+    @PutMapping("/delete")
+    public void deletePost(int freeBoardNo) {
+        log.info("전달받은 게시글 번호 : {}", freeBoardNo);
+        freeBoardService.deletePost(freeBoardNo);
+    }
 }

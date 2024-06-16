@@ -22,8 +22,11 @@
             a.FREE_BOARD_NO,
             a.MEMBER_ID,
             a.FREE_TITLE,
+            a.FREE_CONTENT,
             a.HITS,
-            a.REGISTER_TIME
+            a.REGISTER_TIME,
+            a.MODIFY_TIME,
+            a.STATUS
         FROM
             FREE_BOARD a
         WHERE
@@ -59,7 +62,8 @@
             AND a.STATUS = 'Y'
     </select>
 
-    <select id="getBoardDetail" resultMap="freeBoardResultMap">
+<!--  상세 게시글 조회  -->
+    <select id="getBoardDetail" parameterType="int" resultMap="freeBoardResultMap">
         SELECT
             FREE_BOARD_NO,
             MEMBER_ID,
@@ -75,36 +79,43 @@
             FREE_BOARD_NO = #{freeBoardNo}
     </select>
 
-<!--    <update id="getBoardDetail">-->
-<!--        UPDATE-->
-<!--            FREE_BOARD-->
-<!--        SET-->
-<!--            HITS = #{hits + 1}-->
-<!--        WHERE-->
-<!--            FREE_BOARD_NO = #{freeBoardNo}-->
-<!--    </update>-->
+    <update id="incrementHits">
+        UPDATE
+            FREE_BOARD
+        SET
+            HITS = HITS + 1
+        WHERE
+            FREE_BOARD_NO = #{freeBoardNo}
+    </update>
 
-   <insert id="addBoard">
-        INSERT INTO FREE_BOARD (MEMBER_ID, FREE_TITLE, FREE_CONTENT)
-        VALUES (#{memberId}, #{freeTitle}, #{freeContent})
+   <insert id="addBoard" parameterType="freeBoardVO" useGeneratedKeys="true" keyProperty="freeBoardNo">
+        INSERT INTO FREE_BOARD
+            (MEMBER_ID, FREE_TITLE, FREE_CONTENT)
+        VALUES
+            (#{memberId}, #{freeTitle}, #{freeContent})
     </insert>
 
-<!--    <update id="updatePost">-->
-<!--        UPDATE-->
-<!--            FREE_BOARD-->
-<!--        SET-->
-<!--            FREE_TITLE = #{freeTitle},-->
-<!--            FREE_CONTENT = #{freeContent},-->
-<!--            MODIFY_TIME = CURRENT_TIMESTAMP-->
-<!--        WHERE-->
-<!--            FREE_BOARD_NO = #{freeBoardNo}-->
-<!--    </update>-->
+    <update id="updatePost" parameterType="freeBoardVO" useGeneratedKeys="true" keyProperty="freeBoardNo">
+        UPDATE
+            FREE_BOARD
+        SET
+            FREE_TITLE = #{freeTitle},
+            FREE_CONTENT = #{freeContent},
+            MODIFY_TIME = CURRENT_TIMESTAMP
+        WHERE
+            FREE_BOARD_NO = #{freeBoardNo}
+        AND
+            MEMBER_ID = #{memberId}
+    </update>
 
-<!--    <delete id="deletePost">-->
-<!--        DELETE FROM-->
-<!--            FREE_BOARD-->
-<!--        WHERE-->
-<!--            FREE_BOARD_NO = #{freeBoardNo}-->
-<!--    </delete>-->
+<!--  게시글 삭제  -->
+    <update id="deletePost" parameterType="int">
+        UPDATE
+            FREE_BOARD
+        SET
+            STATUS = 'N'
+        WHERE
+            FREE_BOARD_NO = #{freeBoardNo}
+    </update>
 
 </mapper>

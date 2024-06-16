@@ -12,5 +12,5 @@ public class FreeBoardVO {
     private int hits; // 조회수
     private Timestamp registerTime; // 등록 시간
     private Timestamp modifyTime; // 수정 시간
-    private String status; // 상태 (예: Y/N)
+    private String status; // Y : 활성화, N : 비활성화
 }
