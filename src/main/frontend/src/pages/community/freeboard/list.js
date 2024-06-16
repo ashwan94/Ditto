@@ -37,6 +37,7 @@ export default function List () {
     }
 
     const allList = () =>{
+        setKeyword("")
         getData();
     }
 
