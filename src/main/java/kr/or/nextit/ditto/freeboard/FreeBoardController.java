@@ -1,6 +1,7 @@
 package kr.or.nextit.ditto.freeboard;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
@@ -40,10 +41,12 @@ public class FreeBoardController {
         return freeBoardService.getBoardDetail(freeBoardNo);
     }
 
-//    @PostMapping
-//    public void createPost(@RequestBody FreeBoardVO post) {
-//        freeBoardService.createPost(post); // 새로운 게시물을 생성
-//    }
+    @PostMapping("/freeboard")
+    @ResponseBody
+    public ResponseEntity<String> addBoard(@RequestBody FreeBoardVO post) {
+        freeBoardService.addBoard(post); // 새로운 게시물을 생성
+        return ResponseEntity.ok("포스트 생성 성고옹!");
+    }
 //
 //    @PutMapping
 //    public void updatePost(@RequestBody FreeBoardVO post) {

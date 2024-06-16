@@ -6,6 +6,7 @@
   import SignUp from "./pages/common/SignUp";
   import FreeBoard from "./pages/community/freeboard/list";
   import FreeBoardView from "./pages/community/freeboard/view";
+  import FreeBoardAdd from "./pages/community/freeboard/add";
   import RelayBoard from "./pages/community/relayBoard/list";
   import Notice from "./pages/community/notice/list";
   import Podcast from "./pages/community/podcast/list";
@@ -26,6 +27,7 @@
             {/*<Route path="/seat/list" element={<Seat />} />*/}
             <Route path="/community/freeBoard/list" element={<FreeBoard />}/>
             <Route path="/community/freeBoard/view/:freeBoardNo" element={<FreeBoardView />}/>
+            <Route path="/community/freeBoard/add" element={<FreeBoardAdd />}/>
             <Route path="/community/notice/list" element={<Notice />}/>
             <Route path="/community/relayBoard/list" element={<RelayBoard />}/>
             <Route path="/community/podcast/list" element={<Podcast />}/>

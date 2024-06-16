@@ -23,4 +23,8 @@ public class FreeBoardService {
     public FreeBoardVO getBoardDetail(int freeBoardNo) {
         return mapper.getBoardDetail(freeBoardNo);
     }
+
+    public void addBoard(FreeBoardVO post) {
+        mapper.addBoard(post);
+    }
 }

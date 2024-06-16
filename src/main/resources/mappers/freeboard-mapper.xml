@@ -75,10 +75,10 @@
             FREE_BOARD_NO = #{freeBoardNo}
     </select>
 
-<!--   <insert id="createPost">-->
-<!--        INSERT INTO FREE_BOARD (MEMBER_ID, FREE_TITLE, FREE_CONTENT, REGISTER_TIME, STATUS)-->
-<!--        VALUES (#{memberId}, #{freeTitle}, #{freeContent}, CURRENT_TIMESTAMP, 'Y')-->
-<!--    </insert>-->
+   <insert id="addBoard">
+        INSERT INTO FREE_BOARD (MEMBER_ID, FREE_TITLE, FREE_CONTENT)
+        VALUES (#{memberId}, #{freeTitle}, #{freeContent})
+    </insert>
 
 <!--    <update id="updatePost">-->
 <!--        UPDATE-->
