@@ -9,7 +9,7 @@ export default function View() {
     const [board, setBoard] = useState(null);
 
     const getBoard = async () => {
-        const res = await axios.get(`/freeboard/view/${freeBoardNo}`);
+        const res = await axios.get(`/freeboard/view/${freeBoardNo}`);  // 조회수 증가된 게시글 상세 정보 가져오기
         if (res.data) {
             setBoard(res.data);
         }

@@ -75,14 +75,14 @@
             FREE_BOARD_NO = #{freeBoardNo}
     </select>
 
-<!--    <update id="getBoardDetail">-->
-<!--        UPDATE-->
-<!--            FREE_BOARD-->
-<!--        SET-->
-<!--            HITS = #{hits + 1}-->
-<!--        WHERE-->
-<!--            FREE_BOARD_NO = #{freeBoardNo}-->
-<!--    </update>-->
+    <update id="incrementHits">
+        UPDATE
+            FREE_BOARD
+        SET
+            HITS = HITS + 1
+        WHERE
+            FREE_BOARD_NO = #{freeBoardNo}
+    </update>
 
    <insert id="addBoard">
         INSERT INTO FREE_BOARD (MEMBER_ID, FREE_TITLE, FREE_CONTENT)

@@ -38,6 +38,7 @@ public class FreeBoardController {
     @GetMapping("/freeboard/view/{freeBoardNo}")
     @ResponseBody
     public FreeBoardVO getBoardDetail(@PathVariable int freeBoardNo) {
+        freeBoardService.incrementHits(freeBoardNo); // 조회수 증가
         return freeBoardService.getBoardDetail(freeBoardNo);
     }
 
@@ -47,6 +48,7 @@ public class FreeBoardController {
         freeBoardService.addBoard(post); // 새로운 게시물을 생성
         return ResponseEntity.ok("포스트 생성 성고옹!");
     }
+
 //
 //    @PutMapping
 //    public void updatePost(@RequestBody FreeBoardVO post) {
