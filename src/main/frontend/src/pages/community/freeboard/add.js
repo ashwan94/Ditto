@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import "../../../css/addBoard.css"
 
 export default function FreeBoardAdd() {
@@ -44,7 +44,7 @@ export default function FreeBoardAdd() {
     return (
         <div className="card" style={{marginTop:" 10rem"}}>
             <div className="card-header1">
-                <h1><a href="../BOARD/index.html">자유게시판</a></h1>
+                <Link to={`/community/freeBoard/list`}><h3 className="center">자유게시판</h3></Link>
             </div>
             <form onSubmit={boardSubmit}>
                 <div className="card-write">

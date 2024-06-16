@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 // import '../../../css/board.css';
-import '../../../css/boardView.css'
+import '../../../css/boardList.css'
 import {Link} from "react-router-dom";
 
 export default function List () {
@@ -77,7 +77,8 @@ export default function List () {
                             <tr key={board.freeBoardNo}>
                                 <td className="center small-col">{board.freeBoardNo}</td>
                                 <td className="left large-col">
-                                    <Link to={`/community/freeBoard/view/${board.freeBoardNo}`}>
+                                    <Link
+                                        to={`/community/freeBoard/view/${board.freeBoardNo}`}>
                                         {board.freeTitle}
                                     </Link>
                                 </td>
