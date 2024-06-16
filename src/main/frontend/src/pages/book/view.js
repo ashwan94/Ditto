@@ -40,6 +40,10 @@ export default function BookView() {
     };
 
     useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: "auto"
+        });
         getBook();
     }, []);
 
@@ -89,13 +93,12 @@ export default function BookView() {
                             <table className="board-table" style={{fontSize: "15px"}}>
                                 <thead>
                                 <th style={{background: "lightgray"}} scope="col" className="th-num">표지</th>
-                                <td>
+                                <td style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+
                                     <img
                                         src={book.bookImage}
                                         alt="책 표지"
                                         className="flex justify-center items-center"
-                                        style={{marginLeft: "40%"}}
-                                        // style={{display:"flex", justifyContent:"center", alignItems:"center"}}
                                     />
                                 </td>
                                 </thead>
