@@ -23,44 +23,32 @@
         </where>
     </select>
 
-    <select id="selectBooks" parameterType="searchVO"  resultType="bookVO">
-    SELECT *
-    FROM
-        (
-            SELECT
-                    *
-            FROM
-        (
-            SELECT
-                    A.BOOK_NO,
-                    A.BOOK_NAME,
-                    A.BOOK_COMPANY,
-                    A.BOOK_INTRO,
-                    A.BOOK_RENT,
-                    A.BOOK_AUTHOR,
-                    A.BOOK_RELEASE,
-                    A.BOOK_IMAGE
-            FROM
-                    book A
-        )
-            B
+    <select id="selectBooks" parameterType="searchVO" resultType="bookVO">
+        SELECT
+                B.BOOK_NO,
+                B.BOOK_NAME,
+                B.BOOK_COMPANY,
+                B.BOOK_INTRO,
+                B.BOOK_RENT,
+                B.BOOK_AUTHOR,
+                B.BOOK_RELEASE,
+                B.BOOK_IMAGE
+        FROM
+                BOOK B
         <where>
-            <!--   아무런 검색을 하지 않을 경우 그냥 전체 목록 띄우기   -->
-            <if test='searchWord == ""'>
-
-            </if>
-            <if test='searchType == "bookName"'>
-                B.BOOK_NAME LIKE CONCAT('%', #{searchWord} ,'%')
-            </if>
-            <if test='searchType == "bookAuthor"'>
-                B.BOOK_AUTHOR LIKE CONCAT('%', #{searchWord} ,'%')
+            <!-- 아무런 검색을 하지 않을 경우 그냥 전체 목록 띄우기 -->
+            <if test='searchWord != ""'>
+                <choose>
+                    <when test='searchType == "bookName"'>
+                        B.BOOK_NAME LIKE CONCAT('%', #{searchWord}, '%')
+                    </when>
+                    <when test='searchType == "bookAuthor"'>
+                        B.BOOK_AUTHOR LIKE CONCAT('%', #{searchWord}, '%')
+                    </when>
+                </choose>
             </if>
         </where>
-
-    ) C
-        WHERE C.BOOK_NO BETWEEN #{firstRecordIndex} AND #{lastRecordIndex}
-<!--        LIMIT #{firstRecordIndex}, 10-->
-<!--        LIMIT 로 하면 가장 첫번째 도서가 누락됩니다. . . -->
+        LIMIT #{firstRecordIndex}, 10
     </select>
 
 

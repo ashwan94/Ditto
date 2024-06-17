@@ -12,7 +12,7 @@ export default function signup() {
           <span className="rc h r q zd/2 od xg mh"></span>
 
           <div className="rj">
-            <h2 className="ek ck kk wm xb">계정 만들기</h2>
+            <h2 className="ek ck kk wm xb">Sign Up</h2>
 
             <span className="i rc sj hk xj">
               <span className="rc h s z/2 nd oe rh tm"></span>
@@ -27,13 +27,13 @@ export default function signup() {
               method="POST"
           >
             <div className="wb">
-              <label className="rc kk wm vb" htmlFor="userid">
+              <label className="rc kk wm vb" htmlFor="memberId">
                 아이디
               </label>
               <input
                   type="text"
-                  name="userid"
-                  id="userid"
+                  name="memberId"
+                  id="memberId"
                   placeholder="hanseokku"
                   className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
               />
@@ -41,26 +41,26 @@ export default function signup() {
             </div>
 
             <div className="wb">
-              <label className="rc kk wm vb" htmlFor="username">
+              <label className="rc kk wm vb" htmlFor="memberName">
                 이름
               </label>
               <input
                   type="text"
-                  name="username"
-                  id="username"
+                  name="memberName"
+                  id="memberName"
                   placeholder="한석규"
                   className="vd hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40"
               />
             </div>
 
             <div className="wb">
-              <label className="rc kk wm vb" htmlFor="nickname">
+              <label className="rc kk wm vb" htmlFor="memberNickname">
                 닉네임
               </label>
               <input
                   type="text"
-                  name="nickname"
-                  id="nickname"
+                  name="memberNickname"
+                  id="memberNickname"
                   placeholder="hanseokku"
                   className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
               />
@@ -68,13 +68,13 @@ export default function signup() {
             </div>
 
             <div className="wb">
-              <label className="rc kk wm vb" htmlFor="password">
+              <label className="rc kk wm vb" htmlFor="memberPw">
                 비밀번호
               </label>
               <input
                   type="password"
-                  name="password"
-                  id="password"
+                  name="memberPw"
+                  id="memberPw"
                   placeholder="**************"
                   className="vd hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40"
               />

@@ -139,7 +139,6 @@ const Header = () => {
                 </a>
                 <ul className="a">
                   <li><Link to="/book/list" className="xl">도서 목록 조회</Link></li>
-                  <li><Link to="/book/view" className="xl">도서 상세보기</Link></li>
                   <li><Link to="/book/warn" className="xl">도서 대출 주의사항 안내</Link></li>
                 </ul>
               </li>
