@@ -7,8 +7,8 @@ export default function FreeBoardAdd() {
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const navigate = useNavigate();
     const [file, setFile] = useState(null);
+    const navigate = useNavigate();
 
     const titleOnChangeHandler = useCallback((e) => {
         setTitle(e.target.value);
@@ -23,12 +23,14 @@ export default function FreeBoardAdd() {
     }, []);
 
     const boardSubmit = async (e) => {
-
+        // sessionStorage.setItem("member", JSON.stringify({id: "a001", nickname: "감자", admin:"member"}))
+        // 임시 아이디 집어넣은것
+        const mem = JSON.parse(sessionStorage.getItem("member"))
         e.preventDefault();
         const postData = { // 보낼정보
             freeTitle: title,
             freeContent: content,
-            memberId: 'testUser', // test용 아이디 로그인한 사용자의 ID를 사용 memberId
+            memberId: mem.id, // test용 아이디 로그인한 사용자의 ID를 사용 memberId
         };
 
         try {

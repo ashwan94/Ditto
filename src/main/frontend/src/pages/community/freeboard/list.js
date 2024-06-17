@@ -21,6 +21,7 @@ export default function List () {
         const res = await axios.get('/freeboard/list')
         if (res.data) {
             setBoardList(res.data);
+            console.log(res.data)
         }
     }
 
@@ -75,7 +76,7 @@ export default function List () {
                     <tbody>
                         {boardList.map((board,i)=> (
                             <tr key={board.freeBoardNo}>
-                                <td className="center small-col">{board.freeBoardNo}</td>
+                                <td className="center small-col">{i + 1}</td>
                                 <td className="left large-col">
                                     <Link
                                         to={`/community/freeBoard/view/${board.freeBoardNo}`}>

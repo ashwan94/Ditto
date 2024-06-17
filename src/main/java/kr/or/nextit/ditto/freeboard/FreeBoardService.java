@@ -29,8 +29,14 @@ public class FreeBoardService {
     public FreeBoardVO getBoardDetail(int freeBoardNo) {
         return mapper.getBoardDetail(freeBoardNo);
     }
-
     public void incrementHits(int freeBoardNo) {
         mapper.incrementHits(freeBoardNo);
     }
+    public void deleteBoard(int freeBoardNo) {
+        mapper.deleteBoard(freeBoardNo);
+    }
+    public void updateBoard(FreeBoardVO post) {
+        mapper.updateBoard(post);
+    }
+
 }

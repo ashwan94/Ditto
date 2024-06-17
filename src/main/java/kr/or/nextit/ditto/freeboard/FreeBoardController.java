@@ -44,19 +44,20 @@ public class FreeBoardController {
 
     @PostMapping("/freeboard")
     @ResponseBody
-    public ResponseEntity<String> addBoard(@RequestBody FreeBoardVO post) {
+    public void addBoard(@RequestBody FreeBoardVO post) {
         freeBoardService.addBoard(post); // 새로운 게시물을 생성
-        return ResponseEntity.ok("포스트 생성 성고옹!");
+    }
+    @PutMapping("/freeboard/{freeBoardNo}")
+    @ResponseBody
+    public void deleteBoard(@PathVariable int freeBoardNo){
+        freeBoardService.deleteBoard(freeBoardNo); // 게시물 STATUS 변경
+    }
+    @PutMapping("/freeboard/update/{freeBoardNo}")
+    @ResponseBody
+    public void updateBoard(@PathVariable int freeBoardNo, @RequestBody FreeBoardVO post) {
+        post.setFreeBoardNo(freeBoardNo); // 업데이트할 게시물의 ID 설정
+        freeBoardService.updateBoard(post); // 기존 게시물을 수정
     }
 
-//
-//    @PutMapping
-//    public void updatePost(@RequestBody FreeBoardVO post) {
-//        freeBoardService.updatePost(post); // 기존 게시물을 수정
-//    }
-//
-//    @DeleteMapping("/freeboard/{freeBoardNo}")
-//    public void deletePost(@PathVariable int freeBoardNo) {
-//        freeBoardService.deletePost(freeBoardNo); // 게시물을 삭제
-//    }
+
 }

@@ -12,6 +12,6 @@ public interface FreeBoardMapper {
     FreeBoardVO getBoardDetail(@Param("freeBoardNo") int freeBoardNo);
     void incrementHits(@Param("freeBoardNo") int freeBoardNo);
     void addBoard(FreeBoardVO post); // 새로운 게시물을 생성하는 메서드
-//    void updatePost(FreeBoardVO post); // 기존 게시물을 수정하는 메서드
-//    void deletePost(int freeBoardNo); // 게시물을 삭제하는 메서드
+    void deleteBoard(@Param("freeBoardNo")int freeBoardNo); // 게시물을 삭제하는 메서드
+    void updateBoard(FreeBoardVO post); // 기존 게시물을 수정하는 메서드
 }
