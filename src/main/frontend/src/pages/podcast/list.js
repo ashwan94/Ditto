@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
+import {useLocation} from "react-router-dom";
 
 export default function PodcastList() {
   const [podcasts, setPodcasts] = useState([]);
+  const col = useLocation().state;
+  console.log("/podcast/list 에서 넘겨받은 data : ",col);
 
   // DB 에서 전체 podcast 내용 조회
   const getData = async () => {
     const res = await axios.get("/podcast/list");
+    console.log("컨트롤러에서 받은 data");
     console.log(res.data);
     setPodcasts(res.data);
   };
@@ -23,8 +27,10 @@ export default function PodcastList() {
     console.log(moment(podcasts.start).format("YYYY년MM월DD일"));
     console.log(moment(podcasts.start).format("hh시mm분ss초"));
   }, [podcasts]);
+
   return (
-    <>
+      <main>
+        <section className="gj do ir hj sp jr i pg">
       <div>리스트!!!!</div>
       <div>테슽 성공</div>
       {podcasts &&
@@ -40,6 +46,7 @@ export default function PodcastList() {
             </ul>
           );
         })}
-    </>
+        </section>
+    </main>
   );
 }
