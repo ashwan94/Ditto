@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 public class MemberService
 {
     private final MemberMapper mapper;
-    public MemberVO findMember(LoginRequest login) {
-        return mapper.findMember(login);
+
+    public MemberVO findMember(MemberVO memberVO) {
+        return mapper.findMember(memberVO);
     }
 }

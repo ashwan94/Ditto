@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -20,19 +22,15 @@ public class MemberController {
     }
 
     @PostMapping("/SignIn")
-    public MemberVO login(MemberVO memberVO) {
+    public MemberVO findMember(MemberVO memberVO) {
         System.out.println("==>");
-        System.out.println(memberVO);
-//        MemberVO member = service.findMember(memberVO);
+        // 파라미터로 들어온 갑 확인
+        System.out.println("파라미터 : " + memberVO);
 
-        return memberVO;
-        // 로그인 실패 시 현재 페이지 유지
-//        if (member == null) {
-//          return "redirect:/SignIn";
-//        }
-//
-//        // 로그인 성공 시 메인화면으로 이동
-//        session.setAttribute("member", member);
-//        return "redirect:/";
+        // DB 회원과 비교
+        MemberVO member = service.findMember(memberVO);
+        System.out.println("쿼리 결과 확인용, DB와 비교 조회 : " + member);
+        return member;
+
     }
 }

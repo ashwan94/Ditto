@@ -5,7 +5,7 @@ const Header = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [stickyMenu, setStickyMenu] = useState(false);
   const [navigationOpen, setNavigationOpen] = useState(false);
-  const [loginLog, setLoginLog] = useState(sessionStorage.getItem("login")); // Session 에서 가져온 로그인된 유저 정보
+  const [loginLog, setLoginLog] = useState(sessionStorage.getItem("member")); // Session 에서 가져온 로그인된 유저 정보
 
   useEffect(() => {
     console.log("로그인 유저 정보 : ", loginLog);
@@ -22,16 +22,23 @@ const Header = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [loginLog]);
+
+  // 로그인 상태 변화 감지 useEffect
+  useEffect(() => {
+    setLoginLog(sessionStorage.getItem("member"))
+  }, [loginLog]);
+
 
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
+
   // 로그아웃
   const goLogout = () => {
-    sessionStorage.removeItem("login");
-    setLoginLog(sessionStorage.getItem("login")); // page rendering 을 위한 hook
+    sessionStorage.removeItem("member");
+    setLoginLog(sessionStorage.getItem("member")); // page rendering 을 위한 hook
   }
 
   return (
@@ -177,8 +184,12 @@ const Header = () => {
               </label>
             </div>
 
-            {sessionStorage.getItem("login") ?
-                <button className="lk gh dk rg tc wf xf _l gi hi font-extrabold" onClick={goLogout}>로그아웃</button> :
+            {sessionStorage.getItem("member") ?
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <button className="lk gh dk rg tc wf xf _l gi hi font-extrabold" onClick={goLogout}>로그아웃</button>
+                  <button className="lk gh dk rg tc wf xf _l gi hi font-extrabold mx-3">마이페이지</button>
+                </div>
+                :
                 <Link to="/SignIn" className="lk gh dk rg tc wf xf _l gi hi font-extrabold">로그인</Link>
             }
           </div>

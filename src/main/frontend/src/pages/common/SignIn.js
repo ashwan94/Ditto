@@ -1,12 +1,11 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate, useRoutes} from "react-router-dom";
 import axios, {post} from "axios";
 import {useEffect, useState} from "react";
 
 export default function SignIn() {
-
   const [memberId, setMemberId] = useState("")
   const [memberPw, setMemberPw] = useState("")
-
+  const router = useNavigate();
   // 아이디 체인지 핸들러
   const memberIdOnChangeHandler = (e) => {
     setMemberId(e.target.value);
@@ -27,18 +26,40 @@ export default function SignIn() {
     }
   };
 
+  const [loginStatus, setLoginStatus] = useState(false);
   const login = async () => {
     try {
       console.log("아이디: ",memberId,"비밀번호: ", memberPw)
       const res = await axios.post("/SignIn", null, {
         params: {
-          id: memberId,
-          password: memberPw
+          memberId: memberId,
+          memberPw: memberPw
         }
       });
+      console.log("DB 조회 결과 : ", res.data.memberId);
+      console.log("DB 조회 결과 : ", res.data.memberNickname);
 
-      console.log("DB 조회 결과 : ", res);
+      const failMessage = document.querySelector("#failMessage");
+      if(!res.data){
+        // 로그인 실패
+        // 경고 메세지 출력 X
+        failMessage.innerHTML = `<div style= "color:red; margin-bottom: 5%;">아이디 혹은 비밀번호가 틀렸습니다.</div>`
 
+      }else{
+        // 로그인 성공한 경우 session에 담고
+        // 로그인 성공 시 메인 페이지로 이동
+        const memberNo = res.data.memberNo;
+        const memberId = res.data.memberId;
+        const memberNickname = res.data.memberNickname;
+        const memberAdmin = res.data.memberAdmin;
+        const memberSub = res.data.memberSub;
+        
+        // 조회된 정보들 세션에 저장
+        sessionStorage.setItem("member", JSON.stringify
+        ({memberNo:memberNo, memberId:memberId,memberNickname:memberNickname,
+          memberAdmin:memberAdmin, memberSub:memberSub}))
+        window.location.href = '/';
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -91,8 +112,9 @@ export default function SignIn() {
               />
             </div>
 
+          <div id = "failMessage">
             {/* 로그인 실패 시 빨갛게 로그인 실패 메세지 출력할 공간 */}
-
+          </div>
 
             <button className="vd rj ek rc rg gh lk ml il _l gi hi" onClick={login}>
               로그인
