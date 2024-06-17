@@ -8,7 +8,7 @@ const Header = () => {
   const [loginLog, setLoginLog] = useState(sessionStorage.getItem("member")); // Session 에서 가져온 로그인된 유저 정보
 
   useEffect(() => {
-    console.log("로그인 유저 정보 : ", loginLog);
+    // console.log("로그인 유저 정보 : ", loginLog);
     const savedDarkMode = JSON.parse(localStorage.getItem("darkMode"));
     if (savedDarkMode !== null) {
       setDarkMode(savedDarkMode);

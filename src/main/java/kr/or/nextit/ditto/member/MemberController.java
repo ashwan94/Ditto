@@ -33,4 +33,34 @@ public class MemberController {
         return member;
 
     }
+
+    @GetMapping("/SignUp")
+    public String SignUp() {
+        return "true";
+    }
+
+    @PostMapping("/checkId")
+    public int checkId(@RequestBody MemberVO memberVO) {
+        System.out.println("==>"+ memberVO);
+
+        // 아이디 중복
+        int checkId = service.checkIdIsDuplicated(memberVO.getMemberId());
+        System.out.println("아이디 중복되는가? : "+ checkId);
+        return checkId;
+    }
+
+
+    @PostMapping("/checkNickname")
+    public int checkNickname(MemberVO memberVO) {
+        System.out.println("==>"+ memberVO);
+
+        // 닉네임 중복
+        int checkNickname = service.checkNicknameIsDuplicated(memberVO.getMemberNickname());
+        System.out.println("닉네임 중복되는가? : "+ checkNickname);
+        // 0 = 사용가능한 아이디나 닉네임
+
+        return checkNickname;
+    }
+
+
 }

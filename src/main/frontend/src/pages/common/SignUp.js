@@ -1,4 +1,100 @@
-export default function signup() {
+import {useEffect, useState} from "react";
+import axios from "axios";
+
+export default function Signup() {
+
+  const [memberId,setMemberId] = useState("")
+  const [memberName,setMemberName] = useState("")
+  const [memberNickname, setMemberNickname] = useState("");
+  const [memberPw, setMemberPw] = useState("");
+  const [memberConfimPw, setMemberConfimPw] = useState("");
+  const [memberBirth, setMemberBrith] = useState("");
+  const [memberTel, setMemberTel] = useState("");
+  const [memberAdd, setMemberAdd] = useState("");
+
+  // 아이디 핸들러
+  const memberIdOnChangeHandler = (e) => {
+    setMemberId(e.target.value);
+  }
+
+  // 이름 핸들러
+  const memberNameOnChangeHandler = (e) => {
+    setMemberName(e.target.value);
+  }
+
+  // 닉네임 핸들러
+  const memberNicknameOnChangeHandler = (e) => {
+    setMemberNickname(e.target.value);
+  }
+
+  // 비밀번호 핸들러
+  const memberPwOnChangeHandler = (e) => {
+    setMemberPw(e.target.value);
+  }
+
+  // 재확인비밀번호 핸들러
+  const memberConfimPwOnChangeHandler = (e) => {
+    setMemberConfimPw(e.target.value);
+  }
+
+  // 생년월일 핸들러
+  const memberBirthOnChangeHandler = (e) => {
+    setMemberBrith(e.target.value);
+  }
+
+  // 전화번호 핸들러
+  const memberTelOnChangeHandler = (e) => {
+    setMemberTel(e.target.value);
+  }
+
+  // 주소 핸들러
+  const memberAddOnChangeHandler = (e) => {
+    setMemberAdd(e.target.value);
+  }
+
+  // 값 변화 감지 확인용
+  useEffect(() => {
+    console.log(memberId, memberName)
+  }, [memberId,memberName]);
+
+
+  // 아이디 중복 체크
+  const checkMemberIdDuplicate = async (e) => {
+    try {
+      console.log("아이디: ",memberId)
+      const res = await axios.post("/checkId", {
+        memberId: memberId
+      }, {
+
+        headers:{
+          "Content-Type": "application/json"
+        }
+      });
+      console.log("DB 조회 결과 : ", res.data.memberId);
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+    e.preventDefault()
+  }
+
+  // 닉네임 중복 체크
+  const checkMemberNicknameDuplicate = async () => {
+    try {
+      console.log("아이디: ",memberId)
+      const res = await axios.post("/checkNickname", null, {
+        params: {
+          memberNickname: memberNickname
+        }
+      });
+      console.log("DB 조회 결과 : ", res.data.memberNickname);
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+
   return (
     <main>
       <section className="i pg fh rm ki xn vq gj qp gr hj rp hr">
@@ -23,8 +119,7 @@ export default function signup() {
 
           <form
               className="sb"
-              action="https://formbold.com/s/unique_form_id"
-              method="POST"
+              // method="POST"
           >
             <div className="wb">
               <label className="rc kk wm vb" htmlFor="memberId">
@@ -36,8 +131,10 @@ export default function signup() {
                   id="memberId"
                   placeholder="hanseokku"
                   className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
+                  onChange={memberIdOnChangeHandler}
               />
-              <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold">중복 확인</button>
+              <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
+                      onClick={checkMemberIdDuplicate}>중복 확인</button>
             </div>
 
             <div className="wb">
@@ -50,6 +147,7 @@ export default function signup() {
                   id="memberName"
                   placeholder="한석규"
                   className="vd hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40"
+                  onChange={memberNameOnChangeHandler}
               />
             </div>
 
@@ -63,8 +161,10 @@ export default function signup() {
                   id="memberNickname"
                   placeholder="hanseokku"
                   className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
+                  onChange={memberNicknameOnChangeHandler}
               />
-              <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold">중복 확인</button>
+              <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
+                      onClick={checkMemberNicknameDuplicate}>중복 확인</button>
             </div>
 
             <div className="wb">
@@ -77,6 +177,7 @@ export default function signup() {
                   id="memberPw"
                   placeholder="**************"
                   className="vd hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40"
+                  onChange={memberPwOnChangeHandler}
               />
             </div>
             <div className="wb">
@@ -89,6 +190,7 @@ export default function signup() {
                   id="passwordConfirm"
                   placeholder="**************"
                   className="vd hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40"
+                  onChange={memberConfimPwOnChangeHandler}
               />
             </div>
 
@@ -102,6 +204,7 @@ export default function signup() {
                   id="birth"
                   placeholder="2000.09.01"
                   className="vd hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40"
+                  onChange={memberBirthOnChangeHandler}
               />
             </div>
 
@@ -115,20 +218,7 @@ export default function signup() {
                   id="tel"
                   placeholder="010-8282-4989"
                   className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
-              />
-              <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold">인증 요청</button>
-            </div>
-
-            <div className="wb">
-              <label className="rc kk wm vb" htmlFor="email">
-                이메일
-              </label>
-              <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="hsk999@gmail.com"
-                  className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
+                  onChange={memberTelOnChangeHandler}
               />
               <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold">인증 요청</button>
             </div>
@@ -143,6 +233,7 @@ export default function signup() {
                   id="addr"
                   placeholder="대전 유성구 봉명로 49-4 해피하우스 303호"
                   className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
+                  onChange={memberAddOnChangeHandler}
               />
               <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold">검색</button>
             </div>

@@ -12,4 +12,12 @@ public class MemberService
     public MemberVO findMember(MemberVO memberVO) {
         return mapper.findMember(memberVO);
     }
+
+    public int checkIdIsDuplicated(String memberId) {
+        return mapper.checkIdIsDuplicated(memberId);
+    }
+
+    public int checkNicknameIsDuplicated(String memberNickname) {
+        return mapper.checkNicknameIsDuplicated(memberNickname);
+    }
 }
