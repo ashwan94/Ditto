@@ -1,12 +1,12 @@
 package kr.or.nextit.ditto.member;
 
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Random;
 
 @RestController
 @RequiredArgsConstructor
@@ -60,6 +60,20 @@ public class MemberController {
         // 0 = 사용가능한 아이디나 닉네임
 
         return checkNickname;
+    }
+
+    @GetMapping("/sendSMS")
+    public String sendSMS (@RequestParam String u_phone) {
+        Random rnd  = new Random();
+        StringBuffer buffer = new StringBuffer();
+        for (int i=0; i<4; i++) {
+            buffer.append(rnd.nextInt(10));
+        }
+        String cerNum = buffer.toString();
+        System.out.println("수신자 번호 : " + u_phone);
+        System.out.println("인증번호 : " + cerNum);
+        service.certifiedPhoneNumber(u_phone, cerNum);
+        return cerNum;
     }
 
 
