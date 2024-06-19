@@ -359,8 +359,8 @@ export default function Signup() {
 
 
     return (
-        <main>
-            <section className="i pg fh rm ki xn vq gj qp gr hj rp hr">
+        <main className="rundry">
+            <section className="i pg fh rm ki xn vq gj qp gr hj rp hr ">
                 <img src="images/shape-06.svg" alt="Shape" className="h j k"/>
                 <img src="images/shape-03.svg" alt="Shape" className="h l m"/>
                 <img src="images/shape-17.svg" alt="Shape" className="h n o"/>
@@ -371,12 +371,12 @@ export default function Signup() {
                     <span className="rc h r q zd/2 od xg mh"></span>
 
                     <div className="rj">
-                        <h2 className="ek ck kk wm xb">Sign Up</h2>
+                        <h2 className="ek ck kk wm xb rundry">Sign Up</h2>
 
-                        <span className="i rc sj hk xj">
+                        <span className="i rc sj hk xj rundry">
               <span className="rc h s z/2 nd oe rh tm"></span>
               <span className="rc h q z/2 nd oe rh tm"></span>
-              한석줍쇼 계정 생성
+                            <p className="rundry">한석줍쇼 계정 생성</p>
             </span>
                     </div>
 

@@ -75,7 +75,7 @@ export default function SignIn() {
 
 
   return (
-    <main>
+    <main className="rundry">
       <section className="i pg fh rm ki xn vq gj qp gr hj rp hr">
         <img src="images/shape-06.svg" alt="Shape" className="h j k" />
         <img src="images/shape-03.svg" alt="Shape" className="h l m" />
@@ -122,7 +122,7 @@ export default function SignIn() {
 
             <div className="text-center mt-10 text-black font-extrabold">
               아직 계정이 없으신가요?
-              <Link to="/SignUp" className="sj hk xj rj ob" style={{color:"blue"}}> 회원가입</Link>
+              <Link to="/SignUp" className="sj hk xj rj ob " style={{color:"blue", borderBottom:"1px solid blue"}}> <span className="rundry">회원가입</span></Link>
             </div>
 
         </div>
