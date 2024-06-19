@@ -3,6 +3,8 @@ import axios from "axios";
 
 export default function Signup() {
 
+    // const cools  = require('coolsms-node-sdk').default;
+
     const [memberId, setMemberId] = useState("")
     const [memberName, setMemberName] = useState("")
     const [memberNickname, setMemberNickname] = useState("");
@@ -23,6 +25,7 @@ export default function Signup() {
     const [addressErrorMessage, setAddressErrorMessage] = useState("");
     const [duplicatedId, setDuplicatedId] = useState(true);
     const [duplicatedNickname, setDuplicatedNickname] = useState(true);
+
 
     // 아이디 핸들러
     const memberIdOnChangeHandler = (e) => {
@@ -284,6 +287,18 @@ export default function Signup() {
     };
 
 
+    // 인증번호 문자 보내기
+    const sendMessage = async() => {
+        const res = await axios.post("/sendOne", null,{
+                params: {
+                    memberTel: memberTel
+                }
+            }
+        )
+        console.log("DB 조회 결과 : ", res.data);
+    }
+
+
 
     // 값 변화 감지 확인용
     useEffect(() => {
@@ -441,7 +456,8 @@ export default function Signup() {
                                 className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
                                 onChange={memberTelOnChangeHandler}
                             />
-                            <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold">인증 요청
+                            <button onClick={sendMessage} className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
+                            >인증 요청
                             </button>
                         </div>
 
