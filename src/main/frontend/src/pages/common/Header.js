@@ -39,6 +39,7 @@ const Header = () => {
   const goLogout = () => {
     sessionStorage.removeItem("member");
     setLoginLog(sessionStorage.getItem("member")); // page rendering 을 위한 hook
+    window.location.href = '/';
   }
 
   return (
