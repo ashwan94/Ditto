@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Setter
@@ -18,11 +19,13 @@ public class MemberVO {
     private String memberSub;
     private String memberTel;
     private String memberAdd;
-    private LocalDateTime memberBirth;
+    private String memberBirth;
     private String memberCard;
     private String memberAdmin;
     private String memberLog;
     private String memberDelete;
+    private String memberDetailAdd;
+    private String memberPostcode;
 
 
 }

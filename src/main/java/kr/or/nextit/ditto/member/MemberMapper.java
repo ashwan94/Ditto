@@ -7,4 +7,5 @@ public interface MemberMapper {
     MemberVO findMember(MemberVO memberVO);
     int checkIdIsDuplicated(String memberId);
     int checkNicknameIsDuplicated(String memberNickname);
+    int signup(MemberVO memberVO);
 }

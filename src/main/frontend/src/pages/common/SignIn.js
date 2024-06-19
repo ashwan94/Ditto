@@ -19,7 +19,7 @@ export default function SignIn() {
   const getData = async () => {
     try {
       const res = await axios.get("/SignIn");
-      console.log("DB 연결  : ", res);
+      // console.log("DB 연결  : ", res);
 
     } catch (error) {
       console.error("Error fetching data:", error);

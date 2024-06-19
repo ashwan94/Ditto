@@ -3,85 +3,76 @@ import axios from "axios";
 
 export default function Signup() {
 
-    // const cools  = require('coolsms-node-sdk').default;
 
-    const [memberId, setMemberId] = useState("")
-    const [memberName, setMemberName] = useState("")
-    const [memberNickname, setMemberNickname] = useState("");
-    const [memberPw, setMemberPw] = useState("");
-    const [memberConfirmPw, setMemberConfirmPw] = useState("");
-    const [memberBirth, setMemberBrith] = useState("");
-    const [memberTel, setMemberTel] = useState("");
-    const [memberAdd, setMemberAdd] = useState("")
-    const [memberPostcode, setMemberPostcode] = useState("")
-    const [memberDetailAdd, setMemberDetailAdd] = useState("")
 
-    const [idErrorMessage, setIdErrorMessage] = useState("");
-    const [nameErrorMessage, setNameErrorMessage] = useState("");
-    const [nicknameErrorMessage, setNicknameErrorMessage] = useState("");
-    const [pwErrorMessage, setPwErrorMessage] = useState("");
-    const [pwConfirmErrorMessage, setPwConfirmErrorMessage] = useState("");
-    const [birthErrorMessage, setBirthErrorMessage] = useState("");
-    const [addressErrorMessage, setAddressErrorMessage] = useState("");
-    const [duplicatedId, setDuplicatedId] = useState(true);
-    const [duplicatedNickname, setDuplicatedNickname] = useState(true);
+    /* 사용자에게 입력받을 useState 지정 필드 */
+    const [memberId, setMemberId] = useState("") // 회원 아이디
+    const [memberName, setMemberName] = useState("") // 회원 이름
+    const [memberNickname, setMemberNickname] = useState(""); // 회원 닉네임
+    const [memberPw, setMemberPw] = useState(""); // 회원 패스워드
+    const [memberConfirmPw, setMemberConfirmPw] = useState(""); // 회원 재확인 패스워드
+    const [memberBirth, setMemberBrith] = useState(""); // 회원 생년월일
+    const [memberTel, setMemberTel] = useState(""); // 회원 전화번호
+    const [memberAdd, setMemberAdd] = useState("") // 회원 도로명 주소
+    const [memberPostcode, setMemberPostcode] = useState("") // 회원 우편번호
+    const [memberDetailAdd, setMemberDetailAdd] = useState("") // 회원 상세주소
+    const [userInputCode, setUserInputCode] = useState(""); // 유저가 입력한 인증번호
+    const [verificationCode, setVerificationCode] = useState(0); // 시스템이 지정한 인증번호
 
+    /* 에러 메세지 */
+    const [idErrorMessage, setIdErrorMessage] = useState(""); // 아이디 에러 메세지
+    const [nameErrorMessage, setNameErrorMessage] = useState(""); // 이름 에러 메세지
+    const [nicknameErrorMessage, setNicknameErrorMessage] = useState(""); // 닉네임 에러 메세지
+    const [pwErrorMessage, setPwErrorMessage] = useState(""); // 패스워드 에러 메세지
+    const [pwConfirmErrorMessage, setPwConfirmErrorMessage] = useState(""); // 재확인 패스워드 에러 메세지
+    const [birthErrorMessage, setBirthErrorMessage] = useState(""); // 생년월일 에러 메세지
+    const [addressErrorMessage, setAddressErrorMessage] = useState(""); // 주소 에러 메세지
+    const [duplicatedId, setDuplicatedId] = useState(true); // 아이디 중복 에러 메세지
+    const [duplicatedNickname, setDuplicatedNickname] = useState(true); // 닉네임 중복 에러 메세지
+    const [showVerificationInput, setShowVerificationInput] = useState(false); // 인증 입력 필드 표시 상태
+    const [checkCode, setCheckCode] = useState(true); // 인증번호 확인용 useState
 
     // 아이디 핸들러
     const memberIdOnChangeHandler = (e) => {
         setMemberId(e.target.value);
     }
-
     // 이름 핸들러
     const memberNameOnChangeHandler = (e) => {
         setMemberName(e.target.value);
     }
-
     // 닉네임 핸들러
     const memberNicknameOnChangeHandler = (e) => {
         setMemberNickname(e.target.value);
     }
-
     // 비밀번호 핸들러
     const memberPwOnChangeHandler = (e) => {
         setMemberPw(e.target.value);
     }
-
     // 재확인비밀번호 핸들러
     const memberConfimPwOnChangeHandler = (e) => {
         setMemberConfirmPw(e.target.value);
     }
-
     // 생년월일 핸들러
     const memberBirthOnChangeHandler = (e) => {
         setMemberBrith(e.target.value);
     }
-
     // 전화번호 핸들러
     const memberTelOnChangeHandler = (e) => {
         setMemberTel(e.target.value);
     }
-
-
     // 우편번호 핸들러
     const memberPostcodeOnChangeHandler = (e) => {
         setMemberAdd(e.target.value);
     }
-
-
     // 주소 핸들러
     const memberAddOnChangeHandler = (e) => {
         setMemberPostcode(e.target.value);
     }
-
     // 상세주소 핸들러
     const memberDetailAddOnChangeHandler = (e) => {
         setMemberDetailAdd(e.target.value);
     }
 
-
-
-    // 조건에 맞지 않을 경우 빈칸으로 돌려주기 위해서
     // 아이디 중복체크, 에러 문구
     const checkMemberIdDuplicate = async () => {
         // 사용자에게 8글자 이상의 아이디 입력받기
@@ -90,7 +81,7 @@ export default function Signup() {
             return;
         }
         try {
-            console.log("아이디: ", memberId)
+            // console.log("아이디: ", memberId)
             const res = await axios.post("/checkId", {
                 memberId: memberId
             }, {
@@ -107,19 +98,16 @@ export default function Signup() {
 
             } else {
                 setDuplicatedId(false);
-                setIdErrorMessage("");
+                setIdErrorMessage("사용가능한 아이디입니다.");
             }
 
-            console.log("DB 조회 결과 : ", res.data);
+            // console.log("DB 조회 결과 : ", res.data);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     }
 
-    // 닉네임 중복 체크
-    // 조건에 맞지 않을 경우 빈칸으로 돌려주기 위해서
-    // 닉네임 중복 체크
-    // 닉네임 중복체크, 에러 문구
+    // 닉네임 중복 체크 함수
     const checkMemberNicknameDuplicate = async () => {
         if (memberNickname.length < 2) {
             setNicknameErrorMessage("최소 2글자 이상의 닉네임으로 설정해주세요.");
@@ -129,7 +117,7 @@ export default function Signup() {
             return;
         }
         try {
-            console.log("닉네임: ", memberNickname);
+            // console.log("닉네임: ", memberNickname);
             const res = await axios.post("/checkNickname", null, {
                 params: {
                     memberNickname: memberNickname
@@ -147,15 +135,17 @@ export default function Signup() {
                 setNicknameErrorMessage("");
             }
 
-            console.log("DB 조회 결과 : ", res.data);
+            // console.log("DB 조회 결과 : ", res.data);
 
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     }
 
+    // 이름 정규식 (한글 두글자 이상)
     const koreanRegex = /^[가-힣]{2,}$/;
-    // 이름, 비밀번호 글자 수 제한
+
+    // 이름 글자수 제한 함수
     const checkSizeMemberName = () => {
         // 이름이 두글자 이하인 경우 경고 메세지 출력
 
@@ -168,8 +158,10 @@ export default function Signup() {
     };
 
 
-    // 비밀번호 정규식 특수문자 1개 포함, 숫자, 문자
+    // 비밀번호 정규식 (특수문자 1개 포함, 숫자, 문자)
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
+
+    // 패스워드 정규식 검사 및 에러 메세지 출력 함수
     const checkMemberPw = () => {
         // 이름이 두글자 이하인 경우 경고 메세지 출력
         // 비밀번호 정규식 부합하지 않은 경우 에러메세지 출력
@@ -181,7 +173,7 @@ export default function Signup() {
         }
     }
 
-    // 비밀번호, 재확인 비밀번호 일치, 불일치 함수
+    // 비밀번호와 재확인 비밀번호의 일치,불일치 에러 메세지 출력 함수
     const checkPasswordConfirm = () => {
         if (memberPw !== memberConfirmPw) {
             setPwConfirmErrorMessage("입력한 비밀번호와 다릅니다.");
@@ -196,6 +188,7 @@ export default function Signup() {
         }
     }
 
+    // 생년월일 누락 검사 함수
     const memberBirthOnBlur = () => {
         if (!memberBirth) {
             setBirthErrorMessage("생년월일을 입력해주세요.");
@@ -204,6 +197,7 @@ export default function Signup() {
         }
     };
 
+    // 주소 누락 검사 함수
     const memberDetailAddOnBlur = () => {
         if (!memberDetailAdd) {
             setAddressErrorMessage("상세주소를 입력해주세요.");
@@ -212,41 +206,7 @@ export default function Signup() {
         }
     };
 
-    // 등록 버튼 클릭 시 모든 input 태그 검사 후
-    // 경고 메세지 출력 or update 쿼리 쏘기
-    const register = () => {
-        // 에러 메세지 모두 출력
-        if (duplicatedId) {
-            setIdErrorMessage("아이디 중복체크 해주세요.");
-        } else if (memberId === "") {
-            setIdErrorMessage("최소 8글자 이상의 아이디로 설정해주세요.");
-        }
-        if (memberName === "") {
-            setNameErrorMessage("이름을 입력해주세요.");
-        }
-        if (memberNickname === "") {
-            setNicknameErrorMessage("닉네임을 입력해주세요.");
-        }
-        if (duplicatedNickname) {
-            setNicknameErrorMessage("닉네임 중복체크 해주세요.");
-        }
-        if (memberPw === "") {
-            setPwErrorMessage("비밀번호를 입력해주세요.");
-        }
-        if (memberConfirmPw === "") {
-            setPwConfirmErrorMessage("입력한 비밀번호와 다릅니다..");
-        }
-        if (memberBirth === "") {
-            setBirthErrorMessage("생년월일을 입력해주세요.");
-        }
-        if (memberDetailAdd === ""){
-            setAddressErrorMessage("주소를 입력해주세요.")
-        }
 
-        // DB에 쿼리 쏴서 insert 하기
-
-
-    };
 
 
     // 주소API 사용하여 우편번호,도로명 주소 자동 완성
@@ -286,8 +246,7 @@ export default function Signup() {
         }).open();
     };
 
-
-    // 인증번호 문자 보내기
+    // 인증번호 문자 보내기 함수
     const sendMessage = async() => {
         const res = await axios.post("/sendOne", null,{
                 params: {
@@ -295,14 +254,107 @@ export default function Signup() {
                 }
             }
         )
-        console.log("DB 조회 결과 : ", res.data);
+        // console.log("Controller에서 보낸 인증코드 : ", res.data);
+        setVerificationCode(res.data);
+        setShowVerificationInput(true);
+
+    }
+    // 유저가 입력한 인증번호 핸들러
+    const userInputCodeOnChangeHandler = (e) => {
+        setUserInputCode(e.target.value);
+        // console.log("회원 입력 코드: ", userInputCode)
+    }
+
+    useEffect(() => {
+        setUserInputCode(userInputCode);
+        // console.log("회원 입력 코드: ", userInputCode)
+    }, [userInputCode]);
+
+    // 인증 번호 확인 이밴트 함수
+    const checkVeridationCode = () => {
+        if(userInputCode == verificationCode){
+            alert("본인 인증 완료")
+            setCheckCode(false);
+        } else if (userInputCode != verificationCode){
+            alert("본인 인증 실패")
+            setCheckCode(true);
+        }
     }
 
 
+// 등록 버튼 클릭 시 모든 input 태그 검사 후
+    // 경고 메세지 출력 or insert 쿼리 쏘기
+    const register = async () => {
+        // 에러 메세지 모두 출력
+        if (duplicatedId) {
+            setIdErrorMessage("아이디 중복체크 해주세요.");
+        } else if (memberId === "") {
+            setIdErrorMessage("최소 8글자 이상의 아이디로 설정해주세요.");
+        }
+        if (memberName === "") {
+            setNameErrorMessage("이름을 입력해주세요.");
+        }
+        if (memberNickname === "") {
+            setNicknameErrorMessage("닉네임을 입력해주세요.");
+        }
+        if (duplicatedNickname) {
+            setNicknameErrorMessage("닉네임 중복체크 해주세요.");
+        }
+        if (memberPw === "") {
+            setPwErrorMessage("비밀번호를 입력해주세요.");
+        }
+        if (memberConfirmPw === "") {
+            setPwConfirmErrorMessage("입력한 비밀번호와 다릅니다..");
+        }
+        if (memberBirth === "") {
+            setBirthErrorMessage("생년월일을 입력해주세요.");
+        }
+        if (memberDetailAdd === ""){
+            setAddressErrorMessage("주소를 입력해주세요.")
+        }
+
+        // DB에 쿼리 쏴서 insert 하기
+        if(!duplicatedNickname && !duplicatedId && !checkCode
+            && memberId != "" && memberName != "" && memberNickname != "" && memberPw != "" && memberConfirmPw != ""
+            &&memberBirth != "" && memberTel != "" && memberAdd != "" && memberPostcode != "" && memberDetailAdd != "" ){
+
+
+            // 여기서 쿼리 쏘기
+            const res = await axios.post("/register", null,{
+                params: {
+                memberId: memberId,
+                memberName: memberName,
+                memberNickname: memberNickname,
+                memberPw: memberPw,
+                memberTel: memberTel,
+                memberPostcode: memberPostcode,
+                memberAdd: memberAdd,
+                memberDetailAdd: memberDetailAdd,
+                memberBirth: memberBirth
+            }
+            }, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            // console.log(res);
+
+            if (res.status == 200) {
+                alert("회원가입이 완료되었습니다.");
+                window.location.href = '/SignIn';
+                // 회원가입 후 처리 로직
+            } else {
+                alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+            }
+
+        }
+
+    };
 
     // 값 변화 감지 확인용
     useEffect(() => {
-        console.log(memberPostcode, memberAdd, memberDetailAdd )
+        // console.log(memberPostcode, memberAdd, memberDetailAdd )
     }, [memberPostcode, memberAdd, memberDetailAdd]);
 
 
@@ -452,14 +504,37 @@ export default function Signup() {
                                 name="tel"
                                 id="tel"
                                 value={memberTel}
-                                placeholder="010-8282-4989"
+                                placeholder="01047959464"
                                 className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
                                 onChange={memberTelOnChangeHandler}
                             />
-                            <button onClick={sendMessage} className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
+                            <button onClick={sendMessage}
+                                    className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
                             >인증 요청
                             </button>
                         </div>
+
+
+                        {showVerificationInput ? <div className="wb">
+                            <input
+                                type="tel"
+                                name="tel"
+                                id="tel"
+                                value={userInputCode}
+                                placeholder="12345"
+                                className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
+                                onChange={userInputCodeOnChangeHandler}
+
+                            />
+                            <button
+                                className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
+                                onClick={checkVeridationCode}
+                            >인증 확인
+                            </button>
+
+
+                        </div> : null
+                        }
 
                         <div className="wb">
                             <label className="rc kk wm vb" htmlFor="addr">
@@ -467,21 +542,24 @@ export default function Signup() {
                             </label>
                             <input type="text" id="sample6_postcode" placeholder="우편번호"
                                    className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-48"
-                                   // value={memberPostcode}
-                                   onChange={memberPostcodeOnChangeHandler}/>
+                                // value={memberPostcode}
+                                   onChange={memberPostcodeOnChangeHandler}
+                                    readOnly={true}/>
                             <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
                                     onClick={handlePostcode}>검색
                             </button>
                             <input type="text" id="sample6_address" placeholder="주소"
                                    className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-full my-2"
-                                    onChange={memberAddOnChangeHandler}/><br/>
+                                   onChange={memberAddOnChangeHandler}
+                                   readOnly={true}/><br/>
                             <input type="text" id="sample6_detailAddress" placeholder="상세주소"
                                    className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-48"
                                    value={memberDetailAdd}
                                    onChange={memberDetailAddOnChangeHandler}
                                    onBlur={memberDetailAddOnBlur}/>
                             <input type="text" id="sample6_extraAddress" placeholder="참고항목"
-                                   className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-48 mx-3"/>
+                                   className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-48 mx-3"
+                                   readOnly={true}/>
                         </div>
                         <p id="addressErrorMessage" className="text-red">{addressErrorMessage}</p>
                         <button className="vd rj ek rc rg gh lk ml il _l gi hi mt-14" onClick={register}>

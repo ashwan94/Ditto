@@ -14,6 +14,34 @@
             A.MEMBER_ID = #{memberId}
             AND A.MEMBER_PW = #{memberPw}
     </select>
+
+    <!-- 회원가입용   -->
+    <insert id="signup" parameterType="memberVO">
+        INSERT INTO
+        MEMBER
+        (
+            MEMBER_ID,
+            MEMBER_NAME,
+            MEMBER_NICKNAME,
+            MEMBER_PW,
+            MEMBER_TEL,
+            MEMBER_POSTCODE,
+            MEMBER_ADD,
+            MEMBER_DETAILADD,
+            MEMBER_BIRTH
+        ) VALUES (
+            #{memberId},
+            #{memberName},
+            #{memberNickname},
+            #{memberPw},
+            #{memberTel},
+            #{memberPostcode},
+            #{memberAdd},
+            #{memberDetailAdd},
+            #{memberBirth}
+        )
+    </insert>
+
     
     <!--  회원가입 아이디 중복 체크용   -->
     <select id="checkIdIsDuplicated" parameterType="String" resultType="int">

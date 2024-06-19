@@ -25,4 +25,8 @@ public class MemberService {
     public int checkNicknameIsDuplicated(String memberNickname) {
         return mapper.checkNicknameIsDuplicated(memberNickname);
     }
+
+    public int signUp(MemberVO memberVO) {
+        return mapper.signup(memberVO);
+    }
 }
