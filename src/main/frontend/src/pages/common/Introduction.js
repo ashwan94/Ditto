@@ -9,8 +9,8 @@ export default function Introduction() {
     const settings = {
         dots: false,
         infinite: true,
-        speed: 9000,
-        slidesToShow: 4,
+        speed: 5000,
+        slidesToShow: 5,
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 0,
@@ -56,34 +56,34 @@ export default function Introduction() {
             <section className="image-gallery">
                 <Slider {...settings}>
                     <div>
-                        <img src="path/to/image1.jpg" alt="Image 1" />
+                        <img src={`${process.env.PUBLIC_URL}/images/gu1.png`} alt="Image 1" />
                     </div>
                     <div>
-                        <img src="path/to/image2.jpg" alt="Image 2" />
+                        <img src={`${process.env.PUBLIC_URL}/images/gu2.jpg`} alt="Image 2" />
                     </div>
                     <div>
-                        <img src="path/to/image3.jpg" alt="Image 3" />
+                        <img src={`${process.env.PUBLIC_URL}/images/gu3.jpg`} alt="Image 3" />
                     </div>
                     <div>
-                        <img src="path/to/image4.jpg" alt="Image 4" />
+                        <img src={`${process.env.PUBLIC_URL}/images/gu4.png`} alt="Image 4" />
                     </div>
                     <div>
-                        <img src="path/to/image5.jpg" alt="Image 5" />
+                        <img src={`${process.env.PUBLIC_URL}/images/gu5.jpg`} alt="Image 5" />
                     </div>
                     <div>
-                        <img src="path/to/image6.jpg" alt="Image 6" />
+                        <img src={`${process.env.PUBLIC_URL}/images/gu6.jpg`} alt="Image 6" />
                     </div>
                     <div>
-                        <img src="path/to/image7.jpg" alt="Image 7" />
+                        <img src={`${process.env.PUBLIC_URL}/images/gu7.jpg`} alt="Image 7" />
                     </div>
                     <div>
-                        <img src="path/to/image8.jpg" alt="Image 8" />
+                        <img src={`${process.env.PUBLIC_URL}/images/gu8.jpg`} alt="Image 8" />
                     </div>
                     <div>
-                        <img src="path/to/image9.jpg" alt="Image 9" />
+                        <img src={`${process.env.PUBLIC_URL}/images/gu9.jpg`} alt="Image 9" />
                     </div>
                     <div>
-                        <img src="path/to/image10.jpg" alt="Image 10" />
+                        <img src={`${process.env.PUBLIC_URL}/images/gu10.jpg`} alt="Image 10" />
                     </div>
                 </Slider>
             </section>
@@ -92,7 +92,6 @@ export default function Introduction() {
             <section className="manifesto">
                 <h2>Manifesto</h2>
                 <p>우리는 작은 혁신을 만드는 사람들이 함께하는 플랫폼이다. 우리는 사람들이 작지만 가장 혁신적인 것들로 조금씩 더 나은 세상을 만들어 나가도록 이끕니다.</p>
-                <img src="../../../public/logo192.png" alt="Ryan" />
             </section>
 
             {/* 슬로건 섹션 */}
