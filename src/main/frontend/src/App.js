@@ -10,6 +10,7 @@ import BookList from "./pages/book/list";
 import Intro from "./pages/introduce/intro";
 import BookView from "./pages/book/view";
 import "./css/style.css";
+import Introduction from "./pages/common/Introduction";
 
 function App() {
   return (
@@ -22,9 +23,10 @@ function App() {
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/seat/list" element={<SeatList />} />
           <Route path="/podcast/list" element={<PodcastList />} />
-            <Route path="/book/list" element={<BookList/>}/>
-            <Route path="/book/view" element={<BookView/>}/>
-            <Route path="/intro" element={<Intro/>}/>
+          <Route path="/book/list" element={<BookList/>}/>
+          <Route path="/book/view" element={<BookView/>}/>
+          <Route path="/intro" element={<Intro/>}/>
+          <Route path="/introduction" element={<Introduction/>}/>
         </Routes>
         <Footer />
       </BrowserRouter>

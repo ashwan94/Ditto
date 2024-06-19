@@ -93,7 +93,7 @@ const Header = () => {
                   </svg>
                 </a>
                 <ul className="a">
-                  <li><Link to="/info" className="xl">한석줍쇼란?</Link></li>
+                  <li><Link to="/introduction" className="xl">한석줍쇼란?</Link></li>
                   <li><Link to="/membership/info" className="xl">멤버십 소개</Link></li>
                   <li><Link to="/faq" className="xl">FAQ</Link></li>
                 </ul>
