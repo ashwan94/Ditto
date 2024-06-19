@@ -43,7 +43,7 @@ const Header = () => {
 
   return (
     <header
-      className={`g s r vd ya cj ${stickyMenu ? "hh sm _k dj bl ll" : ""}`}
+      className={`g s r vd ya cj rundry text-xl ${stickyMenu ? "hh sm _k dj bl ll" : ""}`}
     >
       <div className="bb ze ki xn 2xl:ud-px-0 oo wf yf i">
         <div className="vd to/4 tc wf yf">

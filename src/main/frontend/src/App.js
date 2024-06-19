@@ -8,6 +8,7 @@ import "./css/style.css";
 import BookList from "./pages/book/list";
 import Intro from "./pages/introduce/intro";
 import BookView from "./pages/book/view";
+import Mypage from "./pages/common/Mypage";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
           <Route path="/intro" element={<Intro />} />
           <Route path="/SignIn" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
-
+          <Route path="/mypage" element={<Mypage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
