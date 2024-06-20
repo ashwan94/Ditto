@@ -45,12 +45,16 @@ const Footer = () => {
                             <div className="animate_top">
                                 <h4 className="kk wm tj ec">개인정보취급방침</h4>
                                 <ul>
-                                <li><a href="#" className="sc xl vb">이용약관</a></li>
-                                <li><a href="#" className="sc xl vb">운영정책</a></li>
-                                <li><a href="#" className="sc xl vb">접근성 안내</a></li>
+                                    <li><a href="#" className="sc xl vb">이용약관</a></li>
+                                    <li><a href="#" className="sc xl vb">운영정책</a></li>
+                                    <li><a href="#" className="sc xl vb">접근성 안내</a></li>
                                 </ul>
                             </div>
                         </div>
+                        <a id="chat-channel-button" href="javascript:chatChannel()">
+                            <img src="/images/consult_small_yellow_pc.png"
+                                 alt="카카오톡 채널 채팅하기 버튼"/>
+                        </a>
                     </div>
                 </div>
                 <div className="bh ch pm tc uf sf wf xf ap cg fp bj">
