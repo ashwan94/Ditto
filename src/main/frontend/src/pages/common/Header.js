@@ -5,10 +5,10 @@ const Header = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [stickyMenu, setStickyMenu] = useState(false);
   const [navigationOpen, setNavigationOpen] = useState(false);
-  const [loginLog, setLoginLog] = useState(sessionStorage.getItem("login")); // Session 에서 가져온 로그인된 유저 정보
+  const [loginLog, setLoginLog] = useState(sessionStorage.getItem("member")); // Session 에서 가져온 로그인된 유저 정보
 
   useEffect(() => {
-    console.log("로그인 유저 정보 : ", loginLog);
+    // console.log("로그인 유저 정보 : ", loginLog);
     const savedDarkMode = JSON.parse(localStorage.getItem("darkMode"));
     if (savedDarkMode !== null) {
       setDarkMode(savedDarkMode);
@@ -22,21 +22,29 @@ const Header = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [loginLog]);
+
+  // 로그인 상태 변화 감지 useEffect
+  useEffect(() => {
+    setLoginLog(sessionStorage.getItem("member"))
+  }, [loginLog]);
+
 
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
+
   // 로그아웃
   const goLogout = () => {
-    sessionStorage.removeItem("login");
-    setLoginLog(sessionStorage.getItem("login")); // page rendering 을 위한 hook
+    sessionStorage.removeItem("member");
+    setLoginLog(sessionStorage.getItem("member")); // page rendering 을 위한 hook
+    window.location.href = '/';
   }
 
   return (
     <header
-      className={`g s r vd ya cj ${stickyMenu ? "hh sm _k dj bl ll" : ""}`}
+      className={`g s r vd ya cj rundry text-xl ${stickyMenu ? "hh sm _k dj bl ll" : ""}`}
     >
       <div className="bb ze ki xn 2xl:ud-px-0 oo wf yf i">
         <div className="vd to/4 tc wf yf">
@@ -138,9 +146,8 @@ const Header = () => {
                   </svg>
                 </a>
                 <ul className="a">
-                  <li><Link to="/book/list" className="xl">도서 목록 조회</Link></li>
-                  <li><Link to="/book/view" className="xl">도서 상세보기</Link></li>
                   <li><Link to="/book/warn" className="xl">도서 대출 주의사항 안내</Link></li>
+                  <li><Link to="/book/list" className="xl">도서 목록 조회</Link></li>
                 </ul>
               </li>
               <li>
@@ -178,9 +185,14 @@ const Header = () => {
               </label>
             </div>
 
-            {sessionStorage.getItem("login") ?
-                <button className="lk gh dk rg tc wf xf _l gi hi font-extrabold" onClick={goLogout}>로그아웃</button> :
+            {sessionStorage.getItem("member") ?
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  <button className="lk gh dk rg tc wf xf _l gi hi font-extrabold" onClick={goLogout}>로그아웃</button>
+                  <Link to="/mypage" className="lk gh dk rg tc wf xf _l gi hi font-extrabold mx-3">마이페이지</Link>
+                </div>
+                :
                 <Link to="/SignIn" className="lk gh dk rg tc wf xf _l gi hi font-extrabold">로그인</Link>
+
             }
           </div>
         </div>

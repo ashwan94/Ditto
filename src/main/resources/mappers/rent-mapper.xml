@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.nextit.ditto.rent.RentMapper">
+
+
+    <!--  도서 대여   -->
+    <insert id="bookRent" parameterType="rentVO">
+        INSERT INTO
+        rent
+        (
+            book_no,
+            book_name,
+            member_no,
+            member_id,
+            rent_start,
+            rent_end
+        )
+        VALUES
+        (
+            #{bookNo},
+            #{bookName},
+            #{memberNo},
+            #{memberId},
+            now(),
+            DATE_ADD(NOW(), INTERVAL 14 DAY)
+        )
+    </insert>
+
+    <!--  사용자 도서 대여 후 대여 상태 변경   -->
+     <update id="updateBookStatus" parameterType="int">
+        UPDATE
+            book
+        SET
+            BOOK_RENT = 'y'
+        WHERE
+            book_no = #{bookNo} AND BOOK_RENT = 'n';
+    </update>
+
+
+
+
+
+    <!-- 사용자 연체 날수 확인 쿼리 -->
+    <select id="checkOverdueDays" parameterType="int" resultType="int">
+        SELECT
+            IFNULL (
+        (
+            SELECT
+            CASE
+            WHEN
+                NOW() > rent_end
+            THEN
+                DATEDIFF(NOW(), rent_end)
+            ELSE
+                0
+            END
+                AS overdue_days
+            FROM
+                rent
+            WHERE
+                member_no = #{memberNo}
+            AND
+                rent_return IS NULL
+            LIMIT 1
+        ),
+        0)
+        AS overdue_days;
+    </select>
+
+
+    <!-- 사용자 대여도서 권수 체크 쿼리   -->
+    <select id="checkRentCount" parameterType="int" resultType="int">
+        SELECT
+            COUNT(*) AS rent_count
+        FROM
+            rent
+        WHERE
+            member_no = #{memberNo}
+        AND
+            rent_end >= NOW()
+        AND
+            rent_return IS NULL
+    </select>
+</mapper>

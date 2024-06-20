@@ -2,6 +2,7 @@ package kr.or.nextit.ditto.podcast;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 public class PodcastController {
     private final PodcastService service;
+
     // 팟캐스트 전체 채널 목록 조회
     @GetMapping("/podcast/list")
     public List<PodcastVO> select() {
