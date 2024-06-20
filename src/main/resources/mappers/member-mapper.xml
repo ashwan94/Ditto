@@ -4,6 +4,24 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.nextit.ditto.member.MemberMapper">
 
+    <resultMap id="memberResultMap" type="kr.or.nextit.ditto.member.MemberVO">
+        <id property="memberNo" column="MEMBER_NO"/>
+        <result property="memberId" column="MEMBER_ID"/>
+        <result property="memberName" column="MEMBER_NAME"/>
+        <result property="memberNickname" column="MEMBER_NICKNAME"/>
+        <result property="memberPw" column="MEMBER_PW"/>
+        <result property="memberSub" column="MEMBER_SUB"/>
+        <result property="memberTel" column="MEMBER_TEL"/>
+        <result property="memberAdd" column="MEMBER_ADD"/>
+        <result property="memberBirth" column="MEMBER_BIRTH"/>
+        <result property="memberCard" column="MEMBER_CARD"/>
+        <result property="memberAdmin" column="MEMBER_ADMIN"/>
+        <result property="memberLog" column="MEMBER_LOG"/>
+        <result property="memberDelete" column="MEMBER_DELETE"/>
+        <result property="memberDetailAdd" column="MEMBER_DETAILADD"/>
+        <result property="memberPostcode" column="MEMBER_POSTCODE"/>
+    </resultMap>
+
     <!--  로그인용   -->
     <select id="findMember" parameterType="memberVO" resultType="memberVO">
         SELECT
@@ -69,10 +87,19 @@
     <!--  마이페이지 확인용   -->
     <select id="searchMemberInfo" parameterType="String" resultType="memberVO">
         SELECT
-        *
+            *
         FROM
-        MEMBER A
+            MEMBER A
         WHERE
-        A.MEMBER_ID = #{memberId}
+            A.MEMBER_ID = #{memberId}
     </select>
+
+    <update id="passwordChange" parameterType="String">
+        UPDATE
+            MEMBER A
+        SET
+            A.MEMBER_PW = #{memberPw}
+        WHERE
+            A.MEMBER_ID = #{memberId}
+    </update>
 </mapper>

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @RestController
@@ -45,15 +46,22 @@ public class MemberController {
 
     }
 
-
+    // 마이페이지 회원정보 조회
     @PostMapping("/searchMemberInfo")
-    public MemberVO searchMemberInfo(String memberId){
+    public MemberVO searchMemberInfo(@RequestBody Map<String, String> payload){
+        String memberId = payload.get("memberId");
         MemberVO member = service.searchMemberInfo(memberId);
         System.out.println("회원 아이디" + memberId);
         System.out.println("회원 정보 ======>" +member);
-
         return member;
     }
+
+    // 비밀번호 수정
+    @PostMapping("/passwordChange")
+    public void passwordChange(@RequestBody MemberVO post){
+        service.passwordChange(post); // 기존 게시물을 수정
+    }
+
 
     // 회원가입
     @PostMapping("/register")
@@ -89,7 +97,6 @@ public class MemberController {
 
         return checkNickname;
     }
-
 
     /**
      * 단일 메시지 발송 예제 - 공식 홈페이지

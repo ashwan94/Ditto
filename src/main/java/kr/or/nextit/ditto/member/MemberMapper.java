@@ -9,4 +9,5 @@ public interface MemberMapper {
     int checkNicknameIsDuplicated(String memberNickname);
     int signup(MemberVO memberVO);
     MemberVO searchMemberInfo(String memberId);
+    void passwordChange(MemberVO post); // 비밀번호수정
 }

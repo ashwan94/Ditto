@@ -31,5 +31,9 @@ public class MemberService {
         return mapper.searchMemberInfo(memberId);
     }
 
+    public void passwordChange(MemberVO post){
+        mapper.passwordChange(post);
+    }
+
 
 }
