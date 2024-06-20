@@ -5,14 +5,14 @@ import Footer from "./pages/common/Footer";
 import SignIn from "./pages/common/SignIn";
 import SignUp from "./pages/common/SignUp";
 import SeatList from  "./pages/seat/list"
+import "./css/style.css";
 import PodcastList from "./pages/podcast/list";
 import BookList from "./pages/book/list";
-import Intro from "./pages/introduce/intro";
 import BookView from "./pages/book/view";
-import Introduction from "./pages/common/Introduction";
+import Introduction from "./pages/introduce/Introduction";
 import Mypage from "./pages/common/Mypage";
 import BookWarn from "./pages/book/warn";
-
+import KaKaoTalk from "./pages/common/KakaoTalk";
 function App() {
   return (
     <>
@@ -27,11 +27,11 @@ function App() {
           <Route path="/podcast/list" element={<PodcastList />} />
           <Route path="/book/list" element={<BookList/>}/>
           <Route path="/book/view" element={<BookView/>}/>
-          <Route path="/intro" element={<Intro/>}/>
           <Route path="/introduction" element={<Introduction/>}/>
           <Route path="/mypage" element={<Mypage />} />
         </Routes>
         <Footer />
+        <KaKaoTalk />
       </BrowserRouter>
     </>
   );

@@ -51,10 +51,10 @@ const Footer = () => {
                                 </ul>
                             </div>
                         </div>
-                        <a id="chat-channel-button" href="javascript:chatChannel()">
-                            <img src="/images/consult_small_yellow_pc.png"
-                                 alt="카카오톡 채널 채팅하기 버튼"/>
-                        </a>
+                        {/*<a id="chat-channel-button" href="javascript:chatChannel()">*/}
+                        {/*    <img src="/images/consult_small_yellow_pc.png"*/}
+                        {/*         alt="카카오톡 채널 채팅하기 버튼"/>*/}
+                        {/*</a>*/}
                     </div>
                 </div>
                 <div className="bh ch pm tc uf sf wf xf ap cg fp bj">
