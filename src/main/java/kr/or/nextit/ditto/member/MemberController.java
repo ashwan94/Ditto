@@ -45,6 +45,16 @@ public class MemberController {
 
     }
 
+
+    @PostMapping("/searchMemberInfo")
+    public MemberVO searchMemberInfo(String memberId){
+        MemberVO member = service.searchMemberInfo(memberId);
+        System.out.println("회원 아이디" + memberId);
+        System.out.println("회원 정보 ======>" +member);
+
+        return member;
+    }
+
     // 회원가입
     @PostMapping("/register")
     public void SignUp(MemberVO memberVO) {
@@ -103,5 +113,7 @@ public class MemberController {
 
         return verificationCode;
     }
+
+
 
 }

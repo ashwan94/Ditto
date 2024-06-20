@@ -18,7 +18,7 @@ export default function SignIn() {
 
   const getData = async () => {
     try {
-      const res = await axios.get("/SignIn");
+      const res = await axios.post("/SignIn");
       // console.log("DB 연결  : ", res);
 
     } catch (error) {
