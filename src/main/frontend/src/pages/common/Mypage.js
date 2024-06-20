@@ -176,6 +176,13 @@ export default function Mypage() {
 
     // 회원정보 수정
     const saveMemberData = async () => {
+        if (memberNickname.length < 2) {
+            setNicknameErrorMessage("최소 2글자 이상의 닉네임으로 설정해주세요.");
+            return;
+        } else if (memberNickname == '관리자' || memberNickname == 'admin') {
+            setNicknameErrorMessage("사용할 수 없는 키워드가 들어간 닉네임입니다.");
+            return;
+        }
         if (duplicatedNickname){
             alert("사용할수없는 닉네임 입니다 닉네임을 수정해주세요.")
             return
