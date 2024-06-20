@@ -4,41 +4,139 @@ import axios from "axios";
 import "../../css/board.css"
 
 export default function BookView() {
-    // const {bookNo} = useParams();
+
+    /* 전역 변수 선언 필드 */
     const [searchParams, setSearchParams] = useSearchParams()
+
+    /* 도서 정보 */
     const [book, setBook] = useState({});
+
+    /* 도서 대여 가능 여부 */
     const [bookRent, setBookRent] = useState(true);
+    const memberObj = JSON.parse(sessionStorage.getItem("member"));
 
-    console.log("BookView");
+    /* url 로 받은 도서 번호 */
     const bookNo = searchParams.get("bookNo");
-    console.log(bookNo);
 
+
+    /* 첫랜더링 시 가져올 도서 정보 */
     const getBook = async () => {
         try {
-            console.log("getBook");
-            console.log(bookNo);
-
             const res = await axios.get("/book/view", {
                 params: {
                     bookNo: bookNo
                 }
             });
             setBook(res.data);
-            console.log("렌트 여부", res.data.bookNo)
-
-            console.log("통신으로 넘어오는 값 : ", res.data.bookRent);
             if (res.data.bookRent == 'n') {
                 // 대출 가능
                 setBookRent(true)
             } else if (res.data.bookRent == 'y') {
                 setBookRent(false);
             }
-            console.log("도서 대여 여부 : ", bookRent);
+
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
 
+
+    // 최대 대출 가능 횟수 확인
+    const checkRentCount = async () => {
+        const response = await axios.post("/book/checkRentCount", null, {
+            params: {
+                memberNo: memberObj.memberNo
+            }
+        }, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        console.log(response.data)
+    }
+
+
+    // 도서 대여 버튼 클릭 이벤트
+    const bookRentEvent = async () => {
+        if (!bookRent) {
+            alert("다른 사용자가 이미 대여중인 도서입니다.");
+            return;
+        } else {
+            // 다른 사용자가 이미 대여중이 아닌 경우
+            // 도서 대여 절차 진행
+            const res = await axios.post("/book/checkOverdueDays", null, {
+                params: {
+                    memberNo: memberObj.memberNo
+                }
+            }, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            console.log("연체날수: ", res.data)
+
+            if (res.data > 0) {
+                // 연체날수가 0이상인 경우 대여 금지
+                return alert(`연체된 날수가 ${res.data}일 있습니다. 연체된 날수만큼 대여가 불가능합니다.`)
+
+            } else if(res.data < 0 || !res.data) {
+                // 최대 대출 가능 횟수 확인
+                const response = await axios.post("/book/checkRentCount", null, {
+                    params: {
+                        memberNo: memberObj.memberNo
+                    }
+                }, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+
+                if (response.data >= 3) {
+                    return alert("도서 대여 최대 권수는 3권입니다.")
+
+                }
+                // 연체 이력이 없는 경우 도서 대출 진행
+                const res = await axios.post("/book/rent", null, {
+                    params: {
+                        bookNo: bookNo,
+                        bookName: book.bookName,
+                        memberNo: memberObj.memberNo,
+                        memberId: memberObj.memberId
+                    }
+                }, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+                console.log(res);
+                if (res.status == 200) {
+                    // 도서 대여 상태 변경
+                    updateBookStatus();
+                    alert("도서 대여 성공");
+                    window.location.href = '/mypage';
+                    // 회원가입 후 처리 로직
+                } else {
+                    alert("도서 대여 실패, 다시 시도해주세요.");
+                }
+            }
+        }
+    }
+
+    /* 도서 대여 시 대출가능 -> 대출불가로 상태 변화 함수 */
+    const updateBookStatus = async () => {
+        const res = await axios.post("/book/status", null, {
+            params: {
+                bookNo: bookNo
+            }
+        })
+        if (res.status == 200) {
+            console.log(res)
+        }
+    }
+
+
+    /* 페이지 이동 시 window 가장 상단으로 위치 조정 */
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -46,6 +144,12 @@ export default function BookView() {
         });
         getBook();
     }, []);
+
+
+    useEffect(() => {
+        console.log("도서 대여 가능 여부 (false: 대출불가, true: 대출가능): ", bookRent);
+    }, [bookRent]);
+
 
     return (
         <main>
@@ -75,14 +179,19 @@ export default function BookView() {
                                 alignItems: "center",
                                 textAlign: "center"
                             }}>
-                                책을 깨끗하게 사용해주세요<br /> 우리 모두가 함께 사용하는 소중한 책들입니다. <br/>다음 이용자를 위해 책을 소중히 다뤄주세요.<br/> 감사합니다!
+                                책을 깨끗하게 사용해주세요<br/> 우리 모두가 함께 사용하는 소중한 책들입니다. <br/>다음 이용자를 위해 책을 소중히 다뤄주세요.<br/> 감사합니다!
                             </div>
                             <div style={{marginTop: "4%", marginBottom: "2%"}}>
                                 {/*<img src="https://w7.pngwing.com/pngs/676/110/png-transparent-barcode-book-education-library-loan-school-library-icon.png" />*/}
-                                <button
-                                    className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded my-2">
+
+
+                                {memberObj ? <button
+                                    className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded my-2"
+                                    onClick={bookRentEvent}>
                                     도서 대여
-                                </button>
+                                </button> : null}
+
+
                                 <Link to={`/book/list`}>
                                     <button
                                         className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mx-2">
@@ -143,12 +252,12 @@ export default function BookView() {
                                                 src="/images/book_possible.png"
                                                 alt="대출 가능"
                                                 className="flex justify-center items-center"
-                                                style={{width:"50px", height:"50px", marginLeft:"48%"}}/>
+                                                style={{width: "50px", height: "50px", marginLeft: "48%"}}/>
                                             : <img
                                                 src="/images/book_impossible.png"
                                                 alt="대출 불가능"
                                                 className="flex justify-center items-center"
-                                                style={{width:"50px", height:"50px", marginLeft:"48%"}}/>
+                                                style={{width: "50px", height: "50px", marginLeft: "48%"}}/>
                                         }
                                     </td>
                                 </tr>

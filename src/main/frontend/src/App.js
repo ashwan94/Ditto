@@ -9,6 +9,7 @@ import BookList from "./pages/book/list";
 import Intro from "./pages/introduce/intro";
 import BookView from "./pages/book/view";
 import Mypage from "./pages/common/Mypage";
+import BookWarn from "./pages/book/warn";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           {/* view의 parameter 가져오는 방법을 전환하는 작업 진행중 */}
           {/*<Route path="/book/view/:bookNo" element={<BookView />} />*/}
           <Route path="/book/view" element={<BookView />} />
+          <Route path="/book/warn" element={<BookWarn />} />
 
 
           <Route path="/intro" element={<Intro />} />

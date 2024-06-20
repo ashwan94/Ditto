@@ -34,9 +34,9 @@ export default function BookList() {
             setBookList(res.data.list);
             setCurrentPage(currentPage);
             setResultCount(res.data.list.length)
-            console.log("도서 목록 : ", res.data.list);
+            // console.log("도서 목록 : ", res.data.list);
 
-            console.log(res.data.list.length)
+            // console.log(res.data.list.length)
 
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -77,7 +77,7 @@ export default function BookList() {
     //페이지 번호 목록 생성
     const getPageNumList = (startNum) => {
         //1-10 11-20 21-30
-        console.log("버튼의 총 개수 ", totalPageNum)
+        // console.log("버튼의 총 개수 ", totalPageNum)
         const list = []
         for (let i = startNum; i < (startNum + pageNumListSize); i++) {
             if (i <= totalPageNum) {
