@@ -2,10 +2,7 @@ package kr.or.nextit.ditto.member;
 
 
 import lombok.RequiredArgsConstructor;
-
-import net.nurigo.sdk.message.model.Message;
 import org.springframework.stereotype.Service;
-import java.util.HashMap;
 
 
 
@@ -29,4 +26,10 @@ public class MemberService {
     public int signUp(MemberVO memberVO) {
         return mapper.signup(memberVO);
     }
+
+    public MemberVO searchMemberInfo(String memberId) {
+        return mapper.searchMemberInfo(memberId);
+    }
+
+
 }

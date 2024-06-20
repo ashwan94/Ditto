@@ -66,4 +66,13 @@
     </select>
 
 
+    <!--  마이페이지 확인용   -->
+    <select id="searchMemberInfo" parameterType="String" resultType="memberVO">
+        SELECT
+        *
+        FROM
+        MEMBER A
+        WHERE
+        A.MEMBER_ID = #{memberId}
+    </select>
 </mapper>

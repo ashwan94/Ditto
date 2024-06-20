@@ -1,10 +1,42 @@
+import SignIn from "./SignIn";
+import axios from "axios";
+import {useEffect} from "react";
+
 export default function Mypage() {
+
 
     const memberData = sessionStorage.getItem("member");
     const memberObj = JSON.parse(memberData); // 문자열을 JSON 객체로 변환
     const memberNickname = memberObj.memberNickname; // memberNickname 속성 추출
     const memberId = memberObj.memberId;
     console.log(memberNickname, memberId); // "용문동핵주먹" 출력
+
+    const getSession = () => {}
+
+
+    // 로그인한 유저의 정보 가져오기
+    const getData = async () => {
+        try {
+            const res = await axios.post("/SignIn", {
+                memberId: memberId
+            }, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            console.log(res.data)
+        }
+        catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    // 페이지 첫 랜더링 시 가져오기
+    useEffect(() => {
+        getData()
+    }, []);
+
+
     return (
         <main className="rundry">
             <section className="i pg fh rm ki xn vq gj qp gr hj rp hr ">
@@ -107,9 +139,10 @@ export default function Mypage() {
                                 </div>
                             </div>
 
-                            <div className="sm:col-span-2 mt-8">
+                            <div className="sm:col-span-2 mt-8 text-xl">
                                 <button
-                                    className="rounded-md bg-blue-600 px-3 py-2 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                    // className="rounded-md bg-blue-600 px-3 py-2 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                    className="btn btn-dark"
                                 >
                                     비밀번호 수정
                                 </button>
@@ -240,7 +273,8 @@ export default function Mypage() {
                         </button>
                         <button
                             type="submit"
-                            className="rounded-md bg-indigo-600 px-3 py-2 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            className="btn btn-dark"
+                            // className="rounded-md bg-blue-600 px-3 py-2 text-lg font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
                             Save
                         </button>
