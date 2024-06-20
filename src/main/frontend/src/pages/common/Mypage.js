@@ -4,25 +4,60 @@ import {useCallback, useEffect, useState} from "react";
 
 export default function Mypage() {
 
-    const [memberView, setMemberView] = useState([])
+    /* 사용자에게 입력받을 useState 지정 필드 */
+    const [memberView, setMemberView] = useState([]) // 회원정보 조회
     const [currentMemberPw, setCurrentMemberPw] = useState("") // 현재 패스워드
     const [changeMemberPw, setChangeMemberPw] = useState(""); // 수정할 패스워드
+    const [memberNickname, setMemberNickname] = useState(""); // 회원 닉네임
+    const [memberBirth, setMemberBrith] = useState(""); // 회원 생년월일
+    const [memberAdd, setMemberAdd] = useState("") // 회원 도로명 주소
+    const [memberPostcode, setMemberPostcode] = useState("") // 회원 우편번호
+    const [memberDetailAdd, setMemberDetailAdd] = useState("") // 회원 상세주소
+
+    /* 에러 메세지 */
     const [currentPwErrorMessage, setCurrentPwErrorMessage] = useState(""); // 현재 패스워드 에러 메세지
     const [pwErrorMessage, setPwErrorMessage] = useState(""); // 패스워드 에러 메세지
-
+    const [nicknameErrorMessage, setNicknameErrorMessage] = useState(""); // 닉네임 에러 메세지
+    const [birthErrorMessage, setBirthErrorMessage] = useState(""); // 생년월일 에러 메세지
+    const [addressErrorMessage, setAddressErrorMessage] = useState(""); // 주소 에러 메세지
+    const [duplicatedNickname, setDuplicatedNickname] = useState(true); // 닉네임 중복 에러 메세지
+    //현재 비밀번호 입력값 핸들러
     const currentPasswordOnChangeHandler = useCallback((e) => {
-        setCurrentMemberPw(e.target.value); //현재 비밀번호 입력값 핸들러
+        setCurrentMemberPw(e.target.value);
     },[])
 
+    // 비밀번호 수정 핸들러
     const passwordOnChangeHandler = useCallback((e) => {
-        setChangeMemberPw(e.target.value); // 수정할 비밀번호 입력값 핸들러
+        setChangeMemberPw(e.target.value);
+    },[])
+
+    // 닉네임 핸들러
+    const memberNicknameOnChangeHandler = useCallback((e) => {
+        setMemberNickname(e.target.value);
+    },[])
+
+    // 생년월일 핸들러
+    const memberBirthOnChangeHandler = useCallback((e) => {
+        setMemberBrith(e.target.value);
+    },[])
+
+    // 우편번호 핸들러
+    const memberPostcodeOnChangeHandler = useCallback((e) => {
+        setMemberPostcode(e.target.value);
+    },[])
+
+    // 주소 핸들러
+    const memberAddOnChangeHandler = useCallback((e) => {
+        setMemberAdd(e.target.value);
+    },[])
+
+    // 상세주소 핸들러
+    const memberDetailAddOnChangeHandler = useCallback((e) => {
+        setMemberDetailAdd(e.target.value);
     },[])
 
     const memberData = sessionStorage.getItem("member");
     const memberObj = JSON.parse(memberData); // 문자열을 JSON 객체로 변환
-    const memberNickname = memberObj.memberNickname; // memberNickname 속성 추출
-    const memberId = memberObj.memberId;
-    // console.log(memberNickname, memberId); // "용문동핵주먹" 출력
 
 
     // 로그인한 유저의 정보 가져오기
@@ -31,15 +66,20 @@ export default function Mypage() {
             memberId: memberObj.memberId
         }
 
-        console.log("postData", postData)
-
         try {
             const res = await axios.post("/searchMemberInfo", postData, {
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
+
+            console.log(res.data)
             setMemberView(res.data)
+            setMemberNickname(res.data.memberNickname)
+            setMemberPostcode(res.data.memberPostcode)
+            setMemberAdd(res.data.memberAdd)
+            setMemberDetailAdd(res.data.memberDetailAdd)
+            setMemberBrith(res.data.memberBirth)
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -56,11 +96,13 @@ export default function Mypage() {
     const checkMemberPw = () => {
         // 이름이 두글자 이하인 경우 경고 메세지 출력
         // 비밀번호 정규식 부합하지 않은 경우 에러메세지 출력
-        if (!passwordRegex.test(changeMemberPw) || !changeMemberPw) {
-            setPwErrorMessage("최소 특수문자 1개 포함하여 8글자 이상의 비밀번호를 입력해주세요");
-            // 오류 메시지 초기화
-        } else {
-            setPwErrorMessage("");
+        if(changeMemberPw != ""){
+            if (!passwordRegex.test(changeMemberPw) || !changeMemberPw) {
+                setPwErrorMessage("최소 특수문자 1개 포함하여 8글자 이상의 비밀번호를 입력해주세요");
+                // 오류 메시지 초기화
+            } else {
+                setPwErrorMessage("");
+            }
         }
     }
 
@@ -68,16 +110,25 @@ export default function Mypage() {
     const checkCurrentMemberPw = () => {
         // 이름이 두글자 이하인 경우 경고 메세지 출력
         // 비밀번호 정규식 부합하지 않은 경우 에러메세지 출력
-        if (currentMemberPw != memberView.memberPw) {
-            setCurrentPwErrorMessage("비밀번호가 일치하지 않습니다.");
-            // 오류 메시지 초기화
-        } else {
-            setCurrentPwErrorMessage("");
+        if (currentMemberPw != ""){
+            if (currentMemberPw != memberView.memberPw) {
+                setCurrentPwErrorMessage("비밀번호가 일치하지 않습니다.");
+                // 오류 메시지 초기화
+            } else {
+                setCurrentPwErrorMessage("");
+            }
         }
     }
 
     // 비밀번호 수정
     const passwordChange = async () => {
+        if (memberNickname.length < 2) {
+            setNicknameErrorMessage("최소 2글자 이상의 닉네임으로 설정해주세요.");
+            return;
+        } else if (memberNickname == '관리자' || memberNickname == 'admin') {
+            setNicknameErrorMessage("사용할 수 없는 키워드가 들어간 닉네임입니다.");
+            return;
+        }
         if (currentMemberPw == memberView.memberPw && changeMemberPw != "" && pwErrorMessage == ""){
             const passChange = {
                 memberId : memberView.memberId,
@@ -97,6 +148,78 @@ export default function Mypage() {
                 console.error("Error fetching data:", error);
             }
         }
+    }
+
+    // 주소API 사용하여 우편번호,도로명 주소 자동 완성
+    const handlePostcode = () => {
+        new window.daum.Postcode({
+            oncomplete: function (data) {
+                var addr = ''; // 주소 변수
+                // var extraAddr = ''; // 참고항목 변수
+
+                if (data.userSelectedType === 'R') {
+                    addr = data.roadAddress;
+                } else {
+                    addr = data.jibunAddress;
+                }
+
+                document.getElementById('memberPostcode').value = data.zonecode;
+                document.getElementById("memberAdd").value = addr;
+                document.getElementById("memberDetailAdd").focus();
+                setMemberPostcode(data.zonecode);
+                setMemberAdd(addr);
+            }
+        }).open();
+    };
+
+    const saveMemberData = async () => {
+        const memberData =  {
+            memberId : memberView.memberId,
+            memberNickname : memberNickname,
+            memberPostcode : memberPostcode,
+            memberAdd : memberAdd,
+            memberDetailAdd : memberDetailAdd,
+            memberBirth : memberBirth
+        }
+        try {
+            await axios.put("/changeMemberData", memberData,{
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            alert("회원정보가 수정되었습니다.")
+            getData();
+        }catch (error){
+            console.error("회원수정 에러야! => ",error)
+        }
+    }
+
+    // 닉네임 중복체크
+    const nicknameDupCheck = async () => {
+
+        try {
+            const res = await axios.post("/checkNick",  {
+                    memberNickname : memberNickname
+            });
+
+            if (memberNickname != memberView.memberNickname){
+                // 닉네임 중복 체크 확인
+                if (res.data != 0) {
+                    //   중복
+                    setDuplicatedNickname(true);
+                    setNicknameErrorMessage("사용중인 닉네임입니다.");
+                    alert("수정 실패!")
+                    return
+                } else {
+                    setDuplicatedNickname(false);
+                    setNicknameErrorMessage("");
+                }
+            }
+            saveMemberData();
+        } catch (error) {
+            console.error("닉네임 에러야! ", error);
+        }
+
     }
 
     return (
@@ -126,6 +249,7 @@ export default function Mypage() {
                                 </label>
                                 <div className="mt-2">
                                     <input
+                                        readOnly={true}
                                         type="text"
                                         name="memberName"
                                         value={memberView.memberName}
@@ -144,21 +268,24 @@ export default function Mypage() {
                                     <input
                                         type="text"
                                         name="memberNickname"
-                                        value={memberView.memberNickname}
+                                        onChange={memberNicknameOnChangeHandler}
+                                        value={memberNickname}
                                         id="memberNickname"
                                         autoComplete="family-name"
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                     />
                                 </div>
+                                <p id="nicknameErrorMessage" className="text-red">{nicknameErrorMessage}</p>
                             </div>
 
                             <div className="sm:col-span-2">
-                                <label htmlFor="memberId"
+                            <label htmlFor="memberId"
                                        className="block text-lg font-medium leading-6 text-gray-900">
                                     아이디
                                 </label>
                                 <div className="mt-2">
                                     <input
+                                        readOnly={true}
                                         type="text"
                                         name="memberId"
                                         id="memberId"
@@ -228,6 +355,7 @@ export default function Mypage() {
                                 </label>
                                 <div className="mt-2">
                                     <input
+                                        readOnly={true}
                                         id="memberTel"
                                         name="memberTel"
                                         value={memberView.memberTel}
@@ -235,6 +363,26 @@ export default function Mypage() {
                                         autoComplete="memberTel"
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                     />
+                                </div>
+                            </div>
+                            <div className="sm:col-span-2">
+                                <label htmlFor="memberTel"
+                                       className="block text-lg font-medium leading-6 text-gray-900">
+                                </label>
+                                <div className="mt-2">
+
+                                </div>
+                            </div>
+                            <div className="sm:col-span-2">
+                                <label htmlFor="memberTel"
+                                       className="block text-lg font-medium leading-6 text-gray-900">
+                                </label>
+                                <div className="mt-2">
+                                    <button
+                                        onClick={handlePostcode}
+                                        className="float-right bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
+                                    >검색
+                                    </button>
                                 </div>
                             </div>
 
@@ -246,10 +394,12 @@ export default function Mypage() {
                                 </label>
                                 <div className="mt-2">
                                     <input
+                                        readOnly={true}
                                         type="text"
                                         name="memberPostcode"
                                         id="memberPostcode"
-                                        value={memberView.memberPostcode}
+                                        onChange={memberPostcodeOnChangeHandler}
+                                        value={memberPostcode}
                                         autoComplete="memberPostcode"
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                     />
@@ -264,10 +414,12 @@ export default function Mypage() {
                                 </label>
                                 <div className="mt-2">
                                     <input
+                                        readOnly={true}
                                         type="text"
                                         name="memberAdd"
                                         id="memberAdd"
-                                        value={memberView.memberAdd}
+                                        onChange={memberAddOnChangeHandler}
+                                        value={memberAdd}
                                         autoComplete="memberAdd"
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                     />
@@ -282,8 +434,9 @@ export default function Mypage() {
                                     <input
                                         type="text"
                                         name="memberDetailAdd"
-                                        value={memberView.memberDetailAdd}
+                                        value={memberDetailAdd}
                                         id="memberDetailAdd"
+                                        onChange={memberDetailAddOnChangeHandler}
                                         autoComplete="memberDetailAdd"
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                     />
@@ -297,9 +450,11 @@ export default function Mypage() {
                                 </label>
                                 <div className="mt-2">
                                     <input
+                                        readOnly={true}
                                         type="text"
                                         name="memberSub"
                                         id="memberSub"
+                                        value={memberView.memberSub}
                                         autoComplete="memberSub"
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                     />
@@ -313,10 +468,11 @@ export default function Mypage() {
                                 </label>
                                 <div className="mt-2">
                                     <input
-                                        type="text"
+                                        type="date"
                                         name="memberBirth"
                                         id="memberBirth"
-                                        value={memberView.memberBirth}
+                                        value={memberBirth}
+                                        onChange={memberBirthOnChangeHandler}
                                         autoComplete="memberBirth"
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                     />
@@ -349,7 +505,7 @@ export default function Mypage() {
                             Cancel
                         </button>
                         <button
-                            type="submit"
+                            onClick={nicknameDupCheck}
                             className="btn btn-dark"
                             // className="rounded-md bg-blue-600 px-3 py-2 text-lg font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >

@@ -4,6 +4,7 @@ package kr.or.nextit.ditto.member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Member;
 
 
 @Service
@@ -33,6 +34,10 @@ public class MemberService {
 
     public void passwordChange(MemberVO post){
         mapper.passwordChange(post);
+    }
+
+    public void updateMemberData(MemberVO post){
+        mapper.updateMemberData(post);
     }
 
 
