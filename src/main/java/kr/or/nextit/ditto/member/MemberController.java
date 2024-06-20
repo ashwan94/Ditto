@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -78,7 +79,6 @@ public class MemberController {
     public void updateMember(@RequestBody MemberVO post){
         service.updateMemberData(post);
     }
-
 
 
     // 회원가입

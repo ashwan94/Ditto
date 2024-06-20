@@ -13,6 +13,8 @@ export default function Mypage() {
     const [memberAdd, setMemberAdd] = useState("") // 회원 도로명 주소
     const [memberPostcode, setMemberPostcode] = useState("") // 회원 우편번호
     const [memberDetailAdd, setMemberDetailAdd] = useState("") // 회원 상세주소
+    const [showBook, setShowBook] = useState(false); // 도서 대여 내역 on/off
+    const [showBookRentalList, setShowBookRentalList] = useState([]); // 도서대여 내역 리스트
 
     /* 에러 메세지 */
     const [currentPwErrorMessage, setCurrentPwErrorMessage] = useState(""); // 현재 패스워드 에러 메세지
@@ -172,7 +174,12 @@ export default function Mypage() {
         }).open();
     };
 
+    // 회원정보 수정
     const saveMemberData = async () => {
+        if (duplicatedNickname){
+            alert("사용할수없는 닉네임 입니다 닉네임을 수정해주세요.")
+            return
+        }
         const memberData =  {
             memberId : memberView.memberId,
             memberNickname : memberNickname,
@@ -208,18 +215,39 @@ export default function Mypage() {
                     //   중복
                     setDuplicatedNickname(true);
                     setNicknameErrorMessage("사용중인 닉네임입니다.");
-                    alert("수정 실패!")
                     return
                 } else {
                     setDuplicatedNickname(false);
                     setNicknameErrorMessage("");
                 }
             }
-            saveMemberData();
         } catch (error) {
             console.error("닉네임 에러야! ", error);
         }
 
+    }
+
+    // 도서 대역 내역 리스트
+    const showBooks = async () => {
+        if (!showBook){
+            setShowBook(true)
+        }else {
+            setShowBook(false)
+        }
+        const BookRentList = {
+            memberId : memberView.memberId
+        }
+        try {
+            const res = await axios.post("/showBookRentalList",BookRentList,{
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+
+            setShowBookRentalList(res.data)
+        }catch (error){
+            console.error("북렌탈리스트 에러야! => ",error)
+        }
     }
 
     return (
@@ -237,7 +265,26 @@ export default function Mypage() {
                         </h2>
                         <div className="py-5">
                             <span className="mt-1 text-lg leading-6 text-gray-600">내 정보 보기</span>
-                            <span className="mt-1 text-lg leading-6 text-gray-600 mx-3">도서 대출 이력 보기</span>
+                            <span onClick={showBooks} className="btn mt-1 text-lg leading-6 text-gray-600 mx-3">도서 대출 이력 보기</span>
+                            {showBook ? (
+                                <table class="table-auto w-full border-collapse border border-gray-800">
+                                    <tr className="text-center">
+                                        <td class="border border-gray-800 px-4 py-2">도서 번호</td>
+                                        <td class="border border-gray-800 px-4 py-2">도서명</td>
+                                        <td class="border border-gray-800 px-4 py-2">대여일</td>
+                                        <td class="border border-gray-800 px-4 py-2">반납예정일</td>
+                                        <td class="border border-gray-800 px-4 py-2">실제 반납일</td>
+                                        <td class="border border-gray-800 px-4 py-2">연체여부</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-800 px-4 py-2"></td>
+                                        <td class="border border-gray-800 px-4 py-2"></td>
+                                        <td class="border border-gray-800 px-4 py-2"></td>
+                                        <td class="border border-gray-800 px-4 py-2"></td>
+                                        <td class="border border-gray-800 px-4 py-2"></td>
+                                        <td class="border border-gray-800 px-4 py-2"></td>
+                                    </tr>
+                                </table>) : null}
                         </div>
                         <div
                             className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
@@ -269,6 +316,7 @@ export default function Mypage() {
                                         type="text"
                                         name="memberNickname"
                                         onChange={memberNicknameOnChangeHandler}
+                                        onBlur={nicknameDupCheck}
                                         value={memberNickname}
                                         id="memberNickname"
                                         autoComplete="family-name"
@@ -505,7 +553,7 @@ export default function Mypage() {
                             Cancel
                         </button>
                         <button
-                            onClick={nicknameDupCheck}
+                            onClick={saveMemberData}
                             className="btn btn-dark"
                             // className="rounded-md bg-blue-600 px-3 py-2 text-lg font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
