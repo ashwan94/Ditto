@@ -1,4 +1,4 @@
-package seat;
+package kr.or.nextit.ditto.seat;
 
 import lombok.Data;
 
@@ -7,5 +7,6 @@ public class SeatVO {
     private int seatNo;
     private int seatRow;
     private int seatCol;
-    private String seat_status;
+    private String status;
+
 }

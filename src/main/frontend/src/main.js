@@ -462,7 +462,7 @@ const Main = () => {
                   </svg>
                 </span>
                     </div>
-                    <div className="ud-testimonial-content mb-6">
+                    <div className="ud-testimonial-content mb-12">
                       <p className="text-base tracking-wide text-body-color">
                         복사기 무료 이용이 너무 좋습니다. 흑백만 되는게 아쉽지만 만족합니다.
                       </p>
