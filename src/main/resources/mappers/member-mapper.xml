@@ -3,7 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.nextit.ditto.member.MemberMapper">
-
     <!--  로그인용   -->
     <select id="findMember" parameterType="memberVO" resultType="memberVO">
         SELECT
@@ -51,7 +50,6 @@
             MEMBER A
         WHERE
             A.MEMBER_ID = #{memberId}
-
     </select>
 
     <!-- 회원가입 닉네임 중복 체크용 -->
@@ -65,14 +63,36 @@
 
     </select>
 
-
     <!--  마이페이지 확인용   -->
     <select id="searchMemberInfo" parameterType="String" resultType="memberVO">
         SELECT
-        *
+            *
         FROM
-        MEMBER A
+            MEMBER A
         WHERE
-        A.MEMBER_ID = #{memberId}
+            A.MEMBER_ID = #{memberId}
     </select>
+
+    <!-- 마이페이지 비밀번호 수정   -->
+    <update id="passwordChange" parameterType="MemberVO">
+        UPDATE
+            MEMBER A
+        SET
+            A.MEMBER_PW = #{memberPw}
+        WHERE
+            A.MEMBER_ID = #{memberId}
+    </update>
+
+    <update id="updateMemberData" parameterType="MemberVO">
+        UPDATE
+            MEMBER A
+        SET
+            A.MEMBER_NICKNAME = #{memberNickname},
+            A.MEMBER_POSTCODE = #{memberPostcode},
+            A.MEMBER_ADD = #{memberAdd},
+            A.MEMBER_DETAILADD = #{memberDetailAdd},
+            A.MEMBER_BIRTH = #{memberBirth}
+        WHERE
+            A.MEMBER_ID = #{memberId}
+    </update>
 </mapper>
