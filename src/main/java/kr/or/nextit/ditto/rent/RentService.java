@@ -42,11 +42,11 @@ public class RentService {
         return mapper.showBookList(memberId);
     }
 
-    public void rentReturn(int bookNo){
-        mapper.rentReturn(bookNo);
+    public void rentReturn(RentVO rentNo){
+        mapper.rentReturn(rentNo);
     }
-    public void rentBookReturn(int bookNo){
-        mapper.rentBookReturn(bookNo);
+    public void rentBookReturn(RentVO rentNo){
+        mapper.rentBookReturn(rentNo);
     }
 
 }

@@ -54,11 +54,11 @@ public class RentController {
 
     // rent쪽 반납수정
     @PostMapping("/rentReturn")
-    public void rentReturn(@RequestBody  Map<String, Object> map){
-        log.info("{}, 책번호",map.get("bookNo"));
-        int t = (int) map.get("bookNo");
-        service.rentReturn(t);
-        service.rentBookReturn(t);
+    public void rentReturn(@RequestBody RentVO rentNo){
+        service.rentReturn(rentNo);
+        service.rentBookReturn(rentNo);
+        log.info("렌트넘버: {}",rentNo);
     }
+
     // book 반납 대출가능여부 수정
 }

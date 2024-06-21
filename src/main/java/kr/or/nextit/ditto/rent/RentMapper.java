@@ -20,7 +20,7 @@ public interface RentMapper {
 
     List<RentVO> showBookList(String memberId);
 
-    void rentReturn(int bookNo);
+    void rentReturn(RentVO rentNo);
 
-    void rentBookReturn(int bookNo);
+    void rentBookReturn(RentVO rentNo);
 }

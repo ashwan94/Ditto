@@ -16,6 +16,7 @@ export default function Mypage() {
     const [showBook, setShowBook] = useState(false); // 도서 대여 내역 on/off
     const [showBookRentalList, setShowBookRentalList] = useState([]) // 도서대여 내역 리스트
     const [bookNo, setBookNo] = useState(0); // 책 번호
+    const [rentNo, setRentNo] = useState(0); // 렌트 번호
 
     /* 에러 메세지 */
     const [currentPwErrorMessage, setCurrentPwErrorMessage] = useState(""); // 현재 패스워드 에러 메세지
@@ -274,8 +275,10 @@ export default function Mypage() {
     // 도서 반납
     const bookRentReturn = async () => {
 
+        // update 각테이블에 한번씩 총 두번실행
         const rentData = {
-            bookNo: bookNo
+            bookNo: bookNo,
+            rentNo: rentNo
         }
 
         try {
@@ -292,8 +295,8 @@ export default function Mypage() {
     }
 
     useEffect(()=>{
-        bookRentReturn()
-    },[bookNo])
+        bookRentReturn() // 반납버튼 클릭시 rentNo 값 바뀔때마다 실행
+    },[rentNo])
 
     return (
         <main className="rundry">
@@ -335,8 +338,8 @@ export default function Mypage() {
                                                 <td className="border border-gray-800 px-4 py-2">{v.rentEnd}</td>
                                                 <td className="border border-gray-800 px-4 py-2">{v.rentReturn}</td>
                                                 <td className="border border-gray-800 px-4 py-2">{v.rentDelay}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.bookRent == 'Y' ? (<button type={"button"} onClick={() => setBookNo(v.bookNo)
-                                                } className="text-red">반납하기</button>) : (<span className="text-blue-500">반납완료</span>)}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.rentReturn == null && v.bookRent == 'y' ? (<button className="text-red" type="button" onClick={() => {setRentNo(v.rentNo); setBookNo(v.bookNo); }}>
+                                                    반납하기</button>) : (<span className="text-blue-500">반납완료</span>)}</td>
                                             </tr>
                                         )
                                     )

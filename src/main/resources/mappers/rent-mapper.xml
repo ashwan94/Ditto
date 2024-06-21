@@ -33,9 +33,9 @@
         UPDATE
             book
         SET
-            BOOK_RENT = 'Y'
+            BOOK_RENT = 'y'
         WHERE
-            book_no = #{bookNo} AND BOOK_RENT = 'N';
+            book_no = #{bookNo} AND BOOK_RENT = 'n';
     </update>
 
 
@@ -87,6 +87,7 @@
     <!-- 로그인한 회원 도서 대여 목록 -->
     <select id="showBookList" parameterType="String" resultType="rentVO">
         SELECT
+            R.RENT_NO,
             R.BOOK_NO,
             R.BOOK_NAME,
             R.RENT_START,
@@ -96,27 +97,28 @@
             B.BOOK_RENT
         FROM
             RENT R
-        LEFT JOIN
+        JOIN
             BOOK B
         ON
             R.BOOK_NO = B.BOOK_NO
         WHERE
             R.MEMBER_ID = #{memberId}
     </select>
-    <update id="rentReturn" parameterType="int">
+    <update id="rentReturn" parameterType="rentVO">
         UPDATE
             RENT R
         SET
-            R.RENT_DELAY = 'N',
+            R.RENT_DELAY = 'n',
             R.RENT_RETURN = NOW()
         WHERE
-            R.BOOK_NO = #{bookNo};
+            R.BOOK_NO = #{bookNo} AND
+            R.RENT_NO = #{rentNo}
     </update>
-    <update id="rentBookReturn" parameterType="int">
+    <update id="rentBookReturn" parameterType="rentVO">
         UPDATE
             BOOK B
         SET
-            B.book_rent = 'N'
+            B.book_rent = 'n'
         WHERE
             B.BOOK_NO = #{bookNo}
     </update>
