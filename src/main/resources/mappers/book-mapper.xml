@@ -54,7 +54,8 @@
 
 <!--  getBook 도서 정보 상세보기 쿼리문   -->
     <select id="getBook" parameterType="int" resultType="bookVO">
-        SELECT *
+        SELECT
+            *
         FROM
             book
         WHERE

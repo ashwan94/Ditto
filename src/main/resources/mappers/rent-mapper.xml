@@ -83,4 +83,18 @@
         AND
             rent_return IS NULL
     </select>
+    
+    <!-- 로그인한 회원 도서 대여 목록 -->
+    <select id="showBookList" parameterType="String" resultType="rentVO">
+        SELECT
+            *
+        FROM
+            rent R
+        LEFT JOIN
+            book B
+        ON
+            R.BOOK_NO = B.BOOK_NO
+        WHERE
+            R.MEMBER_ID = #{memberId}
+    </select>
 </mapper>

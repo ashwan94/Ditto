@@ -14,14 +14,12 @@ export default function Mypage() {
     const [memberPostcode, setMemberPostcode] = useState("") // 회원 우편번호
     const [memberDetailAdd, setMemberDetailAdd] = useState("") // 회원 상세주소
     const [showBook, setShowBook] = useState(false); // 도서 대여 내역 on/off
-    const [showBookRentalList, setShowBookRentalList] = useState([]); // 도서대여 내역 리스트
+    const [showBookRentalList, setShowBookRentalList] = useState([]) // 도서대여 내역 리스트
 
     /* 에러 메세지 */
     const [currentPwErrorMessage, setCurrentPwErrorMessage] = useState(""); // 현재 패스워드 에러 메세지
     const [pwErrorMessage, setPwErrorMessage] = useState(""); // 패스워드 에러 메세지
     const [nicknameErrorMessage, setNicknameErrorMessage] = useState(""); // 닉네임 에러 메세지
-    const [birthErrorMessage, setBirthErrorMessage] = useState(""); // 생년월일 에러 메세지
-    const [addressErrorMessage, setAddressErrorMessage] = useState(""); // 주소 에러 메세지
     const [duplicatedNickname, setDuplicatedNickname] = useState(true); // 닉네임 중복 에러 메세지
     //현재 비밀번호 입력값 핸들러
     const currentPasswordOnChangeHandler = useCallback((e) => {
@@ -82,28 +80,38 @@ export default function Mypage() {
             setMemberAdd(res.data.memberAdd)
             setMemberDetailAdd(res.data.memberDetailAdd)
             setMemberBrith(res.data.memberBirth)
+
         } catch (error) {
             console.error("Error fetching data:", error);
         }
 
-        const BookRentList = {
-            memberId : memberView.memberId
+    };
+
+    // 책 정보 가져오기
+    const getBookData = async () => {
+
+        const bookData = {
+            memberId: memberObj.memberId
         }
+
         try {
-            const resData = await axios.post("/showBookRentalList",BookRentList,{
+            const resData = await axios.post("/showBookRentalList",bookData,{
                 headers: {
                     "Content-Type": "application/json"
                 }
             })
             setShowBookRentalList(resData.data)
+            console.log(resData.data)
+            console.log(showBookRentalList)
         }catch (error){
-            console.error("북렌탈리스트 에러야! => ",error)
+            console.error("Error fetching data:", error);
         }
     };
 
     // 페이지 첫 랜더링 시 가져오기
     useEffect(() => {
         getData()
+        getBookData()
     }, []);
 
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
@@ -286,27 +294,35 @@ export default function Mypage() {
                                     <td class="border border-gray-800 px-4 py-2">반납예정일</td>
                                     <td class="border border-gray-800 px-4 py-2">실제 반납일</td>
                                     <td class="border border-gray-800 px-4 py-2">연체여부</td>
+                                    <td class="border border-gray-800 px-4 py-2">반납여부</td>
                                 </tr>
-                                <tr>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                </tr>
+                                {showBookRentalList && showBookRentalList.length > 0 ? (
+                                    showBookRentalList.map((v,i)=>{
+                                        (
+                                            <tr key={i}>
+                                                <td className="border border-gray-800 px-4 py-2">{v.bookNo}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.bookName}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.rentStart}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.rentEnd}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.rentReturn}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.rentDelay}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.bookRent}</td>
+                                            </tr>
+                                        )
+                                    })
+                                ) : null}
                             </table>
                         </div>
-                        ) :(
-                        <>
-                            <div
-                                className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
+                        ) : (
+                            <>
+                                <div
+                                    className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
 
-                                <div className="sm:col-span-2 border-gray-900/10">
-                                    <label htmlFor="memberName"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        이름
-                                    </label>
+                                    <div className="sm:col-span-2 border-gray-900/10">
+                                        <label htmlFor="memberName"
+                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                            이름
+                                        </label>
                                     <div className="mt-2">
                                         <input
                                             readOnly={true}
