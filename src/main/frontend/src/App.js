@@ -1,18 +1,21 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Main from "./main";
-import Header from "./pages/common/Header";
-import Footer from "./pages/common/Footer";
-import SignIn from "./pages/common/SignIn";
-import SignUp from "./pages/common/SignUp";
+import Header from "./pages/common/header";
+import Footer from "./pages/common/footer";
+import SignIn from "./pages/common/signIn";
+import SignUp from "./pages/common/signUp";
 import SeatList from  "./pages/seat/list"
 import "./css/style.css";
 import PodcastList from "./pages/podcast/list";
 import BookList from "./pages/book/list";
 import BookView from "./pages/book/view";
-import Introduction from "./pages/introduce/Introduction";
-import Mypage from "./pages/common/Mypage";
+import Mypage from "./pages/common/mypage";
 import BookWarn from "./pages/book/warn";
-import KaKaoTalk from "./pages/common/KakaoTalk";
+import KaKaoTalk from "./pages/common/kakaoTalk";
+import Membership from "./pages/introduce/membership";
+import Faq from "./pages/introduce/faq";
+
+
 function App() {
   return (
     <>
@@ -27,8 +30,9 @@ function App() {
           <Route path="/podcast/list" element={<PodcastList />} />
           <Route path="/book/list" element={<BookList/>}/>
           <Route path="/book/view" element={<BookView/>}/>
-          <Route path="/introduction" element={<Introduction/>}/>
           <Route path="/mypage" element={<Mypage />} />
+          <Route path="/membershipInfo" element={<Membership />} />
+          <Route path="/faq" element={<Faq />} />
         </Routes>
         <Footer />
         <KaKaoTalk />
