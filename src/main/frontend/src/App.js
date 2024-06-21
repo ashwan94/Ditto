@@ -5,7 +5,7 @@ import Footer from "./pages/common/Footer";
 import SignIn from "./pages/common/SignIn";
 import SignUp from "./pages/common/SignUp";
 import SeatList from  "./pages/seat/list"
-import PodcastList from "./pages/podcast/list";
+import PodcastList from "./pages/community/podcast/list";
 import BookList from "./pages/book/list";
 import Intro from "./pages/introduce/intro";
 import BookView from "./pages/book/view";
@@ -28,7 +28,7 @@ function App() {
           <Route path="/SignIn" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/mypage" element={<Mypage />} />
-          <Route path="/podcast/list" element={<PodcastList />} />
+          <Route path="/community/podcast/list" element={<PodcastList />} />
           <Route path="/seat/list" element={<SeatList />} />
         </Routes>
         <Footer />

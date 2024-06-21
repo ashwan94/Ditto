@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @RestController
@@ -45,15 +47,39 @@ public class MemberController {
 
     }
 
-
+    // 마이페이지 회원정보 조회
     @PostMapping("/searchMemberInfo")
-    public MemberVO searchMemberInfo(String memberId){
+    public MemberVO searchMemberInfo(@RequestBody Map<String, String> payload){
+        String memberId = payload.get("memberId");
         MemberVO member = service.searchMemberInfo(memberId);
         System.out.println("회원 아이디" + memberId);
         System.out.println("회원 정보 ======>" +member);
-
         return member;
     }
+
+    // 비밀번호 수정
+    @PostMapping("/passwordChange")
+    public void passwordChange(@RequestBody MemberVO post){
+        service.passwordChange(post); // 기존 게시물을 수정
+    }
+
+    // 마이페이지 닉네임 중복체크
+    @PostMapping("/checkNick")
+    public int checkNick(@RequestBody MemberVO memberVO) {
+        System.out.println("==>" + memberVO);
+        // 닉네임 중복
+        int checkNickname = service.checkNicknameIsDuplicated(memberVO.getMemberNickname());
+        System.out.println("닉네임 중복되는가? : " + checkNickname);
+        // 0 = 사용가능한 아이디나 닉네임
+        return checkNickname;
+    }
+
+    // 마이페이지 회원정보 수정
+    @PutMapping("/changeMemberData")
+    public void updateMember(@RequestBody MemberVO post){
+        service.updateMemberData(post);
+    }
+
 
     // 회원가입
     @PostMapping("/register")
@@ -89,7 +115,6 @@ public class MemberController {
 
         return checkNickname;
     }
-
 
     /**
      * 단일 메시지 발송 예제 - 공식 홈페이지
