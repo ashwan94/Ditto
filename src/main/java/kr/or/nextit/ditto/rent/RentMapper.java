@@ -19,4 +19,8 @@ public interface RentMapper {
     int checkRentCount(int memberNo);
 
     List<RentVO> showBookList(String memberId);
+
+    void rentReturn(int bookNo);
+
+    void rentBookReturn(int bookNo);
 }

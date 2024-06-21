@@ -41,4 +41,12 @@ public class RentService {
     public List<RentVO> showBookList(String memberId){
         return mapper.showBookList(memberId);
     }
+
+    public void rentReturn(int bookNo){
+        mapper.rentReturn(bookNo);
+    }
+    public void rentBookReturn(int bookNo){
+        mapper.rentBookReturn(bookNo);
+    }
+
 }

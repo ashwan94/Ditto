@@ -3,10 +3,8 @@ package kr.or.nextit.ditto.rent;
 import kr.or.nextit.ditto.member.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.ibatis.javassist.bytecode.analysis.Type;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -48,11 +46,19 @@ public class RentController {
 
     // 로그인 회원 도서 대여 여부
     @PostMapping("/showBookRentalList")
-    public List<RentVO> BookList(@RequestBody Map<String, String> memberIdMap){
+    public List<RentVO> bookList(@RequestBody Map<String, String> memberIdMap){
         String memberId = memberIdMap.get("memberId");
-        System.out.println("Received memberId: " + memberId);
         List<RentVO> result = service.showBookList(memberId);
-        System.out.println("왜안나와!! " + result);
         return result;
     }
+
+    // rent쪽 반납수정
+    @PostMapping("/rentReturn")
+    public void rentReturn(@RequestBody  Map<String, Object> map){
+        log.info("{}, 책번호",map.get("bookNo"));
+        int t = (int) map.get("bookNo");
+        service.rentReturn(t);
+        service.rentBookReturn(t);
+    }
+    // book 반납 대출가능여부 수정
 }

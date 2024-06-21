@@ -15,6 +15,7 @@ export default function Mypage() {
     const [memberDetailAdd, setMemberDetailAdd] = useState("") // 회원 상세주소
     const [showBook, setShowBook] = useState(false); // 도서 대여 내역 on/off
     const [showBookRentalList, setShowBookRentalList] = useState([]) // 도서대여 내역 리스트
+    const [bookNo, setBookNo] = useState(0); // 책 번호
 
     /* 에러 메세지 */
     const [currentPwErrorMessage, setCurrentPwErrorMessage] = useState(""); // 현재 패스워드 에러 메세지
@@ -102,7 +103,6 @@ export default function Mypage() {
             })
             setShowBookRentalList(resData.data)
             console.log(resData.data)
-            console.log(showBookRentalList)
         }catch (error){
             console.error("Error fetching data:", error);
         }
@@ -113,6 +113,11 @@ export default function Mypage() {
         getData()
         getBookData()
     }, []);
+
+    // showBookRentalList 상태가 변경될 때마다 로그 출력
+    useEffect(() => {
+        console.log(showBookRentalList);
+    }, [showBookRentalList]);
 
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
 
@@ -266,6 +271,30 @@ export default function Mypage() {
 
     }
 
+    // 도서 반납
+    const bookRentReturn = async () => {
+
+        const rentData = {
+            bookNo: bookNo
+        }
+
+        try {
+            await axios.post("/rentReturn",rentData,{
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+
+            getBookData();
+        }catch (error){
+            console.error("Error fetching data:", error);
+        }
+    }
+
+    useEffect(()=>{
+        bookRentReturn()
+    },[bookNo])
+
     return (
         <main className="rundry">
             <section className="i pg fh rm ki xn vq gj qp gr hj rp hr ">
@@ -297,19 +326,20 @@ export default function Mypage() {
                                     <td class="border border-gray-800 px-4 py-2">반납여부</td>
                                 </tr>
                                 {showBookRentalList && showBookRentalList.length > 0 ? (
-                                    showBookRentalList.map((v,i)=>{
+                                    showBookRentalList.map((v,i)=>
                                         (
-                                            <tr key={i}>
+                                            <tr key={i} className="text-center">
                                                 <td className="border border-gray-800 px-4 py-2">{v.bookNo}</td>
                                                 <td className="border border-gray-800 px-4 py-2">{v.bookName}</td>
                                                 <td className="border border-gray-800 px-4 py-2">{v.rentStart}</td>
                                                 <td className="border border-gray-800 px-4 py-2">{v.rentEnd}</td>
                                                 <td className="border border-gray-800 px-4 py-2">{v.rentReturn}</td>
                                                 <td className="border border-gray-800 px-4 py-2">{v.rentDelay}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.bookRent}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.bookRent == 'Y' ? (<button type={"button"} onClick={() => setBookNo(v.bookNo)
+                                                } className="text-red">반납하기</button>) : (<span className="text-blue-500">반납완료</span>)}</td>
                                             </tr>
                                         )
-                                    })
+                                    )
                                 ) : null}
                             </table>
                         </div>
@@ -563,7 +593,8 @@ export default function Mypage() {
                             </div>
                         </>)}
                     </div>
-                    <div className="mt-6 flex items-center justify-end gap-x-6">
+                    {!showBook ?
+                        (<div className="mt-6 flex items-center justify-end gap-x-6">
                         <button type="button" className="text-lg font-semibold leading-6 text-gray-900">
                             Cancel
                         </button>
@@ -574,7 +605,7 @@ export default function Mypage() {
                         >
                         Save
                         </button>
-                    </div>
+                    </div>) :null}
                 </div>
             </section>
         </main>
