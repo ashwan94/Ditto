@@ -4,6 +4,8 @@ import {useCallback, useEffect, useState} from "react";
 
 export default function Mypage() {
 
+    // TODO 연체 여부가 Y일때 는 update rent_delay 컬럼 수정 되지 않게 해야됨
+
     /* 사용자에게 입력받을 useState 지정 필드 */
     const [memberView, setMemberView] = useState([]) // 회원정보 조회
     const [currentMemberPw, setCurrentMemberPw] = useState("") // 현재 패스워드
@@ -14,14 +16,14 @@ export default function Mypage() {
     const [memberPostcode, setMemberPostcode] = useState("") // 회원 우편번호
     const [memberDetailAdd, setMemberDetailAdd] = useState("") // 회원 상세주소
     const [showBook, setShowBook] = useState(false); // 도서 대여 내역 on/off
-    const [showBookRentalList, setShowBookRentalList] = useState([]); // 도서대여 내역 리스트
+    const [showBookRentalList, setShowBookRentalList] = useState([]) // 도서 대여 내역 리스트
+    const [bookNo, setBookNo] = useState(0); // 책 번호
+    const [rentNo, setRentNo] = useState(0); // 렌트 번호
 
     /* 에러 메세지 */
     const [currentPwErrorMessage, setCurrentPwErrorMessage] = useState(""); // 현재 패스워드 에러 메세지
     const [pwErrorMessage, setPwErrorMessage] = useState(""); // 패스워드 에러 메세지
     const [nicknameErrorMessage, setNicknameErrorMessage] = useState(""); // 닉네임 에러 메세지
-    const [birthErrorMessage, setBirthErrorMessage] = useState(""); // 생년월일 에러 메세지
-    const [addressErrorMessage, setAddressErrorMessage] = useState(""); // 주소 에러 메세지
     const [duplicatedNickname, setDuplicatedNickname] = useState(true); // 닉네임 중복 에러 메세지
     //현재 비밀번호 입력값 핸들러
     const currentPasswordOnChangeHandler = useCallback((e) => {
@@ -58,14 +60,14 @@ export default function Mypage() {
         setMemberDetailAdd(e.target.value);
     },[])
 
-    const memberData = sessionStorage.getItem("member");
+    const memberData = sessionStorage.getItem("member"); // 세션스토리지에담긴 로그인 회원정보 가져오기
     const memberObj = JSON.parse(memberData); // 문자열을 JSON 객체로 변환
 
 
     // 로그인한 유저의 정보 가져오기
     const getData = async () => {
         const postData = {
-            memberId: memberObj.memberId
+            memberId: memberObj.memberId // 세션에담긴 로그인 회원 아이디
         }
 
         try {
@@ -76,35 +78,74 @@ export default function Mypage() {
             });
 
             console.log(res.data)
-            setMemberView(res.data)
-            setMemberNickname(res.data.memberNickname)
-            setMemberPostcode(res.data.memberPostcode)
-            setMemberAdd(res.data.memberAdd)
-            setMemberDetailAdd(res.data.memberDetailAdd)
-            setMemberBrith(res.data.memberBirth)
+            setMemberView(res.data) // 요청한 로그인 회원의 정보 전체 담기
+            setMemberNickname(res.data.memberNickname) // 닉네임만
+            setMemberPostcode(res.data.memberPostcode)// 우편번호만
+            setMemberAdd(res.data.memberAdd)// 주소만
+            setMemberDetailAdd(res.data.memberDetailAdd)// 상세주소만
+            setMemberBrith(res.data.memberBirth)// 생일만
+
         } catch (error) {
             console.error("Error fetching data:", error);
         }
 
-        const BookRentList = {
-            memberId : memberView.memberId
+    };
+
+    // 책 대여 이력 정보 가져오기
+    const getBookData = async () => {
+
+        const bookData = {
+            memberId: memberObj.memberId // 세션에 담긴 회원 아이디
         }
+
         try {
-            const resData = await axios.post("/showBookRentalList",BookRentList,{
+            const resData = await axios.post("/showBookRentalList",bookData,{
                 headers: {
                     "Content-Type": "application/json"
                 }
             })
-            setShowBookRentalList(resData.data)
+            setShowBookRentalList(resData.data)// 책 대여 이력 리스트에 담기
+            console.log(resData.data)
         }catch (error){
-            console.error("북렌탈리스트 에러야! => ",error)
+            console.error("Error fetching data:", error);
         }
     };
 
     // 페이지 첫 랜더링 시 가져오기
     useEffect(() => {
-        getData()
+        if (JSON.parse(sessionStorage.getItem("bookRent"))){
+            setShowBook(true);
+            sessionStorage.removeItem("bookRent");
+        }
+        getData() // 로그인한 유저의 정보 가져오기
+        getBookData() // 책 대여 이력 정보 가져오기
     }, []);
+
+    // 도서 반납
+    const bookRentReturn = async () => {
+
+        // update 각테이블에 한번씩 총 두번실행
+        const rentData = {
+            bookNo: bookNo, // 책번호
+            rentNo: rentNo // 렌트번호
+        }
+
+        try {
+            await axios.post("/rentReturn",rentData,{
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+
+            getBookData(); // 책 대여 이력 정보 가져오기 실행
+        }catch (error){
+            console.error("Error fetching data:", error);
+        }
+    }
+
+    useEffect(()=>{
+        bookRentReturn() // 반납버튼 클릭시 rentNo 값 바뀔때마다 실행
+    },[rentNo]) // 반납버튼 눌렀을때 렌트넘버의 상태값이 변할때마다 실행
 
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
 
@@ -119,6 +160,8 @@ export default function Mypage() {
             } else {
                 setPwErrorMessage("");
             }
+        }else {
+            setPwErrorMessage("")
         }
     }
 
@@ -126,29 +169,26 @@ export default function Mypage() {
     const checkCurrentMemberPw = () => {
         // 이름이 두글자 이하인 경우 경고 메세지 출력
         // 비밀번호 정규식 부합하지 않은 경우 에러메세지 출력
-        if (currentMemberPw != ""){
-            if (currentMemberPw != memberView.memberPw) {
-                setCurrentPwErrorMessage("비밀번호가 일치하지 않습니다.");
+        if (currentMemberPw != ""){ // 현재 비밀번호가 ""가 아니면
+            if (currentMemberPw != memberView.memberPw) { // 현재 비멀번호와 일치하지 않으면
+                setCurrentPwErrorMessage("비밀번호가 일치하지 않습니다."); // 현재 비밀번호 onblur 수정
                 // 오류 메시지 초기화
             } else {
-                setCurrentPwErrorMessage("");
+                setCurrentPwErrorMessage(""); // 현재 비밀번호 onblur 수정
             }
+        }else {
+            setCurrentPwErrorMessage(""); // 현재 비밀번호 칸이 비어 있을때
         }
     }
 
-    // 비밀번호 수정
+    // 비밀번호 수정 버튼 클릭시
     const passwordChange = async () => {
-        if (memberNickname.length < 2) {
-            setNicknameErrorMessage("최소 2글자 이상의 닉네임으로 설정해주세요.");
-            return;
-        } else if (memberNickname == '관리자' || memberNickname == 'admin') {
-            setNicknameErrorMessage("사용할 수 없는 키워드가 들어간 닉네임입니다.");
-            return;
-        }
+
+        // 현재 비밀번호가 일치하고 새로운 비밀먼호가 ""가 아니고 새로운 비밀번호가 조건에 충족할 때
         if (currentMemberPw == memberView.memberPw && changeMemberPw != "" && pwErrorMessage == ""){
             const passChange = {
-                memberId : memberView.memberId,
-                memberPw : changeMemberPw
+                memberId : memberView.memberId, // 로그인 회원 아이디
+                memberPw : changeMemberPw // 새로 바꿀 비밀번호
             }
             try {
                 const res = await axios.post("/passwordChange", passChange, {
@@ -156,8 +196,8 @@ export default function Mypage() {
                         "Content-Type": "application/json"
                     }
                 });
-                setCurrentMemberPw("");
-                setChangeMemberPw("");
+                setCurrentMemberPw(""); // 업데이트후 현재비밀번호칸 비워주기
+                setChangeMemberPw(""); // 업데이트후 새로운 비밀번호칸 비워주기
                 alert("비밀번호가 수정되었습니다.")
                 getData();
             } catch (error) {
@@ -189,26 +229,29 @@ export default function Mypage() {
         }).open();
     };
 
-    // 회원정보 수정
+    // save버튼 클릭시 회원정보 수정
     const saveMemberData = async () => {
-        if (memberNickname.length < 2) {
+        if (memberNickname.length == 0){
+            alert("닉네임을 입력해 주세요.")
+            return;
+        } else if (memberNickname.length < 2) {
             alert("최소 2글자 이상의 닉네임으로 설정해주세요.")
             return;
         } else if (memberNickname == '관리자' || memberNickname == 'admin') {
             alert("사용할 수 없는 키워드가 들어간 닉네임입니다.")
             return;
         }
-        if (duplicatedNickname){
+        if (duplicatedNickname){ // true일때 중복될때
             alert("사용할수없는 닉네임 입니다 닉네임을 수정해주세요.")
             return
         }
         const memberData =  {
-            memberId : memberView.memberId,
-            memberNickname : memberNickname,
-            memberPostcode : memberPostcode,
-            memberAdd : memberAdd,
-            memberDetailAdd : memberDetailAdd,
-            memberBirth : memberBirth
+            memberId : memberView.memberId, // 로그인 회원 아이디
+            memberNickname : memberNickname, // 바꿀닉네임, 현상유지도 가능
+            memberPostcode : memberPostcode, // 우편번호
+            memberAdd : memberAdd, // 주소
+            memberDetailAdd : memberDetailAdd, // 상세주소
+            memberBirth : memberBirth // 생일
         }
         try {
             await axios.put("/changeMemberData", memberData,{
@@ -223,40 +266,41 @@ export default function Mypage() {
         }
     }
 
-    // 닉네임 중복체크
+    // 닉네임 중복체크 onblur 마우스 땠을때 실행됨
     const nicknameDupCheck = async () => {
 
         if (memberNickname.length < 2) {
-            setNicknameErrorMessage("최소 2글자 이상의 닉네임으로 설정해주세요.");
+            setNicknameErrorMessage("최소 2글자 이상의 닉네임으로 설정해주세요.");// 닉네임 onblur
             return;
         } else if (memberNickname == '관리자' || memberNickname == 'admin') {
-            setNicknameErrorMessage("사용할 수 없는 키워드가 들어간 닉네임입니다.");
+            setNicknameErrorMessage("사용할 수 없는 키워드가 들어간 닉네임입니다."); // 닉네임 onblur
             return;
         }
 
         try {
             const res = await axios.post("/checkNick",  {
-                    memberNickname : memberNickname
+                    memberNickname : memberNickname // 닉네임
             });
 
-            if (memberNickname != memberView.memberNickname){
+            if (memberNickname != memberView.memberNickname){ // 닉네임이 현재 닉네임과 다를때 실행
                 // 닉네임 중복 체크 확인
                 if (res.data != 0) {
                     //   중복
-                    setDuplicatedNickname(true);
+                    setDuplicatedNickname(true); // 중복될때
                     setNicknameErrorMessage("사용중인 닉네임입니다.");
                     return
                 } else {
-                    setDuplicatedNickname(false);
+                    setDuplicatedNickname(false);// 사용가능할때
                     setNicknameErrorMessage("");
                 }
             }
-            setDuplicatedNickname(false);
+            setDuplicatedNickname(false); // 현재이름과 같을때 사용가능하게
         } catch (error) {
             console.error("닉네임 에러야! ", error);
         }
 
     }
+
 
     return (
         <main className="rundry">
@@ -272,7 +316,9 @@ export default function Mypage() {
                             환영합니다.
                         </h2>
                         <div className="py-5">
+                            {/* 내 정보 보기 */}
                             <span onClick={() => setShowBook(false)} className="btn mt-1 text-lg leading-6 text-gray-600">내 정보 보기</span>
+                            {/* 도서 대출 이력 보기 */}
                             <span onClick={() => setShowBook(true)} className="btn mt-1 text-lg leading-6 text-gray-600 mx-3">도서 대출 이력 보기</span>
                         </div>
                         {showBook ? (
@@ -286,27 +332,37 @@ export default function Mypage() {
                                     <td class="border border-gray-800 px-4 py-2">반납예정일</td>
                                     <td class="border border-gray-800 px-4 py-2">실제 반납일</td>
                                     <td class="border border-gray-800 px-4 py-2">연체여부</td>
+                                    <td class="border border-gray-800 px-4 py-2">반납여부</td>
                                 </tr>
-                                <tr>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                    <td class="border border-gray-800 px-4 py-2"></td>
-                                </tr>
+                                {/* 도서대여 이력이 한개이상 존재 할때나옴 */}
+                                {showBookRentalList && showBookRentalList.length > 0 ? (
+                                    showBookRentalList.map((v,i)=>
+                                        (
+                                            <tr key={i} className="text-center">
+                                                <td className="border border-gray-800 px-4 py-2">{v.bookNo}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.bookName}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.rentStart}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.rentEnd}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.rentReturn}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.rentDelay}</td>
+                                                <td className="border border-gray-800 px-4 py-2">{v.rentReturn == null && v.bookRent == 'Y' ? (<button className="text-red" type="button" onClick={() => {setRentNo(v.rentNo); setBookNo(v.bookNo); }}>
+                                                    반납하기</button>) : (<span className="text-blue-500">반납완료</span>)}</td>
+                                            </tr>
+                                        )
+                                    )
+                                ) : null}
                             </table>
                         </div>
-                        ) :(
-                        <>
-                            <div
-                                className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
+                        ) : (
+                            <>
+                                <div
+                                    className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
 
-                                <div className="sm:col-span-2 border-gray-900/10">
-                                    <label htmlFor="memberName"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        이름
-                                    </label>
+                                    <div className="sm:col-span-2 border-gray-900/10">
+                                        <label htmlFor="memberName"
+                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                            이름
+                                        </label>
                                     <div className="mt-2">
                                         <input
                                             readOnly={true}
@@ -547,7 +603,8 @@ export default function Mypage() {
                             </div>
                         </>)}
                     </div>
-                    <div className="mt-6 flex items-center justify-end gap-x-6">
+                    {!showBook ?
+                        (<div className="mt-6 flex items-center justify-end gap-x-6">
                         <button type="button" className="text-lg font-semibold leading-6 text-gray-900">
                             Cancel
                         </button>
@@ -558,7 +615,7 @@ export default function Mypage() {
                         >
                         Save
                         </button>
-                    </div>
+                    </div>) :null}
                 </div>
             </section>
         </main>

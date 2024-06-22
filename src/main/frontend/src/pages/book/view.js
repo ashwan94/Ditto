@@ -35,10 +35,10 @@ export default function BookView() {
                 }
             });
             setBook(res.data);
-            if (res.data.bookRent == 'n') {
+            if (res.data.bookRent == 'N') {
                 // 대출 가능
                 setBookRent(true)
-            } else if (res.data.bookRent == 'y') {
+            } else if (res.data.bookRent == 'Y') {
                 setBookRent(false);
             }
 
@@ -56,16 +56,12 @@ export default function BookView() {
 
         // 도서 대여 버튼 클릭 이벤트
     const bookRentEvent = async () => {
-
-            // 책의 대여 여부 확인 대여가능/대여불가
             if (!bookRent) {
                 alert("다른 사용자가 이미 대여중인 도서입니다.");
                 return;
             } else {
                 // 다른 사용자가 이미 대여중이 아닌 경우
                 // 도서 대여 절차 진행
-
-                // 회원의 연체 이력 조회(연체날수 체크)
                 const res = await axios.post("/book/checkOverdueDays", null, {
                     params: {
                         memberNo: memberObj.memberNo
@@ -75,15 +71,19 @@ export default function BookView() {
                         "Content-Type": "application/json"
                     }
                 });
+                sessionStorage.setItem("bookRent", JSON.stringify("ok")) // 대여했을때 마이페이지이동시 대여리스트 띄우도록
+                console.log("연체날수: ", res.data)
 
-                // 연체날수가 0이상인 경우 대여 금지
-                if (res.data > 0) {
-                    return alert(`연체된 날수가 ${res.data}일 있습니다. 연체된 날수만큼 대여가 불가능합니다.`)
+                // 책의 대여 여부 확인 대여가능/대여불가
+                if (!bookRent) {
+                    alert("다른 사용자가 이미 대여중인 도서입니다.");
+                    return;
+                } else {
+                    // 다른 사용자가 이미 대여중이 아닌 경우
+                    // 도서 대여 절차 진행
 
-
-                    // 최대 대출 가능 횟수 확인 (res.data가 3이하인 경우에만 대여 가능)
-                } else if (res.data < 0 || !res.data) {
-                    const response = await axios.post("/book/checkRentCount", null, {
+                    // 회원의 연체 이력 조회(연체날수 체크)
+                    const res = await axios.post("/book/checkOverdueDays", null, {
                         params: {
                             memberNo: memberObj.memberNo
                         }
@@ -91,41 +91,58 @@ export default function BookView() {
                         headers: {
                             "Content-Type": "application/json"
                         }
-                    })
-
-                    if (response.data >= 3) {
-                        return alert("도서 대여 최대 권수는 3권입니다.")
-
-                    }
-                    // 연체 이력이 없는 경우 도서 대출 진행
-                    const res = await axios.post("/book/rent", null, {
-                        params: {
-                            bookNo: bookNo,
-                            bookName: book.bookName,
-                            memberNo: memberObj.memberNo,
-                            memberId: memberObj.memberId
-                        }
-                    }, {
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
                     });
 
-                    // 연체 이력 없고 최대 대출 가능 권수를 넘지 않은 경우 도서 대여 진행 및
-                    // 도서의 상태값 변경
-                    if (res.status == 200) {
-                        // 도서 대여 상태 변경
-                        updateBookStatus();
-                        alert("도서 대여 성공");
-                        window.location.href = '/mypage';
-                        // 회원가입 후 처리 로직
-                    } else {
-                        alert("도서 대여 실패, 다시 시도해주세요.");
+                    // 연체날수가 0이상인 경우 대여 금지
+                    if (res.data > 0) {
+                        return alert(`연체된 날수가 ${res.data}일 있습니다. 연체된 날수만큼 대여가 불가능합니다.`)
+
+
+                        // 최대 대출 가능 횟수 확인 (res.data가 3이하인 경우에만 대여 가능)
+                    } else if (res.data < 0 || !res.data) {
+                        const response = await axios.post("/book/checkRentCount", null, {
+                            params: {
+                                memberNo: memberObj.memberNo
+                            }
+                        }, {
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        })
+
+                        if (response.data >= 3) {
+                            return alert("도서 대여 최대 권수는 3권입니다.")
+
+                        }
+                        // 연체 이력이 없는 경우 도서 대출 진행
+                        const res = await axios.post("/book/rent", null, {
+                            params: {
+                                bookNo: bookNo,
+                                bookName: book.bookName,
+                                memberNo: memberObj.memberNo,
+                                memberId: memberObj.memberId
+                            }
+                        }, {
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        });
+
+                        // 연체 이력 없고 최대 대출 가능 권수를 넘지 않은 경우 도서 대여 진행 및
+                        // 도서의 상태값 변경
+                        if (res.status == 200) {
+                            // 도서 대여 상태 변경
+                            updateBookStatus();
+                            alert("도서 대여 성공");
+                            window.location.href = '/mypage';
+                            // 회원가입 후 처리 로직
+                        } else {
+                            alert("도서 대여 실패, 다시 시도해주세요.");
+                        }
                     }
                 }
             }
-        }
-
+    }
     /* 도서 대여 시 대출가능 -> 대출불가로 상태 변화 함수 */
     const updateBookStatus = async () => {
         const res = await axios.post("/book/status", null, {

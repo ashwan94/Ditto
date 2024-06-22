@@ -33,9 +33,9 @@
         UPDATE
             book
         SET
-            BOOK_RENT = 'y'
+            BOOK_RENT = 'Y'
         WHERE
-            book_no = #{bookNo} AND BOOK_RENT = 'n';
+            book_no = #{bookNo} AND BOOK_RENT = 'N';
     </update>
 
 
@@ -83,4 +83,43 @@
         AND
             rent_return IS NULL
     </select>
+    
+    <!-- 로그인한 회원 도서 대여 목록 -->
+    <select id="showBookList" parameterType="String" resultType="rentVO">
+        SELECT
+            R.RENT_NO,
+            R.BOOK_NO,
+            R.BOOK_NAME,
+            R.RENT_START,
+            R.RENT_END,
+            R.RENT_RETURN,
+            R.RENT_DELAY,
+            B.BOOK_RENT
+        FROM
+            RENT R
+        JOIN
+            BOOK B
+        ON
+            R.BOOK_NO = B.BOOK_NO
+        WHERE
+            R.MEMBER_ID = #{memberId}
+    </select>
+    <update id="rentReturn" parameterType="rentVO">
+        UPDATE
+            RENT R
+        SET
+            R.RENT_DELAY = 'N',
+            R.RENT_RETURN = NOW()
+        WHERE
+            R.BOOK_NO = #{bookNo} AND
+            R.RENT_NO = #{rentNo}
+    </update>
+    <update id="rentBookReturn" parameterType="rentVO">
+        UPDATE
+            BOOK B
+        SET
+            B.book_rent = 'N'
+        WHERE
+            B.BOOK_NO = #{bookNo}
+    </update>
 </mapper>

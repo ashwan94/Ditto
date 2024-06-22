@@ -1,11 +1,13 @@
 package kr.or.nextit.ditto.rent;
 
+import kr.or.nextit.ditto.member.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.ibatis.javassist.bytecode.analysis.Type;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -42,5 +44,17 @@ public class RentController {
         return service.checkRentCount(memberNo);
     }
 
+    // 로그인 회원 도서 대여 이력 리스트
+    @PostMapping("/showBookRentalList")
+    public List<RentVO> bookList(@RequestBody RentVO memberId){
+        return service.showBookList(memberId);// 로그인 회원의 도서 대여 이력 리스트 출력
+    }
+
+    // 로그인회원의 도서 반납
+    @PostMapping("/rentReturn")
+    public void rentReturn(@RequestBody RentVO rentNo){
+        service.rentReturn(rentNo); // 연체여부, 실제반납일 수정
+        service.rentBookReturn(rentNo); // 책 대출가능여부 활성화 대출가능하게
+    }
 
 }

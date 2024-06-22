@@ -2,7 +2,10 @@ package kr.or.nextit.ditto.rent;
 
 
 
+import kr.or.nextit.ditto.member.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface RentMapper {
@@ -14,4 +17,10 @@ public interface RentMapper {
     int checkOverdueDays(int memberNo);
 
     int checkRentCount(int memberNo);
+
+    List<RentVO> showBookList(RentVO memberId);
+
+    void rentReturn(RentVO rentNo);
+
+    void rentBookReturn(RentVO rentNo);
 }

@@ -57,19 +57,17 @@ public class MemberController {
         return member;
     }
 
-    // 비밀번호 수정
+    // 마이페이지 비밀번호 수정
     @PostMapping("/passwordChange")
     public void passwordChange(@RequestBody MemberVO post){
-        service.passwordChange(post); // 기존 게시물을 수정
+        service.passwordChange(post); // 기존 비밀번호 수정
     }
 
     // 마이페이지 닉네임 중복체크
     @PostMapping("/checkNick")
     public int checkNick(@RequestBody MemberVO memberVO) {
-        System.out.println("==>" + memberVO);
         // 닉네임 중복
         int checkNickname = service.checkNicknameIsDuplicated(memberVO.getMemberNickname());
-        System.out.println("닉네임 중복되는가? : " + checkNickname);
         // 0 = 사용가능한 아이디나 닉네임
         return checkNickname;
     }
@@ -77,7 +75,7 @@ public class MemberController {
     // 마이페이지 회원정보 수정
     @PutMapping("/changeMemberData")
     public void updateMember(@RequestBody MemberVO post){
-        service.updateMemberData(post);
+        service.updateMemberData(post); // 회원정보 수정버튼 클릭시
     }
 
 
