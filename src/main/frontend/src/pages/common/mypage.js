@@ -222,9 +222,9 @@ export default function Mypage() {
                 document.getElementById('memberPostcode').value = data.zonecode;
                 document.getElementById("memberAdd").value = addr;
                 document.getElementById("memberDetailAdd").focus();
-                setMemberPostcode(data.zonecode);
-                setMemberAdd(addr);
-                setMemberDetailAdd("")
+                setMemberPostcode(data.zonecode); // 우편 번호
+                setMemberAdd(addr); // 주소
+                setMemberDetailAdd("") // 상세주소
             }
         }).open();
     };

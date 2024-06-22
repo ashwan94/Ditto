@@ -12,6 +12,7 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Member;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,6 +138,34 @@ public class MemberController {
         return verificationCode;
     }
 
+    // 관리자 회원 정보 리스트
+    @GetMapping("/adminMemberList")
+    public List<MemberVO> adminPageMemberList(){
+        return service.adminPageMemberList();
+    }
 
+    // 관리자 검색 아이디 회원정보
+    @PostMapping("/adminMemberListSearch")
+    public List<MemberVO> adminSearchMemberList(@RequestBody MemberVO memberId){
+        return service.adminPageSearchMemberList(memberId);
+    }
+
+    // 관리자 페이지 회원 비활성화
+    @PostMapping("/memberDeleteY")
+    public void adminMemberDeleteY(@RequestBody MemberVO memberId){
+        service.adminPageMemberDeleteY(memberId);
+    }
+
+    // 관리자 페이지 회원 활성화
+    @PostMapping("/memberDeleteN")
+    public void adminMemberDeleteN(@RequestBody MemberVO memberId){
+        service.adminPageMemberDeleteN(memberId);
+    }
+
+    // 관리자 페이지 멤버십 상태변경
+    @PostMapping("/memberSubStatus")
+    public void adminMemberSubStatus(@RequestBody MemberVO memberVO){
+        service.adminMemberSubStatus(memberVO);
+    }
 
 }

@@ -20,5 +20,4 @@ public class RentVO {
     String rentReturn;
     String rentExtend;
     String bookRent; // 조인해서 렌트합니다.
-
 }

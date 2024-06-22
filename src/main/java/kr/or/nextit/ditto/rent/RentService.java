@@ -53,4 +53,13 @@ public class RentService {
         mapper.rentBookReturn(rentNo);
     }
 
+    // 관리자 페이지 도서 대여 이력
+    public List<RentVO> adminPageBookRentList(){
+        return mapper.adminPageBookRentList();
+    }
+
+    public List<RentVO> adminPageBookRentListSearch (RentVO memberId){
+        return mapper.adminPageBookRentListSearch(memberId);
+    }
+
 }

@@ -14,6 +14,7 @@ import BookWarn from "./pages/book/warn";
 import KaKaoTalk from "./pages/common/kakaoTalk";
 import Membership from "./pages/introduce/membership";
 import Faq from "./pages/introduce/faq";
+import AdminPage from "./pages/common/adminPage";
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/membershipInfo" element={<Membership />} />
           <Route path="/faq" element={<Faq />} />
+          <Route path="/adminPage" element={<AdminPage />} />
           <Route path="/community/podcast/list" element={<PodcastList />} />
         </Routes>
         <Footer />

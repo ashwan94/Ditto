@@ -2,6 +2,7 @@ package kr.or.nextit.ditto.rent;
 
 
 
+import kr.or.nextit.ditto.book.BookVO;
 import kr.or.nextit.ditto.member.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,4 +24,8 @@ public interface RentMapper {
     void rentReturn(RentVO rentNo);
 
     void rentBookReturn(RentVO rentNo);
+
+    List<RentVO> adminPageBookRentList();
+
+    List<RentVO> adminPageBookRentListSearch(RentVO memberId);
 }

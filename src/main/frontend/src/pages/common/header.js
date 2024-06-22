@@ -187,7 +187,8 @@ const Header = () => {
             {sessionStorage.getItem("member") ?
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                   <button className="lk gh dk rg tc wf xf _l gi hi font-extrabold" onClick={goLogout}>로그아웃</button>
-                  <Link to="/mypage" className="lk gh dk rg tc wf xf _l gi hi font-extrabold mx-3">마이페이지</Link>
+                  {JSON.parse(sessionStorage.getItem("member")).memberAdmin == "MEMBER" ?
+                      (<Link to="/mypage" className="lk gh dk rg tc wf xf _l gi hi font-extrabold mx-3">마이페이지</Link>) : (<Link to="/adminPage" className="lk gh dk rg tc wf xf _l gi hi font-extrabold mx-3">관리자</Link>) }
                 </div>
                 :
                 <Link to="/SignIn" className="lk gh dk rg tc wf xf _l gi hi font-extrabold">로그인</Link>

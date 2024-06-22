@@ -85,7 +85,7 @@
     </select>
     
     <!-- 로그인한 회원 도서 대여 목록 -->
-    <select id="showBookList" parameterType="String" resultType="rentVO">
+    <select id="showBookList" parameterType="string" resultType="rentVO">
         SELECT
             R.RENT_NO,
             R.BOOK_NO,
@@ -108,7 +108,6 @@
         UPDATE
             RENT R
         SET
-            R.RENT_DELAY = 'N',
             R.RENT_RETURN = NOW()
         WHERE
             R.BOOK_NO = #{bookNo} AND
@@ -122,4 +121,45 @@
         WHERE
             B.BOOK_NO = #{bookNo}
     </update>
+
+    <!-- 관리자 페이지 도서 대여 이력 가져오기 -->
+    <select id="adminPageBookRentList" resultType="rentVO">
+        SELECT
+            R.RENT_NO,
+            R.BOOK_NO,
+            R.BOOK_NAME,
+            R.RENT_START,
+            R.RENT_END,
+            R.RENT_RETURN,
+            R.RENT_DELAY,
+            B.BOOK_RENT,
+            R.MEMBER_ID
+        FROM
+            RENT R
+        JOIN
+            BOOK B
+        ON
+            R.BOOK_NO = B.BOOK_NO
+    </select>
+    <!-- 관리자 페이지 회원 아이디검색 도서 대여 이력 정보 조회 -->
+    <select id="adminPageBookRentListSearch" parameterType="rentVO" resultType="rentVO">
+        SELECT
+            R.RENT_NO,
+            R.BOOK_NO,
+            R.BOOK_NAME,
+            R.RENT_START,
+            R.RENT_END,
+            R.RENT_RETURN,
+            R.RENT_DELAY,
+            B.BOOK_RENT,
+            R.MEMBER_ID
+        FROM
+            RENT R
+        JOIN
+            BOOK B
+        ON
+            R.BOOK_NO = B.BOOK_NO
+        WHERE
+            R.MEMBER_ID = #{memberId}
+    </select>
 </mapper>

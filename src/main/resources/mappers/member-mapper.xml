@@ -74,7 +74,7 @@
     </select>
 
     <!-- 마이페이지 비밀번호 수정   -->
-    <update id="passwordChange" parameterType="MemberVO">
+    <update id="passwordChange" parameterType="memberVO">
         UPDATE
             MEMBER A
         SET
@@ -83,7 +83,8 @@
             A.MEMBER_ID = #{memberId}
     </update>
 
-    <update id="updateMemberData" parameterType="MemberVO">
+    <!-- 회원정보 수정 -->
+    <update id="updateMemberData" parameterType="memberVO">
         UPDATE
             MEMBER A
         SET
@@ -95,4 +96,63 @@
         WHERE
             A.MEMBER_ID = #{memberId}
     </update>
+
+    <!-- 관리자 페이지 전체 회원정보 조회 -->
+    <select id="adminPageMemberList" resultType="memberVO">
+        SELECT
+            A.MEMBER_NO,
+            A.MEMBER_ID,
+            A.MEMBER_NAME,
+            A.MEMBER_NICKNAME,
+            A.MEMBER_SUB,
+            A.MEMBER_TEL,
+            A.MEMBER_DELETE
+        FROM
+            MEMBER A
+        WHERE
+            A.MEMBER_ADMIN = 'MEMBER'
+    </select>
+    <!-- 관리자 페이지 회원 아이디로 조회 -->
+    <select id="adminPageSearchMemberList" parameterType="memberVO" resultType="memberVO">
+        SELECT
+            A.MEMBER_NO,
+            A.MEMBER_ID,
+            A.MEMBER_NAME,
+            A.MEMBER_NICKNAME,
+            A.MEMBER_SUB,
+            A.MEMBER_TEL,
+            A.MEMBER_DELETE
+        FROM
+            MEMBER A
+        WHERE
+            A.MEMBER_ID = #{memberId}
+    </select>
+    <!-- 관리자 페이지 회원정보 비활성화 -->
+    <update id="adminPageMemberDeleteY" parameterType="memberVO">
+        UPDATE
+            MEMBER A
+        SET
+            A.MEMBER_DELETE = 'Y'
+        WHERE
+            A.MEMBER_ID = #{memberId}
+    </update>
+    <!-- 관리자 페이지 회원정보 활성화 -->
+    <update id="adminPageMemberDeleteN" parameterType="memberVO">
+        UPDATE
+            MEMBER A
+        SET
+            A.MEMBER_DELETE = 'N'
+        WHERE
+            A.MEMBER_ID = #{memberId}
+    </update>
+    <!-- 관리자 페이지 회원 구독 상태 변경 -->
+    <update id="adminMemberSubStatus" parameterType="memberVO">
+        UPDATE
+            MEMBER A
+        SET
+            A.MEMBER_SUB = #{memberSub}
+        WHERE
+            A.MEMBER_ID = #{memberId}
+    </update>
+
 </mapper>
