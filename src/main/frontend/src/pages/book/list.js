@@ -4,23 +4,30 @@ import {Link} from "react-router-dom";
 
 
 export default function BookList() {
-    // TODO
-    // BookList 보완사항 | 박연지 | 06.17
-    // 전체 도서 data 기준으로 도서 검색 기능 보완
 
+    /**
+     * 작성자 : 박연지
+     * 도서 리스트 출력 코드
+     * getDate() : 화면 첫 랜더링 시 도서 목록 가져오는 함수
+     * */
 
-    // 도서 리스트
+    /* 도서 리스트 */
     const [bookList, setBookList] = useState([]);
-    // 현재 페이지
+    /* 현재 페이지 */
     const [currentPage, setCurrentPage] = useState(1);
-    // 한 페이지에 보일 게시글의 개수
+    /* 한 페이지에 보일 게시글의 개수 */
     const recordsPerPage = 10;
-    // 도서 목록 개수
+    /* 도서 목록 개수 */
     const [resultCount, setResultCount] = useState(0)
+
+    /* 검색 단어, 검색 타입(제목/저자) */
+    const [searchWord, setSearchWord] = useState("")
+    const [searchType, setSearchType] = useState("bookName")
+
+
     /* 화면에 도서 목록을 그리는 getData 함수 */
     const getData = async () => {
         try {
-            // console.log(currentPage);
             const fristRecordIndex = (currentPage - 1) * 10 + 1;  //페이지시작
             // const lastRecordIndex = currentPage * recordsPerPage //페이지종료
             const res = await axios.get("/book/list", {
@@ -34,10 +41,6 @@ export default function BookList() {
             setBookList(res.data.list);
             setCurrentPage(currentPage);
             setResultCount(res.data.list.length)
-            // console.log("도서 목록 : ", res.data.list);
-
-            // console.log(res.data.list.length)
-
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -45,39 +48,26 @@ export default function BookList() {
 
 
     /* 검색 기능을 위한 검색 키워드, 검색 타이틀 체인지 핸들러 */
-    const [searchWord, setSearchWord] = useState("")
-    const [searchType, setSearchType] = useState("bookName")
     const searchWordOnChangeHandler = (e) => {
         setSearchWord(e.target.value)
-
     }
     const searchTypeOnChangeHandler = (e) => {
         setSearchType(e.target.value)
-
     }
 
-    // useEffect(() => {
-    //     console.log("검색 기능 타입과 키워드 확인용")
-    //     // console.log(searchWord)
-    //     // console.log(searchType)
-    // }, [searchWord, searchType]);
-
-    /* 현재 페이지가 바뀔때마다 도서 목록을 교체하기 위한 useEffect 훅 */
+    /* 현재 페이지가 바뀔 때마다 도서 목록을 교체하기 위한 useEffect 훅 */
     useEffect(() => {
         getData();
-        // getPageNumList();
     }, [currentPage]);
 
-    /* 페이징처리 */
+    /* 페이지네이션 관련 변수 선언 */
     const totalCount = 335; //책목록 전체건수
     const [pageNumList, setPageNumList] = useState([]); //페이지번호 목록
     const pageNumListSize = 10; //페이지 번호 목록(10개)
-    const totalPageNum = Math.ceil(totalCount / pageNumListSize);
+    const totalPageNum = Math.ceil(totalCount / pageNumListSize); // 최대 페이지 번호
 
-    //페이지 번호 목록 생성
+    /* 페이지 번호 그리는 함수 */
     const getPageNumList = (startNum) => {
-        //1-10 11-20 21-30
-        // console.log("버튼의 총 개수 ", totalPageNum)
         const list = []
         for (let i = startNum; i < (startNum + pageNumListSize); i++) {
             if (i <= totalPageNum) {
@@ -93,12 +83,17 @@ export default function BookList() {
         getPageNumList(1)
     }, []);
 
+
     /* 이전 버튼 클릭 이벤트 */
     const goClickPrev = () => {
+
+        /* 이전 버튼 눌러서 화면 랜더링 시 화면 최상단으로 위치 이동 */
         window.scrollTo({
             top: 0,
             behavior: 'smooth',
         });
+
+        /* 1페이지 이상일때만 페이지 넘버 교체 */
         if (currentPage > 1) {
             getPageNumList(pageNumList[0] - 10);
         } else {
@@ -107,6 +102,8 @@ export default function BookList() {
             return alert("정보가 없습니다.");
         }
     }
+
+
     /* 이후 버튼 클릭 이벤트 */
     const goClickNext = () => {
         window.scrollTo({
@@ -119,16 +116,11 @@ export default function BookList() {
             return alert("정보가 없습니다.")
         }
     }
-
-    /* 페이지 변경 확인용 훅
-    useEffect(() => {
-        console.log("페이지 변경 => ", currentPage)
-    }, [currentPage]);
-    */
-
     /* 검색 버튼 이벤트 */
     const searchBook = (e) => {
         getData();
+
+        /* 도서 목록 가져온 후 랜더링 두 번되는 것 막기 */
         e.preventDefault();
     }
 
@@ -159,7 +151,6 @@ export default function BookList() {
                     {bookList && bookList.length > 0 ? (
                         bookList.map((v, i) => (
                             <ul role="list" className="divide-y divide-gray-100" key={`bookList` + i}>
-                                {/*<Link to={`/book/view/${v.bookNo}`}>*/}
                                 <Link to={`/book/view?bookNo=${v.bookNo}`}>
                                     <li className="flex justify-between gap-x-6 py-5">
                                         <div className="flex min-w-0 gap-x-4">
@@ -177,8 +168,6 @@ export default function BookList() {
                                                     : {v.bookRelease}</p>
                                                 <p className="mt-1 truncate text-sm leading-5 text-gray-900">책 소개
                                                     : {v.bookIntro}</p>
-                                                {/*<p className="mt-1 text-sm leading-5 text-gray-500">대여여부*/}
-                                                {/*    : {v.bookRent}</p>*/}
                                             </div>
                                         </div>
                                     </li>

@@ -5,8 +5,13 @@ import "../../css/board.css"
 
 export default function BookView() {
 
-    /* 전역 변수 선언 필드 */
-    const [searchParams, setSearchParams] = useSearchParams()
+
+    /**
+     * 작성자 : 박연지
+     * 도서 리스트 출력 코드
+     * getBook() : 화면 첫 랜더링 시 도서 정보 가져오는 함수
+     * */
+
 
     /* 도서 정보 */
     const [book, setBook] = useState({});
@@ -16,10 +21,12 @@ export default function BookView() {
     const memberObj = JSON.parse(sessionStorage.getItem("member"));
 
     /* url 로 받은 도서 번호 */
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    /* ?bookNo=n 의 n의 값을 bookNo로 저장해두기 */
     const bookNo = searchParams.get("bookNo");
 
-
-    /* 첫랜더링 시 가져올 도서 정보 */
+    /* 첫 랜더링 시 가져올 도서 정보 */
     const getBook = async () => {
         try {
             const res = await axios.get("/book/view", {
@@ -40,49 +47,26 @@ export default function BookView() {
         }
     };
 
+    /**
+     * 작성자 : 박연지
+     * 도서 대여 기능 구현 파트
+     * checkRentCount() : 회원 번호 조회 후 최대 대출 가능 횟수 파악
+     * bookRentEvent
+     * */
 
-    // 최대 대출 가능 횟수 확인
-    const checkRentCount = async () => {
-        const response = await axios.post("/book/checkRentCount", null, {
-            params: {
-                memberNo: memberObj.memberNo
-            }
-        }, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-
-        console.log(response.data)
-    }
-
-
-    // 도서 대여 버튼 클릭 이벤트
+        // 도서 대여 버튼 클릭 이벤트
     const bookRentEvent = async () => {
-        if (!bookRent) {
-            alert("다른 사용자가 이미 대여중인 도서입니다.");
-            return;
-        } else {
-            // 다른 사용자가 이미 대여중이 아닌 경우
-            // 도서 대여 절차 진행
-            const res = await axios.post("/book/checkOverdueDays", null, {
-                params: {
-                    memberNo: memberObj.memberNo
-                }
-            }, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            console.log("연체날수: ", res.data)
 
-            if (res.data > 0) {
-                // 연체날수가 0이상인 경우 대여 금지
-                return alert(`연체된 날수가 ${res.data}일 있습니다. 연체된 날수만큼 대여가 불가능합니다.`)
+            // 책의 대여 여부 확인 대여가능/대여불가
+            if (!bookRent) {
+                alert("다른 사용자가 이미 대여중인 도서입니다.");
+                return;
+            } else {
+                // 다른 사용자가 이미 대여중이 아닌 경우
+                // 도서 대여 절차 진행
 
-            } else if(res.data < 0 || !res.data) {
-                // 최대 대출 가능 횟수 확인
-                const response = await axios.post("/book/checkRentCount", null, {
+                // 회원의 연체 이력 조회(연체날수 체크)
+                const res = await axios.post("/book/checkOverdueDays", null, {
                     params: {
                         memberNo: memberObj.memberNo
                     }
@@ -90,38 +74,57 @@ export default function BookView() {
                     headers: {
                         "Content-Type": "application/json"
                     }
-                })
-
-                if (response.data >= 3) {
-                    return alert("도서 대여 최대 권수는 3권입니다.")
-
-                }
-                // 연체 이력이 없는 경우 도서 대출 진행
-                const res = await axios.post("/book/rent", null, {
-                    params: {
-                        bookNo: bookNo,
-                        bookName: book.bookName,
-                        memberNo: memberObj.memberNo,
-                        memberId: memberObj.memberId
-                    }
-                }, {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
                 });
-                console.log(res);
-                if (res.status == 200) {
-                    // 도서 대여 상태 변경
-                    updateBookStatus();
-                    alert("도서 대여 성공");
-                    window.location.href = '/mypage';
-                    // 회원가입 후 처리 로직
-                } else {
-                    alert("도서 대여 실패, 다시 시도해주세요.");
+
+                // 연체날수가 0이상인 경우 대여 금지
+                if (res.data > 0) {
+                    return alert(`연체된 날수가 ${res.data}일 있습니다. 연체된 날수만큼 대여가 불가능합니다.`)
+
+
+                    // 최대 대출 가능 횟수 확인 (res.data가 3이하인 경우에만 대여 가능)
+                } else if (res.data < 0 || !res.data) {
+                    const response = await axios.post("/book/checkRentCount", null, {
+                        params: {
+                            memberNo: memberObj.memberNo
+                        }
+                    }, {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+
+                    if (response.data >= 3) {
+                        return alert("도서 대여 최대 권수는 3권입니다.")
+
+                    }
+                    // 연체 이력이 없는 경우 도서 대출 진행
+                    const res = await axios.post("/book/rent", null, {
+                        params: {
+                            bookNo: bookNo,
+                            bookName: book.bookName,
+                            memberNo: memberObj.memberNo,
+                            memberId: memberObj.memberId
+                        }
+                    }, {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    });
+
+                    // 연체 이력 없고 최대 대출 가능 권수를 넘지 않은 경우 도서 대여 진행 및
+                    // 도서의 상태값 변경
+                    if (res.status == 200) {
+                        // 도서 대여 상태 변경
+                        updateBookStatus();
+                        alert("도서 대여 성공");
+                        window.location.href = '/mypage';
+                        // 회원가입 후 처리 로직
+                    } else {
+                        alert("도서 대여 실패, 다시 시도해주세요.");
+                    }
                 }
             }
         }
-    }
 
     /* 도서 대여 시 대출가능 -> 대출불가로 상태 변화 함수 */
     const updateBookStatus = async () => {
@@ -266,9 +269,6 @@ export default function BookView() {
 
                         </div>
                     </div>
-                </div>
-                <div>
-
                 </div>
             </section>
         </main>
