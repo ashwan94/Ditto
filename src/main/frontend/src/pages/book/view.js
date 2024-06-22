@@ -28,10 +28,10 @@ export default function BookView() {
                 }
             });
             setBook(res.data);
-            if (res.data.bookRent == 'n') {
+            if (res.data.bookRent == 'N') {
                 // 대출 가능
                 setBookRent(true)
-            } else if (res.data.bookRent == 'y') {
+            } else if (res.data.bookRent == 'Y') {
                 setBookRent(false);
             }
 
@@ -74,6 +74,7 @@ export default function BookView() {
                     "Content-Type": "application/json"
                 }
             });
+            sessionStorage.setItem("bookRent", JSON.stringify("ok")) // 대여했을때 마이페이지이동시 대여리스트 띄우도록
             console.log("연체날수: ", res.data)
 
             if (res.data > 0) {

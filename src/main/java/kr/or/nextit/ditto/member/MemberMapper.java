@@ -11,6 +11,6 @@ public interface MemberMapper {
     int checkNicknameIsDuplicated(String memberNickname);
     int signup(MemberVO memberVO);
     MemberVO searchMemberInfo(String memberId);
-    void passwordChange(MemberVO post); // 비밀번호 수정
-    void updateMemberData(MemberVO post); // 회원정보 수정
+    void passwordChange(MemberVO post); // 마이페이지 비밀번호 수정
+    void updateMemberData(MemberVO post); // 마이페이지 회원정보 수정
 }

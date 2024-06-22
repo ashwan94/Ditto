@@ -33,9 +33,9 @@
         UPDATE
             book
         SET
-            BOOK_RENT = 'y'
+            BOOK_RENT = 'Y'
         WHERE
-            book_no = #{bookNo} AND BOOK_RENT = 'n';
+            book_no = #{bookNo} AND BOOK_RENT = 'N';
     </update>
 
 
@@ -108,7 +108,7 @@
         UPDATE
             RENT R
         SET
-            R.RENT_DELAY = 'n',
+            R.RENT_DELAY = 'N',
             R.RENT_RETURN = NOW()
         WHERE
             R.BOOK_NO = #{bookNo} AND
@@ -118,7 +118,7 @@
         UPDATE
             BOOK B
         SET
-            B.book_rent = 'n'
+            B.book_rent = 'N'
         WHERE
             B.BOOK_NO = #{bookNo}
     </update>

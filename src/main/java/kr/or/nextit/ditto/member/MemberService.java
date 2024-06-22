@@ -32,10 +32,10 @@ public class MemberService {
         return mapper.searchMemberInfo(memberId);
     }
     public void passwordChange(MemberVO post){
-        mapper.passwordChange(post);
+        mapper.passwordChange(post); // 마이페이지 비밀번호 수정
     }
     public void updateMemberData(MemberVO post){
-        mapper.updateMemberData(post);
+        mapper.updateMemberData(post); // 마이페이지 회원정보 수정
     }
 
 

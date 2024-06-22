@@ -44,21 +44,17 @@ public class RentController {
         return service.checkRentCount(memberNo);
     }
 
-    // 로그인 회원 도서 대여 여부
+    // 로그인 회원 도서 대여 이력 리스트
     @PostMapping("/showBookRentalList")
-    public List<RentVO> bookList(@RequestBody Map<String, String> memberIdMap){
-        String memberId = memberIdMap.get("memberId");
-        List<RentVO> result = service.showBookList(memberId);
-        return result;
+    public List<RentVO> bookList(@RequestBody RentVO memberId){
+        return service.showBookList(memberId);// 로그인 회원의 도서 대여 이력 리스트 출력
     }
 
-    // rent쪽 반납수정
+    // 로그인회원의 도서 반납
     @PostMapping("/rentReturn")
     public void rentReturn(@RequestBody RentVO rentNo){
-        service.rentReturn(rentNo);
-        service.rentBookReturn(rentNo);
-        log.info("렌트넘버: {}",rentNo);
+        service.rentReturn(rentNo); // 연체여부, 실제반납일 수정
+        service.rentBookReturn(rentNo); // 책 대출가능여부 활성화 대출가능하게
     }
 
-    // book 반납 대출가능여부 수정
 }
