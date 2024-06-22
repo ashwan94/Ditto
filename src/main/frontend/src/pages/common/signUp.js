@@ -3,6 +3,11 @@ import axios from "axios";
 
 export default function SignUp() {
 
+    /**
+     * 작성자 : 박연지
+     * 회원가입 코드
+     *
+     * */
 
 
     /* 사용자에게 입력받을 useState 지정 필드 */
@@ -73,7 +78,7 @@ export default function SignUp() {
         setMemberDetailAdd(e.target.value);
     }
 
-    // 아이디 중복체크, 에러 문구
+    // 아이디 중복체크, 아이디 8글자 이상인지 확인하는 이벤트 함수
     const checkMemberIdDuplicate = async () => {
         // 사용자에게 8글자 이상의 아이디 입력받기
         if (memberId.length < 8) {
@@ -81,7 +86,6 @@ export default function SignUp() {
             return;
         }
         try {
-            // console.log("아이디: ", memberId)
             const res = await axios.post("/checkId", {
                 memberId: memberId
             }, {
@@ -89,19 +93,15 @@ export default function SignUp() {
                     "Content-Type": "application/json"
                 }
             });
-
             // 아이디 중복 체크 확인
             if (res.data != 0) {
-                //   중복
+                // res.data 가 0이 아니면 이미 사용중인 아이디가 있다는 의미
                 setDuplicatedId(true);
                 setIdErrorMessage("사용중인 아이디입니다.");
-
             } else {
                 setDuplicatedId(false);
                 setIdErrorMessage("사용가능한 아이디입니다.");
             }
-
-            // console.log("DB 조회 결과 : ", res.data);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -142,29 +142,28 @@ export default function SignUp() {
         }
     }
 
-    // 이름 정규식 (한글 두글자 이상)
+    // 이름 정규식 (한글 두 글자 이상)
     const koreanRegex = /^[가-힣]{2,}$/;
 
-    // 이름 글자수 제한 함수
+    // 이름 글자수 제한 함수 이벤트 함수
     const checkSizeMemberName = () => {
-        // 이름이 두글자 이하인 경우 경고 메세지 출력
 
+        // 이름이 두글자 이하인 경우 경고 메세지 출력
         if (!koreanRegex.test(memberName)) {
             setNameErrorMessage("최소 두 글자 이상의 한글만 입력 가능합니다");
-            // 조건에 부합한 경우 에러메세지 지우기
+
+            // 조건에 부합한 경우 에러 메세지 지우기
         } else {
             setNameErrorMessage("");
         }
     };
-
 
     // 비밀번호 정규식 (특수문자 1개 포함, 숫자, 문자)
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
 
     // 패스워드 정규식 검사 및 에러 메세지 출력 함수
     const checkMemberPw = () => {
-        // 이름이 두글자 이하인 경우 경고 메세지 출력
-        // 비밀번호 정규식 부합하지 않은 경우 에러메세지 출력
+        // 비밀번호 정규식 부합하지 않은 경우 에러 메세지 출력
         if (!passwordRegex.test(memberPw) || !memberPw) {
             setPwErrorMessage("최소 특수문자 1개 포함하여 8글자 이상의 비밀번호를 입력해주세요");
             // 오류 메시지 초기화
@@ -178,17 +177,19 @@ export default function SignUp() {
         if (memberPw !== memberConfirmPw) {
             setPwConfirmErrorMessage("입력한 비밀번호와 다릅니다.");
         } else {
-            if(memberPw == ""){
-            setPwConfirmErrorMessage("비밀번호를 입력해주세요.");
+            if (memberPw == "") {
+                setPwConfirmErrorMessage("비밀번호를 입력해주세요.");
 
-            }
-        else if(memberPw != ""){
+            } else if (memberPw != "") {
                 setPwConfirmErrorMessage("");
             }
         }
     }
 
-    // 생년월일 누락 검사 함수
+
+    /* onBlur input 태그들을 검사하는 함수들 */
+
+    // 생년월일 누락 검사 함수 (onBlur input 태그에 커서를 뗐을때 반응하는 이벤트)
     const memberBirthOnBlur = () => {
         if (!memberBirth) {
             setBirthErrorMessage("생년월일을 입력해주세요.");
@@ -207,9 +208,8 @@ export default function SignUp() {
     };
 
 
-
-
-    // 주소API 사용하여 우편번호,도로명 주소 자동 완성
+    /* 주소API 사용하여 우편번호,도로명 주소 자동 완성 */
+    /* 다음 주소 API 사용 */
     const handlePostcode = () => {
         new window.daum.Postcode({
             oncomplete: function (data) {
@@ -221,7 +221,6 @@ export default function SignUp() {
                 } else {
                     addr = data.jibunAddress;
                 }
-
                 if (data.userSelectedType === 'R') {
                     if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
                         extraAddr += data.bname;
@@ -247,42 +246,45 @@ export default function SignUp() {
     };
 
     // 인증번호 문자 보내기 함수
-    const sendMessage = async() => {
-        const res = await axios.post("/sendOne", null,{
+    const sendMessage = async () => {
+        // MemberController 의 단일 문자 발송으로 쿼리 넘기기
+        const res = await axios.post("/sendOne", null, {
                 params: {
                     memberTel: memberTel
                 }
             }
         )
-        // console.log("Controller에서 보낸 인증코드 : ", res.data);
         setVerificationCode(res.data);
         setShowVerificationInput(true);
-
     }
+
     // 유저가 입력한 인증번호 핸들러
     const userInputCodeOnChangeHandler = (e) => {
         setUserInputCode(e.target.value);
-        // console.log("회원 입력 코드: ", userInputCode)
     }
+
 
     useEffect(() => {
         setUserInputCode(userInputCode);
-        // console.log("회원 입력 코드: ", userInputCode)
     }, [userInputCode]);
 
     // 인증 번호 확인 이밴트 함수
     const checkVeridationCode = () => {
-        if(userInputCode == verificationCode){
+
+        // 유저가 입력한 인증번호와 시스템이 보낸 인증번호가 같은 경우
+        if (userInputCode == verificationCode) {
             alert("본인 인증 완료")
             setCheckCode(false);
-        } else if (userInputCode != verificationCode){
+
+        } else if (userInputCode != verificationCode) {
             alert("본인 인증 실패")
             setCheckCode(true);
         }
     }
 
 
-// 등록 버튼 클릭 시 모든 input 태그 검사 후
+    // 등록버튼 클릭 이벤트
+    // 등록 버튼 클릭 시 모든 input 태그 검사 후
     // 경고 메세지 출력 or insert 쿼리 쏘기
     const register = async () => {
         // 에러 메세지 모두 출력
@@ -309,47 +311,43 @@ export default function SignUp() {
         if (memberBirth === "") {
             setBirthErrorMessage("생년월일을 입력해주세요.");
         }
-        if (memberDetailAdd === ""){
+        if (memberDetailAdd === "") {
             setAddressErrorMessage("주소를 입력해주세요.")
         }
 
         // DB에 쿼리 쏴서 insert 하기
-        if(!duplicatedNickname && !duplicatedId && !checkCode
+        if (!duplicatedNickname && !duplicatedId && !checkCode
             && memberId != "" && memberName != "" && memberNickname != "" && memberPw != "" && memberConfirmPw != ""
-            &&memberBirth != "" && memberTel != "" && memberAdd != "" && memberPostcode != "" && memberDetailAdd != "" ){
+            && memberBirth != "" && memberTel != "" && memberAdd != "" && memberPostcode != "" && memberDetailAdd != "") {
 
 
             // 여기서 쿼리 쏘기
-            const res = await axios.post("/register", null,{
+            const res = await axios.post("/register", null, {
                 params: {
-                memberId: memberId,
-                memberName: memberName,
-                memberNickname: memberNickname,
-                memberPw: memberPw,
-                memberTel: memberTel,
-                memberPostcode: memberPostcode,
-                memberAdd: memberAdd,
-                memberDetailAdd: memberDetailAdd,
-                memberBirth: memberBirth
-            }
+                    memberId: memberId,
+                    memberName: memberName,
+                    memberNickname: memberNickname,
+                    memberPw: memberPw,
+                    memberTel: memberTel,
+                    memberPostcode: memberPostcode,
+                    memberAdd: memberAdd,
+                    memberDetailAdd: memberDetailAdd,
+                    memberBirth: memberBirth
+                }
             }, {
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
-
-            // console.log(res);
-
             if (res.status == 200) {
                 alert("회원가입이 완료되었습니다.");
+                // 회원가입 후 로그인 화면으로 이동
                 window.location.href = '/SignIn';
-                // 회원가입 후 처리 로직
+
             } else {
                 alert("회원가입에 실패했습니다. 다시 시도해주세요.");
             }
-
         }
-
     };
 
     // 값 변화 감지 확인용
@@ -544,7 +542,7 @@ export default function SignUp() {
                                    className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-48"
                                 // value={memberPostcode}
                                    onChange={memberPostcodeOnChangeHandler}
-                                    readOnly={true}/>
+                                   readOnly={true}/>
                             <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
                                     onClick={handlePostcode}>검색
                             </button>

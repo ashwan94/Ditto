@@ -77,7 +77,6 @@ export default function Main() {
                     </div>
 
                     {/* 상단 이미지 갤러리 섹션 */}
-
                     <section className="image-gallery">
                         <Slider {...settings}>
                             <div>

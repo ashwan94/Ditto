@@ -3,7 +3,7 @@ import KakaoTalk from "../common/kakaoTalk";
 
 export default function Membership() {
 
-    
+
     // 첫 랜더링 시 사이트 가장 상단으로 위치
     useEffect(() => {
         window.scrollTo({
@@ -55,18 +55,18 @@ export default function Membership() {
                         <div className="text-center text-2xl mt-3">멤버십 구독 회원분들께 드리는 무료 혜택!</div>
                     </div>
 
-                    <div className="bb ze ki xn yq mb en">
+/'                    <div className="bb ze ki xn yq mb en">
                         {/* 무료 혜택 안내 화면 구역 리셉션 데스크, 주방 및 휴게실 등 6가지 */}
                         <div className="wc qf pn xo ng">
                             <div className="animate_top sg oi pi zq ml il am cn _m">
                                 <img src="images/main_features_info.png" alt="Icon" className="w-10"/>
-                                <h4 className="ek zj kk wm nb _b">리셉션 데스크</h4>
+                                <h4 className="ek zj kk wm nb _b rundry">리셉션 데스크</h4>
                                 <p>리셉션 데스크에는 전문성을 갖춘 매니저가 상주하며, 최고의 고객 서비스를 제공합니다</p>
                             </div>
 
                             <div className="animate_top sg oi pi zq ml il am cn _m">
                                 <img src="images/main_features_kitchen.png" alt="Icon" className="w-10"/>
-                                <h4 className="ek zj kk wm nb _b">주방 및 휴게시설</h4>
+                                <h4 className="ek zj kk wm nb _b rundry">주방 및 휴게시설</h4>
                                 <p>편안한 쇼파, 고급 안마의자, 자연 친화적인 휴식 공간, 간단히 식음료를 즐길 수 있는 테이블과 스툴 등을 갖추고 있습니다. 라운지 공간에는 공용
                                     냉장고,
                                     얼음정수기, 커피머신,
@@ -75,7 +75,7 @@ export default function Membership() {
 
                             <div className="animate_top sg oi pi zq ml il am cn _m">
                                 <img src="images/main_features_printer.png" alt="Icon" className="w-10"/>
-                                <h4 className="ek zj kk wm nb _b">사무 보조 기기</h4>
+                                <h4 className="ek zj kk wm nb _b rundry">사무 보조 기기</h4>
                                 <p>복사/스캔/팩스가 가능한 복합기, 문서 절단기, 코팅기, 제본기, 파쇄기까지 다양한 사무 보조기기를 고루 갖추고 있습니다. 입주사분들께는 월
                                     100장(흑백기준)을 무료로 출력해
                                     드립니다. 초과시에도 부담없는 금액으로 이용하실 수 있습니다</p>
@@ -83,7 +83,7 @@ export default function Membership() {
 
                             <div className="animate_top sg oi pi zq ml il am cn _m">
                                 <img src="images/main_features_readingRoom.png" alt="Icon" className="w-10"/>
-                                <h4 className="ek zj kk wm nb _b">열람실</h4>
+                                <h4 className="ek zj kk wm nb _b rundry">열람실</h4>
                                 <p>1인 ~ 10인이 도서 열람이 가능한 공간이 마련돼 있습니다. 냉난방시설과 환기시설을 갖추고 있어 쾌적한 실내환경을 제공합니다. 책상과 서랍, 고급의자
                                     등이
                                     마련돼 있어 최상의
@@ -92,13 +92,13 @@ export default function Membership() {
 
                             <div className="animate_top sg oi pi zq ml il am cn _m">
                                 <img src="images/main_features_location.png" alt="Icon" className="w-10"/>
-                                <h4 className="ek zj kk wm nb _b">접근성</h4>
+                                <h4 className="ek zj kk wm nb _b rundry">접근성</h4>
                                 <p>오룡역 8번 출구에서 도보 5분 거리에 위치하고 있어 대중교통 이용이 편리합니다</p>
                             </div>
 
                             <div className="animate_top sg oi pi zq ml il am cn _m">
                                 <img src="images/main_features_clean.png" alt="Icon" className="w-10"/>
-                                <h4 className="ek zj kk wm nb _b">시설 관리</h4>
+                                <h4 className="ek zj kk wm nb _b rundry">시설 관리</h4>
                                 <p>매일 정기적으로 전문 청소업체가 방문해 모든 시설을 쾌적하고 깔끔하게 관리합니다</p>
                             </div>
                         </div>
@@ -107,10 +107,10 @@ export default function Membership() {
 
                         {/* 멤버십 가격 안내 화면 구역 */}
                         {/* TODO 클릭 했을 때 결제 API로 이동하게 기능 구현 */}
-                        <section className="px-8 py-24">
+                        <section className="px-8 py-24 rounded-xl mt-44" style={{backgroundColor:"lightblue"}}>
                             <div className="container mx-auto text-center">
                                 <h2 className="block antialiased tracking-normal font-sans text-4xl font-semibold leading-[1.3] text-black mb-4 rundry">멤버십 가격 안내</h2>
-                                <p className="block antialiased font-sans text-base leading-relaxed text-inherit mb-8 font-normal !text-gray-500">Check
+                                <p className="block antialiased font-sans text-base leading-relaxed text-inherit mb-8 font-normal text-white">Check
                                     out our affordable pricing options for awsome enviroment.</p>
                             </div>
                             <div className="mt-24">
