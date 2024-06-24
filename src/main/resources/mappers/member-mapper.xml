@@ -26,6 +26,7 @@
             MEMBER_TEL,
             MEMBER_POSTCODE,
             MEMBER_ADD,
+            MEMBER_PROFILE,
             MEMBER_DETAILADD,
             MEMBER_BIRTH
         ) VALUES (
@@ -36,6 +37,7 @@
             #{memberTel},
             #{memberPostcode},
             #{memberAdd},
+            #{memberProfile},
             #{memberDetailAdd},
             #{memberBirth}
         )
@@ -72,6 +74,26 @@
         WHERE
             A.MEMBER_ID = #{memberId}
     </select>
+
+<!--  마이페이지 프로필 이미지 조회  -->
+    <select id="getProfile" parameterType="string" resultType="string">
+        SELECT
+            MEMBER_PROFILE
+        FROM
+            MEMBER
+        WHERE
+            MEMBER_ID = #{memberId}
+    </select>
+
+<!--  마이페이지 프로필 이미지 등록  -->
+    <update id="registerProfile" parameterType="string">
+        UPDATE
+            MEMBER
+        SET
+            MEMBER_PROFILE = #{imageUrl}
+        WHERE
+            MEMBER_ID = #{memberId}
+    </update>
 
     <!-- 마이페이지 비밀번호 수정   -->
     <update id="passwordChange" parameterType="MemberVO">

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.nextit.ditto.comment.CommentMapper">
+    <resultMap id="commentResultMap" type="kr.or.nextit.ditto.comment.CommentVO">
+        <id property="commentNo" column="COMMENT_NO"/> <!-- 댓글 번호 매핑 -->
+        <result property="boardNo" column="BOARD_NO"/> <!-- 게새글 번호 매핑 -->
+        <result property="memberId" column="MEMBER_ID"/> <!-- 회원 ID 매핑 -->
+        <result property="content" column="CONTENT"/> <!-- 댓글 내용 매핑 -->
+        <result property="type" column="TYPE"/> <!-- 게시판 종류 매핑 -->
+        <result property="createDate" column="CREATE_DATE"/> <!-- 작성일 매핑 -->
+        <result property="modifyDate" column="MODIFY_DATE"/> <!-- 수정일 매핑 -->
+        <result property="status" column="STATUS"/> <!-- 활성화 상태 매핑 -->
+    </resultMap>
+
+    <!-- 모든 댓글 조회하는 SQL 쿼리 -->
+    <select id="getCommentList" parameterType="int" resultMap="commentResultMap">
+        SELECT
+            c.COMMENT_NO,
+            c.BOARD_NO,
+            c.MEMBER_ID,
+            c.CONTENT,
+            c.TYPE,
+            c.CREATE_DATE,
+            c.MODIFY_DATE,
+            c.STATUS
+        FROM
+            COMMENT c
+        INNER JOIN
+            FREE_BOARD f
+        ON
+            c.BOARD_NO = f.FREE_BOARD_NO
+        WHERE
+            c.BOARD_NO = #{boardNo}
+        AND
+            c.STATUS = 'Y'
+        AND
+            c.TYPE = 'FREE_BOARD'
+    </select>
+
+<!--  댓글 작성  -->
+    <insert id="commentRegister" parameterType="commentVO">
+        INSERT INTO COMMENT
+            (COMMENT_NO, BOARD_NO, MEMBER_ID, CONTENT, TYPE)
+        VALUES
+            (#{commentNo}, #{boardNo}, #{memberId}, #{content}, #{type})
+    </insert>
+</mapper>

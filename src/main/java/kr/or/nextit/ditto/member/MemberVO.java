@@ -20,12 +20,10 @@ public class MemberVO {
     private String memberTel;
     private String memberAdd;
     private String memberBirth;
-    private String memberCard;
+    private String memberProfile;
     private String memberAdmin;
     private String memberLog;
     private String memberDelete;
     private String memberDetailAdd;
     private String memberPostcode;
-
-
 }

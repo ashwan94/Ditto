@@ -50,6 +50,7 @@
               <Route path="/faq" element={<Faq />} />
               <Route path="/community/podcast/list" element={<PodcastList />} />
           </Routes>
+          <KaKaoTalk />
           <Footer />
         </BrowserRouter>
       </>

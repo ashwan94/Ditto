@@ -50,8 +50,11 @@ export default function List(){
     const [seatList, setSeatList] = useState([]);
     const getSeatData = async () => {
         const res = await axios.get("/seat/list");
+
+
+
         setSeatList(res.data);
-        // console.log("결과 : ", res.data);
+        console.log("결과 : ", res.data);
     };
 
     // 브라우저 로딩 완료 시 DB 의 SEAT 에서 좌석 정보 가져옴
@@ -82,7 +85,7 @@ export default function List(){
 
     return(
         <main>
-            <section className="gj do ir hj sp text-black">
+            <section className="gj do hj sp text-black">
                 <div className="grid place-items-center static">
                     <div className="text-5xl">좌석 배치도</div>
                     <div className="text-xl">예약할 좌석을 선택해주세요</div>

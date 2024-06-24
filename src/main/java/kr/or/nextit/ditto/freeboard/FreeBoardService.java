@@ -1,5 +1,6 @@
 package kr.or.nextit.ditto.freeboard;
 
+import kr.or.nextit.ditto.common.SearchVO;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,13 @@ public class FreeBoardService {
     private final FreeBoardMapper mapper;
 
     // 모든 게시글 조회
-    public List<FreeBoardVO> getBoardList(){
-        return mapper.getBoardList();
+    public List<FreeBoardVO> getBoardList(SearchVO vo){
+        return mapper.getBoardList(vo);
+    }
+
+    // 모든 게시글 개수 조회
+    public int getBoardListCount(SearchVO vo){
+        return mapper.getBoardListCount(vo);
     }
 
     // 제목으로 검색

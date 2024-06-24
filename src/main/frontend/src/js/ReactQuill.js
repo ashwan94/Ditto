@@ -121,7 +121,7 @@ const Editor = ({boardNo, addBtn, updateBtn}) => {
     const goAdd = async () => {
         if(title){
             if(content){
-                const memberId = "갠역시21"; // 로그인 기능 미구현으로 임시 회원 데이터 삽입
+                const memberId = JSON.parse(sessionStorage.getItem("member")).memberId; // 로그인된 회원 정보
                 const data = {freeTitle : title, freeContent : content, memberId:memberId}
                 const res = await axios.post("/freeBoard/register", data)
                 .then((response => navigate("/community/freeBoard/view", {

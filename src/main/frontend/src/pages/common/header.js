@@ -8,7 +8,6 @@ const Header = () => {
   const [loginLog, setLoginLog] = useState(sessionStorage.getItem("member")); // Session 에서 가져온 로그인된 유저 정보
 
   useEffect(() => {
-    // console.log("로그인 유저 정보 : ", loginLog);
     const savedDarkMode = JSON.parse(localStorage.getItem("darkMode"));
     if (savedDarkMode !== null) {
       setDarkMode(savedDarkMode);
@@ -49,7 +48,7 @@ const Header = () => {
       <div className="bb ze ki xn 2xl:ud-px-0 oo wf yf i">
         <div className="vd to/4 tc wf yf">
           <Link to="/">
-            <img className="om" src="/images/logo-light.svg" alt="Logo Light" />
+            <img className="om w-44" src="/images/hansukjupshow_logo.png" alt="Logo Light" />
             <img
               className="xc nm"
               src="/images/logo-dark.svg"
@@ -196,7 +195,6 @@ const Header = () => {
                 </div>
                 :
                 <Link to="/SignIn" className="lk gh dk rg tc wf xf _l gi hi font-extrabold">로그인</Link>
-
             }
           </div>
         </div>

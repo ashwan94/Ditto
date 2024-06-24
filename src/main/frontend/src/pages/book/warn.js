@@ -5,7 +5,7 @@ import "../../css/board.css"
 
 export default function BookWarn() {
     return (<main>
-            <section className="gj do ir hj sp jr i pg rundry">
+            <section className="gj do hj sp jr i pg rundry">
                 <div className="bb ze ki xn 2xl:ud-px-0">
                     <div className="container">
                         <img
