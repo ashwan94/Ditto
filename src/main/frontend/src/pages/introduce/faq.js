@@ -52,7 +52,7 @@ export default function Faq() {
 
     return(
     <main className="rundry text-xl">
-        <section className="gj do ir hj sp jr i pg rundry">
+        <section className="gj do hj sp jr i pg rundry">
             <div className="bb ze ki xn 2xl:ud-px-0 mb-8" style={{borderTop: "1px solid lightgray"}}>
                 {/* 상단 이미지 갤러리 섹션 */}
                 <section className="image-gallery mt-8">

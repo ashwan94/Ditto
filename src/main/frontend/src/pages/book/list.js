@@ -126,7 +126,7 @@ export default function BookList() {
 
     return (
         <main>
-            <section className="gj do ir hj sp jr i pg rundry">
+            <section className="gj do hj sp jr i pg rundry">
                 <div className="bb ze ki xn 2xl:ud-px-0">
 
                     <div id="board-search">

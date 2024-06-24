@@ -173,7 +173,7 @@ export default function BookView() {
 
     return (
         <main>
-            <section className="gj do ir hj sp jr i pg">
+            <section className="gj do hj sp jr i pg">
                 <div>
 
                     <div className="page-title">

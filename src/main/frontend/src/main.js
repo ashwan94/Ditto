@@ -58,7 +58,7 @@ export default function Main() {
 
     return (
         <main className="rundry text-xl">
-            <section className="gj do ir hj sp jr i pg rundry">
+            <section className="gj do hj sp jr i pg rundry">
                 <div className="bb ze ki xn 2xl:ud-px-0" style={{borderTop: "1px solid lightgray"}}>
                     {/* 소개 섹션 */}
                     {/*<p>운영시간</p>*/}
@@ -70,7 +70,7 @@ export default function Main() {
 
                     {/*<img src="images/introduction banner.png" alt="Icon" className="scale-100"/>*/}
                     <div className="row-auto">
-                        <img className="scale-55 ml-16" src="/images/hansukjupshow_logo.png" alt="Logo Light"/>
+                        <img className="scale-75 ml-16" src="/images/hansukjupshow_logo.png" alt="Logo Light"/>
                         <p style={{textAlign: "center"}} className="mb-12">직장인 5명 중 2명은 퇴근 후 ‘공부한다’라고 답할 만큼<br/>
                             분초사회라 일컫는 현대사회에 자기계발에 시간과 돈을 아끼지 않는 ‘샐러던트’들을 위해 <br/>
                             업무 공간과 그룹 스터디와 같은 미팅룸, 개인 작업을 할 수 있는 시스템과 공간을 마련하였습니다</p>

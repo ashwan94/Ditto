@@ -15,7 +15,7 @@ export default function Membership() {
 
     return(
         <main className="rundry text-xl">
-            <div className="gj do ir hj sp jr i pg rundry">
+            <div className="gj do hj sp jr i pg rundry">
                 <div className="bb ze ki xn 2xl:ud-px-0" style={{borderTop: "1px solid lightgray"}}>
                 </div>
 

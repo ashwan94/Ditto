@@ -82,7 +82,7 @@ export default function List(){
 
     return(
         <main>
-            <section className="gj do ir hj sp text-black">
+            <section className="gj do hj sp text-black">
                 <div className="grid place-items-center static">
                     <div className="text-5xl">좌석 배치도</div>
                     <div className="text-xl">예약할 좌석을 선택해주세요</div>
