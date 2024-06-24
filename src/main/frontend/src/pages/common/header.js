@@ -49,7 +49,12 @@ const Header = () => {
       <div className="bb ze ki xn 2xl:ud-px-0 oo wf yf i">
         <div className="vd to/4 tc wf yf">
           <Link to="/">
-            <img className="om w-48" src="/images/hansukjupshow_logo.png" alt="Logo Light" />
+            <img className="om" src="/images/logo-light.svg" alt="Logo Light" />
+            <img
+              className="xc nm"
+              src="/images/logo-dark.svg"
+              alt="Logo Dark"
+            />
           </Link>
           <button
             className="po rc"
