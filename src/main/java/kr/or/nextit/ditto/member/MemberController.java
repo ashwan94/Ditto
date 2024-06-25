@@ -1,6 +1,7 @@
 package kr.or.nextit.ditto.member;
 
 
+import kr.or.nextit.ditto.common.SearchVO;
 import kr.or.nextit.ditto.rent.RentVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Member;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -171,8 +169,10 @@ public class MemberController {
 
     // 회원정보 타입 검색
     @PostMapping("/adminMemberListSearch")
-    public List<MemberVO> adminPageSearchMemberId(@RequestBody MemberVO memberVO{
-        String type = memberVO.
+    public List<MemberVO> adminPageSearchMemberId(@RequestBody SearchVO searchVO){
+        List<MemberVO> vo = new ArrayList<MemberVO>();
+        String type = searchVO.getType();
+        String keyword = searchVO.getKeyword();
         if ("아이디".equals(type)){
             vo = service.adminPageSearchMemberIdData(keyword); // 아이디 기준 검색
         }

@@ -85,7 +85,25 @@ export default function AdminPage(){
 
     // 멤버 아이디로 회원 정보, 게시판, 도서 대여이력 검색
     const searchBtn = async () => {
-
+        if(searchKeyword != ""){
+            if(showMemberList){
+                searchMemberList()
+            }else if (showFreeBoardList){
+                searchFreeBoardList()
+            }else if (showRelayBoardList){
+                searchRelayBoardList()
+            }else if (showBookList){
+                searchBookList()
+            }else if (showPodcastList){
+                searchPodcastList()
+            }
+            return;
+        }
+        getMemberData();
+        getFreeBoardData();
+        getRelayBoardData();
+        getBookRentData();
+        searchPodcastList();
     }
 
     // 회원정보 검색요청
@@ -112,6 +130,10 @@ export default function AdminPage(){
             const res = await axios.post("/adminFreeBoardListSearch",{
                 type: searchType,
                 keyword : searchKeyword
+            },{
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
             setFreeBoardList(res.data)
 
@@ -126,6 +148,10 @@ export default function AdminPage(){
             const res = await axios.post("/adminRelayBoardListSearch",{
                 type: searchType,
                 keyword : searchKeyword
+            },{
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
             setRelayBoardList(res.data)
 
@@ -140,6 +166,10 @@ export default function AdminPage(){
             const res = await axios.post("/adminBookListSearch",{
                 type: searchType,
                 keyword : searchKeyword
+            },{
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
             setBookRentList(res.data)
 
@@ -154,6 +184,10 @@ export default function AdminPage(){
             const res = await axios.post("/adminPodcastListSearch",{
                 type: searchType,
                 keyword : searchKeyword
+            },{
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
             setPodcastList(res.data)
 

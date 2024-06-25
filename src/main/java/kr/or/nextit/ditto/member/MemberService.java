@@ -1,6 +1,7 @@
 package kr.or.nextit.ditto.member;
 
 
+import kr.or.nextit.ditto.common.SearchVO;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
@@ -63,7 +64,7 @@ public class MemberService {
         return mapper.adminPageMemberClickListSearch(memberId); // 도서 대여 이력 아이디 클릭시 해당 회원정보 조회
     }
 
-    public List<MemberVO> adminPageSearchMemberIdData(@Param("keyword") String keyword){
+    public List<MemberVO> adminPageSearchMemberIdData(String keyword){
         return mapper.adminPageSearchMemberIdData(keyword);
     }
 

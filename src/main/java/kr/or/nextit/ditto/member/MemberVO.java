@@ -27,5 +27,4 @@ public class MemberVO {
     private String memberDetailAdd;
     private String memberPostcode;
 
-
 }
