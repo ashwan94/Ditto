@@ -8,9 +8,6 @@ public class SearchVO {
 	private String searchWord;
 	private int firstRecordIndex;
 	private int lastRecordIndex;
-	private String type;
-	private String keyword;
-
 
 	public String getSearchType() {
 		return searchType;

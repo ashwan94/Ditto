@@ -23,5 +23,5 @@ public interface MemberMapper {
     void adminMemberSubStatus(MemberVO memberVO); // 관리자 페이지 멤버십 상태변경
 
     List<MemberVO> adminPageMemberClickListSearch(MemberVO memberId); // 도서대여 이력에서 회원 아이디클릭시 해당 회원정보조회
-    List<MemberVO> adminPageSearchMemberIdData(String keyword); // 멤버아이디 타입 키워드로 검색
+    List<MemberVO> adminPageSearchMemberIdData(String searchWord); // 멤버아이디 타입 키워드로 검색
 }

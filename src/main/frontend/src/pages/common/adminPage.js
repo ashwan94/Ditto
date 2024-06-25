@@ -14,14 +14,17 @@ export default function AdminPage(){
     const [showBookList, setShowBookList] = useState(false) // 도서 대여 이력 화면표시
     const [showPodcastList, setShowPodcastList] = useState(false) // 팟캐스트 화면표시
     const [searchType, setSearchType] = useState("아이디") // 회원 정보 검색타입
-    const [searchKeyword, setSearchKeyword] = useState("") // 회원 정보 검색키워드
+    const [searchWord, setSearchWord] = useState("") // 회원 정보 검색키워드
 
     const searchTypeOnChangeHandler = useCallback((e) => {
         setSearchType(e.target.value)
+        if (searchType == "아이디" || searchType == "도서명"){
+            setSearchWord("")
+        }
     },[])
 
-    const searchKeywordOnChangeHandler = useCallback((e) => {
-        setSearchKeyword(e.target.value)
+    const searchWordOnChangeHandler = useCallback((e) => {
+        setSearchWord(e.target.value)
     },[])
 
     // 회원정보 전체 조회
@@ -68,8 +71,6 @@ export default function AdminPage(){
             const resBookRent = await axios.get("/adminBookRentList");
 
             setBookRentList(resBookRent.data)
-            console.log(resBookRent.data)
-
         } catch (error) {
             console.error("도서 대여 이력조회 에러", error);
         }
@@ -85,7 +86,8 @@ export default function AdminPage(){
 
     // 멤버 아이디로 회원 정보, 게시판, 도서 대여이력 검색
     const searchBtn = async () => {
-        if(searchKeyword != ""){
+        console.log(searchWord)
+        if(searchWord != ""){
             if(showMemberList){
                 searchMemberList()
             }else if (showFreeBoardList){
@@ -110,8 +112,8 @@ export default function AdminPage(){
     const searchMemberList = async () => {
         try {
             const res = await axios.post("/adminMemberListSearch",{
-                type: searchType,
-                keyword : searchKeyword
+                searchType: searchType,
+                searchWord : searchWord
             },{
                 headers: {
                     "Content-Type": "application/json"
@@ -128,8 +130,8 @@ export default function AdminPage(){
     const searchFreeBoardList = async () => {
         try {
             const res = await axios.post("/adminFreeBoardListSearch",{
-                type: searchType,
-                keyword : searchKeyword
+                searchType: searchType,
+                searchWord : searchWord
             },{
                 headers: {
                     "Content-Type": "application/json"
@@ -146,8 +148,8 @@ export default function AdminPage(){
     const searchRelayBoardList = async () => {
         try {
             const res = await axios.post("/adminRelayBoardListSearch",{
-                type: searchType,
-                keyword : searchKeyword
+                searchType: searchType,
+                searchWord : searchWord
             },{
                 headers: {
                     "Content-Type": "application/json"
@@ -164,8 +166,8 @@ export default function AdminPage(){
     const searchBookList = async () => {
         try {
             const res = await axios.post("/adminBookListSearch",{
-                type: searchType,
-                keyword : searchKeyword
+                searchType: searchType,
+                searchWord : searchWord
             },{
                 headers: {
                     "Content-Type": "application/json"
@@ -182,8 +184,8 @@ export default function AdminPage(){
     const searchPodcastList = async () => {
         try {
             const res = await axios.post("/adminPodcastListSearch",{
-                type: searchType,
-                keyword : searchKeyword
+                searchType: searchType,
+                searchWord : searchWord
             },{
                 headers: {
                     "Content-Type": "application/json"
@@ -263,6 +265,17 @@ export default function AdminPage(){
         }
         return null;
     }
+
+    // 연체여부 클릭시 딜레이상태 'Y' 'N'인것들만 보임
+    const rentDelaySearch = async () => {
+        try {
+            const res = await axios.post("/rentDelaySearch");
+            setBookRentList(res.data)
+        } catch (error) {
+            console.error("도서 대여 이력조회 에러", error);
+        }
+    }
+
     return (
         <main className="rundry">
             <section className="i pg fh rm ki xn vq gj qp gr hj rp hr ">
@@ -277,7 +290,8 @@ export default function AdminPage(){
                                     setShowBookList(false);
                                     setShowPodcastList(false);
                                     getMemberData();
-                                    setSearchKeyword("");
+                                    setSearchWord("");
+                                    setSearchType("아이디");
                                 }}
                                 className={`btn mt-1 text-lg leading-6 mx-3 ${showMemberList ? 'text-blue-600' : 'text-gray-600'}`}>회원정보</span>
                             <span
@@ -288,7 +302,8 @@ export default function AdminPage(){
                                     setShowBookList(false);
                                     setShowPodcastList(false);
                                     getFreeBoardData();
-                                    setSearchKeyword("");
+                                    setSearchWord("");
+                                    setSearchType("아이디");
                                 }}
                                 className={`btn mt-1 text-lg leading-6 mx-3 ${showFreeBoardList ? 'text-blue-600' : 'text-gray-600'}`}>자유게시판</span>
                             <span
@@ -299,7 +314,8 @@ export default function AdminPage(){
                                     setShowBookList(false);
                                     setShowPodcastList(false);
                                     getRelayBoardData();
-                                    setSearchKeyword("");
+                                    setSearchWord("");
+                                    setSearchType("아이디");
                                 }}
                                 className={`btn mt-1 text-lg leading-6 mx-3 ${showRelayBoardList ? 'text-blue-600' : 'text-gray-600'}`}>릴레이 소설게시판</span>
                             <span
@@ -310,7 +326,8 @@ export default function AdminPage(){
                                     setShowBookList(true);
                                     setShowPodcastList(false);
                                     getBookRentData();
-                                    setSearchKeyword("");
+                                    setSearchWord("");
+                                    setSearchType("아이디");
                                 }}
                                 className={`btn mt-1 text-lg leading-6 mx-3 ${showBookList ? 'text-blue-600' : 'text-gray-600'}`}>도서 대여 이력</span>
                             <span
@@ -321,7 +338,8 @@ export default function AdminPage(){
                                     setShowBookList(false);
                                     setShowPodcastList(true);
                                     // getPodcastData();
-                                    setSearchKeyword("");
+                                    setSearchWord("");
+                                    setSearchType("아이디");
                                 }}
                                 className={`btn mt-1 text-lg leading-6 mx-3 ${showPodcastList ? 'text-blue-600' : 'text-gray-600'}`}>팟캐스트</span>
                             {showMemberList ? (
@@ -330,9 +348,9 @@ export default function AdminPage(){
                                     <option value="아이디">아이디</option>
                                 </select>
                                 <input
-                                    onChange={searchKeywordOnChangeHandler}
                                     type="text"
-                                    className="border" style={{borderRadius: "4px"}} value={searchKeyword}/>
+                                    onChange={searchWordOnChangeHandler}
+                                    className="border" style={{borderRadius: "4px"}} value={searchWord}/>
                                 <button
                                     onClick={searchBtn}
                                     className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
@@ -344,8 +362,9 @@ export default function AdminPage(){
                                         <option value="제목">제목</option>
                                     </select>
                                     <input
-                                        onChange={searchKeywordOnChangeHandler}
-                                        className="border" style={{borderRadius: "4px"}} value={searchKeyword}/>
+                                        type="text"
+                                        onChange={searchWordOnChangeHandler}
+                                        className="border" style={{borderRadius: "4px"}} value={searchWord}/>
                                     <button
                                         onClick={searchBtn}
                                         className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
@@ -357,8 +376,9 @@ export default function AdminPage(){
                                         <option value="제목">제목</option>
                                     </select>
                                     <input
-                                        onChange={searchKeywordOnChangeHandler}
-                                        className="border" style={{borderRadius: "4px"}} value={searchKeyword}/>
+                                        type="text"
+                                        onChange={searchWordOnChangeHandler}
+                                        className="border" style={{borderRadius: "4px"}} value={searchWord}/>
                                     <button
                                         onClick={searchBtn}
                                         className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
@@ -367,13 +387,22 @@ export default function AdminPage(){
                                 <label className="float-right">
                                     <select onChange={searchTypeOnChangeHandler}>
                                         <option value="아이디">아이디</option>
+                                        <option value="도서명">도서명</option>
                                         <option value="대여일">대여일</option>
                                         <option value="반납예정일">반납예정일</option>
                                         <option value="실제반납일">실제반납일</option>
                                     </select>
-                                    <input
-                                        onChange={searchKeywordOnChangeHandler}
-                                        className="border" style={{borderRadius: "4px"}} value={searchKeyword}/>
+                                    {searchType == "아이디" || searchType == "도서명"? (
+                                        <input
+                                            type="text"
+                                            onChange={searchWordOnChangeHandler}
+                                            className="border" style={{borderRadius: "4px"}} value={searchWord}/>
+                                    ) : (
+                                        <input
+                                            type="date"
+                                            onChange={searchWordOnChangeHandler}
+                                            className="border" style={{borderRadius: "4px"}} value={searchWord}/>
+                                    )}
                                     <button
                                         onClick={searchBtn}
                                         className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
@@ -385,8 +414,9 @@ export default function AdminPage(){
                                         <option value="수정일">수정일</option>
                                     </select>
                                     <input
-                                        onChange={searchKeywordOnChangeHandler}
-                                        className="border" style={{borderRadius: "4px"}} value={searchKeyword}/>
+                                        type="text"
+                                        onChange={searchWordOnChangeHandler}
+                                        className="border" style={{borderRadius: "4px"}} value={searchWord}/>
                                     <button
                                         onClick={searchBtn}
                                         className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
@@ -515,7 +545,9 @@ export default function AdminPage(){
                                             <td className="border border-gray-800 px-4 py-2">반납예정일</td>
                                             <td className="border border-gray-800 px-4 py-2">실제 반납일</td>
                                             <td className="border border-gray-800 px-4 py-2">회원 아이디</td>
-                                            <td className="border border-gray-800 px-4 py-2">연체여부</td>
+                                            <td
+                                                className="border border-gray-800 px-4 py-2 text-purple-500">
+                                                <button onClick={rentDelaySearch}>연체여부</button></td>
                                         </tr>
                                         {/* 도서대여 이력이 한개이상 존재 할때나옴 */}
                                         {bookRentList && bookRentList.length > 0 ? (

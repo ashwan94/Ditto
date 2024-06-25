@@ -27,4 +27,10 @@ public interface RentMapper {
 
     List<RentVO> adminPageBookRentList();
 
+    List<RentVO> adminBookSearchPageId (String searchWord);
+    List<RentVO> adminBookSearchPageBook (String searchWord);
+    List<RentVO> adminBookSearchPageRentStart (String searchWord);
+    List<RentVO> adminBookSearchPageRentEnd (String searchWord);
+    List<RentVO> adminBookSearchPageRentReturn (String searchWord);
+    List<RentVO> rentDelaySearch ();
 }

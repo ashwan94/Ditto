@@ -64,8 +64,8 @@ public class MemberService {
         return mapper.adminPageMemberClickListSearch(memberId); // 도서 대여 이력 아이디 클릭시 해당 회원정보 조회
     }
 
-    public List<MemberVO> adminPageSearchMemberIdData(String keyword){
-        return mapper.adminPageSearchMemberIdData(keyword);
+    public List<MemberVO> adminPageSearchMemberIdData(String searchWord){
+        return mapper.adminPageSearchMemberIdData(searchWord);
     }
 
 

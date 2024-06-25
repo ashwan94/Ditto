@@ -166,7 +166,6 @@
         FROM
             MEMBER A
         WHERE
-            A.MEMBER_ID = #{keyword}
+            A.MEMBER_ID LIKE CONCAT('%', #{searchWord}, '%')
     </select>
-
 </mapper>

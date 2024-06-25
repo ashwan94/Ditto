@@ -171,10 +171,10 @@ public class MemberController {
     @PostMapping("/adminMemberListSearch")
     public List<MemberVO> adminPageSearchMemberId(@RequestBody SearchVO searchVO){
         List<MemberVO> vo = new ArrayList<MemberVO>();
-        String type = searchVO.getType();
-        String keyword = searchVO.getKeyword();
-        if ("아이디".equals(type)){
-            vo = service.adminPageSearchMemberIdData(keyword); // 아이디 기준 검색
+        String searchType = searchVO.getSearchType();
+        String searchWord = searchVO.getSearchWord();
+        if ("아이디".equals(searchType)){
+            vo = service.adminPageSearchMemberIdData(searchWord); // 아이디 기준 검색
         }
         return vo;
     }
