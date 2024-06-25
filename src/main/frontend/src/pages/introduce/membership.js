@@ -216,7 +216,7 @@ export default function Membership() {
                                     <h5 className="block antialiased tracking-normal font-sans text-xl font-semibold leading-snug text-blue-gray-900 capitalize">기업체
                                         공유오피스 입주 상담</h5>
                                     <p className="block antialiased font-sans text-sm leading-normal text-inherit font-normal !text-gray-500">
-                                        높은 사옥 이전 비용, 인테리어 비용이 부담스러운 사장님들께<br /> 추천하는 입주 상담 서비스
+                                        사옥 이전 비용, 인테리어 비용이 부담스러운 사장님들께 추천하는 입주 상담 서비스
                                     </p>
                                     <h3 className="antialiased tracking-normal font-sans text-3xl font-semibold leading-snug text-blue-gray-900 flex gap-1 mt-4">
                                         Contact us<span
@@ -258,8 +258,7 @@ export default function Membership() {
                                         </li>
                                     </ul>
                                     <button
-                                        className="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 px-4 rounded-lg border border-green-500
-                                        text-green-500 hover:opacity-75 focus:ring focus:ring-green-200 active:opacity-[0.85] block w-full mt-10"
+                                        className="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 px-4 rounded-lg border border-green-500 text-green-500 hover:opacity-75 focus:ring focus:ring-green-200 active:opacity-[0.85] block w-full mt-6"
                                         type="button"
                                         onClick={() => {
                                             const kakaoTalk = document.querySelector("#chat-channel-button")
