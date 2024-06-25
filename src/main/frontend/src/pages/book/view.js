@@ -166,10 +166,6 @@ export default function BookView() {
     }, []);
 
 
-    useEffect(() => {
-        console.log("도서 대여 가능 여부 (false: 대출불가, true: 대출가능): ", bookRent);
-    }, [bookRent]);
-
 
     return (
         <main>

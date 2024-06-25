@@ -103,6 +103,8 @@
             R.BOOK_NO = B.BOOK_NO
         WHERE
             R.MEMBER_ID = #{memberId}
+        ORDER BY
+            STR_TO_DATE(R.RENT_START, '%Y-%m-%d') DESC;
     </select>
     <update id="rentReturn" parameterType="rentVO">
         UPDATE

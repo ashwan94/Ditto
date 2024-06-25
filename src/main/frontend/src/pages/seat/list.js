@@ -18,11 +18,7 @@ export default function List(){
     const [num, setNum] = useState(0); // MQTT 통신 횟수 확인용
     useEffect(() => {
         // 최초 null 로 시작할때 브라우저 로딩 시 발생하는 에러에 대한 처리
-        if(message){
-            console.log("착석 여부 : ");
-            console.log(message)
-            console.log(num);
-        }
+
     }, [message]);
 
     // MQTT connect 에 대한 event -> subscribe, publish 모두 처리

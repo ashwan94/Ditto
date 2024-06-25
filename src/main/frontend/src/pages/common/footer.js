@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <footer>
+        <footer className="rundry">
             <div className="bb ze ki xn 2xl:ud-px-0">
                 <div className="ji gp">
                     <div className="tc uf ap gg fp">
@@ -20,30 +20,29 @@ const Footer = () => {
                         </div>
                         <div className="vd ro tc sf rn un gg vn">
                             <div className="animate_top">
-                                <h4 className="kk wm tj ec">바로가기</h4>
+                                <h4 className="kk wm tj ec rundry">바로가기</h4>
                                 <ul>
-                                    <li><a href="#" className="sc xl vb">홈</a></li>
-                                    <li><a href="#" className="sc xl vb">도서</a></li>
-                                    <li><a href="#" className="sc xl vb">멤버십</a></li>
+                                    <li><a href="http://localhost:3000/" className="sc xl vb">홈</a></li>
+                                    <li><a href="http://localhost:3000/book/list" className="sc xl vb">도서</a></li>
+                                    <li><a href="http://localhost:3000/membershipInfo" className="sc xl vb">멤버십</a></li>
                                 </ul>
                             </div>
                             <div className="animate_top">
-                                <h4 className="kk wm tj ec">시설 안내</h4>
+                                <h4 className="kk wm tj ec rundry">시설 안내</h4>
                                 <ul>
-                                    <li><a href="#" className="sc xl vb">열람실</a></li>
-                                    <li><a href="#" className="sc xl vb">내부 구조도</a></li>
+                                    <li><a href="http://localhost:3000/seat/list" className="sc xl vb">열람실</a></li>
+                                    <li><a href="http://localhost:3000/seat/list" className="sc xl vb">내부 구조도</a></li>
                                 </ul>
                             </div>
                             <div className="animate_top">
-                                <h4 className="kk wm tj ec">지원</h4>
+                                <h4 className="kk wm tj ec rundry">지원</h4>
                                 <ul>
-                                    <li><a href="#" className="sc xl vb">한끼줍쇼란?</a></li>
-                                    <li><a href="#" className="sc xl vb">블로그</a></li>
-                                    <li><a href="#" className="sc xl vb">Github</a></li>
+                                    <li><a href="https://section.blog.naver.com/BlogHome.naver?directoryNo=0&currentPage=1&groupId=0" className="sc xl vb">블로그</a></li>
+                                    <li><a href="https://github.com/ashwan94/Ditto" className="sc xl vb">Github</a></li>
                                 </ul>
                             </div>
                             <div className="animate_top">
-                                <h4 className="kk wm tj ec">개인정보취급방침</h4>
+                                <h4 className="kk wm tj ec rundry">개인정보취급방침</h4>
                                 <ul>
                                     <li><a href="#" className="sc xl vb">이용약관</a></li>
                                     <li><a href="#" className="sc xl vb">운영정책</a></li>

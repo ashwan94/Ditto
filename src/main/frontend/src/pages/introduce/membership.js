@@ -46,11 +46,11 @@ export default function Membership() {
 
     return (
         <main className="rundry text-xl">
-            <div className="gj do hj sp jr i pg rundry">
-                <div className="bb ze ki xn 2xl:ud-px-0" style={{borderTop: "1px solid lightgray"}}>
+            <div className="gj do hj sp jr pg rundry" >
+                <div style={{borderTop: "1px solid lightgray"}}>
                 </div>
 
-                <section className="gj do ir hj sp jr i pg">
+                <section className="gj do ir hj sp jr i pg" style={{paddingBottom:"14.75rem"}}>
                     <div className="xc fn zd/2 2xl:ud-w-187.5 bd 2xl:ud-h-171.5 h q r me-36">
                         <img src="/images/shape-01.svg" alt="shape"
                              className="xc 2xl:ud-block h t -ud-left-[10%] ua scale-75"/>
@@ -75,16 +75,8 @@ export default function Membership() {
                     </div>
                 </section>
 
-                <section className="lj tp kr mt-10">
+                <section className="lj tp kr mb-10">
                     <div>
-                        <div className="animate_top bb ze rj ki xn vq">
-                            <h2
-                                x-text="sectionTitle"
-                                className="fk vj pr kk wm on/5 gq/2 bb _b"
-                            >
-                            </h2>
-                            <p className="bb on/5 wo/5 hq" x-text="sectionTitleText"></p>
-                        </div>
                         <div className="text-center text-8xl text-black">Features</div>
                         <div className="text-center text-2xl mt-3">멤버십 구독 회원분들께 드리는 무료 혜택!</div>
                     </div>
@@ -139,12 +131,11 @@ export default function Membership() {
 
 
                     {/* 멤버십 가격 안내 화면 구역 */}
-
-                    <section className="px-8 py-24 rounded-xl mt-44" style={{backgroundColor: "lightblue"}}>
+                    <section className="rundry px-8 py-24 rounded-xl mt-44" style={{backgroundColor: "lightblue", border:"2px solid black"}}>
                         <div className="container mx-auto text-center">
-                            <h2 className="block antialiased tracking-normal font-sans text-4xl font-semibold leading-[1.3] text-black mb-4 rundry">멤버십
+                            <h2 className="block antialiased tracking-normal text-4xl font-semibold leading-[1.3] text-black mb-4 rundry">멤버십
                                 가격 안내</h2>
-                            <p className="block antialiased font-sans text-base leading-relaxed text-inherit mb-8 font-normal text-white">
+                            <p className="block antialiased text-base leading-relaxed text-inherit mb-8 font-bold text-white ">
                                 Check out our affordable pricing options for awesome environment.
                             </p>
                         </div>
@@ -155,17 +146,17 @@ export default function Membership() {
 
                             {/* 왼쪽 박스 */}
                             <div
-                                className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md border border-blue-gray-100 mx-4">
+                                className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md border border-blue-gray-100 mx-4 rundry">
                                 <div
                                     className="relative bg-clip-border mt-4 mx-4 rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none !m-0 p-6">
-                                    <h5 className="block antialiased tracking-normal font-sans text-xl font-semibold leading-snug text-blue-gray-900 capitalize">한달
+                                    <h5 className="block antialiased tracking-normal text-xl font-semibold leading-snug text-blue-gray-900 capitalize rundry">한달
                                         이용권</h5>
-                                    <p className="block antialiased font-sans text-sm leading-normal text-inherit font-normal !text-gray-500">
+                                    <p className="block antialiased text-sm leading-normal text-inherit font-normal !text-gray-500 mt-5">
                                         꾸준히 자기계발을 하고 싶은 당신에게 추천하는 한석줍쇼 한달 이용권
                                     </p>
-                                    <h3 className="antialiased tracking-normal font-sans text-3xl font-semibold leading-snug text-blue-gray-900 flex gap-1 mt-4">
+                                    <h3 className="antialiased tracking-normal text-3xl font-semibold leading-snug text-blue-gray-900 flex gap-1 mt-4">
                                         159,000원<span
-                                        className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 -translate-y-0.5 self-end opacity-70"></span>
+                                        className="block antialiased tracking-normal text-base font-semibold leading-relaxed text-blue-gray-900 -translate-y-0.5 self-end opacity-70"></span>
                                     </h3>
                                 </div>
                                 <div className="p-6 border-t border-blue-gray-50">
@@ -177,7 +168,7 @@ export default function Membership() {
                                                 <path strokeLinecap="round" strokeLinejoin="round"
                                                       d="M4.5 12.75l6 6 9-13.5"></path>
                                             </svg>
-                                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-inherit">카페테리아 / 무료 와이파이
+                                            <p className="block antialiased text-sm leading-normal font-normal text-inherit">카페테리아 / 무료 와이파이
                                                 이용 가능</p>
                                         </li>
                                         <li className="flex items-center gap-3 text-gray-700">
@@ -187,7 +178,7 @@ export default function Membership() {
                                                 <path strokeLinecap="round" strokeLinejoin="round"
                                                       d="M4.5 12.75l6 6 9-13.5"></path>
                                             </svg>
-                                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-inherit">도서
+                                            <p className="block antialiased text-sm leading-normal font-normal text-inherit">도서
                                                 열람 및 대여 가능</p>
                                         </li>
                                         <li className="flex items-center gap-3 text-gray-700">
@@ -197,14 +188,13 @@ export default function Membership() {
                                                 <path strokeLinecap="round" strokeLinejoin="round"
                                                       d="M4.5 12.75l6 6 9-13.5"></path>
                                             </svg>
-                                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-inherit">개인석
+                                            <p className="block antialiased text-sm leading-normal font-normal text-inherit">개인석
                                                 이용 가능</p>
                                         </li>
                                     </ul>
-                                    <button
-                                        onClick={() => clickChargeBtn('kakaopay', '159000', 'nickname', 'http://localhost:3000/membershipInfo')}
-                                        className="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 px-4 rounded-lg border border-green-500 text-green-500 hover:opacity-75 focus:ring focus:ring-green-200 active:opacity-[0.85] block w-full mt-6"
-                                        type="button">buy now
+                                    <button onClick={() => clickChargeBtn('kakaopay', '159000', 'nickname', 'http://localhost:3000/membershipInfo')}
+                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full w-full mt-6" style={{border:"2px solid black"}}>
+                                        가입하기
                                     </button>
                                 </div>
                             </div>
@@ -213,14 +203,14 @@ export default function Membership() {
                                 className="reative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md border border-blue-gray-100 mx-4">
                                 <div
                                     className="relative bg-clip-border mt-4 mx-4 rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none !m-0 p-6">
-                                    <h5 className="block antialiased tracking-normal font-sans text-xl font-semibold leading-snug text-blue-gray-900 capitalize">기업체
+                                    <h5 className="block antialiased tracking-normal text-xl font-semibold leading-snug text-blue-gray-900 capitalize rundry">기업체
                                         공유오피스 입주 상담</h5>
-                                    <p className="block antialiased font-sans text-sm leading-normal text-inherit font-normal !text-gray-500">
+                                    <p className="block antialiased text-sm leading-normal text-inherit font-normal !text-gray-500 mt-5">
                                         사옥 이전 비용, 인테리어 비용이 부담스러운 사장님들께 추천하는 입주 상담 서비스
                                     </p>
-                                    <h3 className="antialiased tracking-normal font-sans text-3xl font-semibold leading-snug text-blue-gray-900 flex gap-1 mt-4">
-                                        Contact us<span
-                                        className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 -translate-y-0.5 self-end opacity-70"></span>
+                                    <h3 className="antialiased tracking-normal text-3xl font-semibold leading-snug text-blue-gray-900 flex gap-1 mt-4">
+                                       CONTACT US<span
+                                        className="block antialiased tracking-normal text-base font-semibold leading-relaxed text-blue-gray-900 -translate-y-0.5 self-end opacity-70"></span>
                                     </h3>
                                 </div>
                                 <div className="p-6 border-t border-blue-gray-50">
@@ -232,7 +222,7 @@ export default function Membership() {
                                                 <path strokeLinecap="round" strokeLinejoin="round"
                                                       d="M4.5 12.75l6 6 9-13.5"></path>
                                             </svg>
-                                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-inherit">24시간
+                                            <p className="block antialiased  text-sm leading-normal font-normal text-inherit">24시간
                                                 입주 상담 예약 가능</p>
                                         </li>
                                         <li className="flex items-center gap-3 text-gray-700">
@@ -242,7 +232,7 @@ export default function Membership() {
                                                 <path strokeLinecap="round" strokeLinejoin="round"
                                                       d="M4.5 12.75l6 6 9-13.5"></path>
                                             </svg>
-                                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-inherit">아래
+                                            <p className="block antialiased text-sm leading-normal font-normal text-inherit">아래
                                                 톡상담 버튼을 클릭해주세요</p>
                                         </li>
                                         <li className="flex items-center gap-3 text-gray-700">
@@ -252,14 +242,14 @@ export default function Membership() {
                                                 <path strokeLinecap="round" strokeLinejoin="round"
                                                       d="M4.5 12.75l6 6 9-13.5"></path>
                                             </svg>
-                                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-inherit">
+                                            <p className="block antialiased text-sm leading-normal font-normal text-inherit">
                                                전화상담 010-4795-9464로 연락주세요
                                             </p>
                                         </li>
                                     </ul>
                                     <button
-                                        className="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 px-4 rounded-lg border border-green-500 text-green-500 hover:opacity-75 focus:ring focus:ring-green-200 active:opacity-[0.85] block w-full mt-6"
-                                        type="button"
+                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full w-full mt-6"
+                                        style={{border:"2px solid black"}}
                                         onClick={() => {
                                             const kakaoTalk = document.querySelector("#chat-channel-button")
                                             kakaoTalk.click()
