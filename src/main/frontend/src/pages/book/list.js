@@ -39,7 +39,6 @@ export default function BookList() {
                 }
             });
             setBookList(res.data.list);
-            setCurrentPage(currentPage);
             setResultCount(res.data.list.length)
         } catch (error) {
             console.error("Error fetching data:", error);

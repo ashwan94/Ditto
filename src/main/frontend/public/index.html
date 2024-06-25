@@ -29,16 +29,8 @@
   <body>
 <!--    <noscript>You need to enable JavaScript to run this app.</noscript>-->
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+<!-- 다음 지도 API 활용-->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   </body>
   <script
@@ -46,6 +38,7 @@
           integrity="sha384-dpu02ieKC6NUeKFoGMOKz6102CLEWi9+5RQjWSV0ikYSFFd8M3Wp2reIcquJOemx"
           crossorigin="anonymous"
   ></script>
+<!--  카카오톡 톡상담 API -->
   <script>
     Kakao.init("e1e65b1f716ed881b2ea616c8e5d6f7f"); // 사용하려는 앱의 JavaScript 키 입력
   </script>
@@ -56,5 +49,10 @@
       });
     }
   </script>
+
+<!-- 회원가입 주소 API -->
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e1e65b1f716ed881b2ea616c8e5d6f7f"></script>
+
+<!-- 결제 API -->
+  <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 </html>

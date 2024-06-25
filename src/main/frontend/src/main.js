@@ -58,17 +58,8 @@ export default function Main() {
 
     return (
         <main className="rundry text-xl">
-            <section className="gj do hj sp jr i pg rundry">
+            <section className="gj do ir hj sp jr i pg rundry">
                 <div className="bb ze ki xn 2xl:ud-px-0" style={{borderTop: "1px solid lightgray"}}>
-                    {/* 소개 섹션 */}
-                    {/*<p>운영시간</p>*/}
-                    {/*<p>위치</p>*/}
-                    {/*<p>슬로건</p>*/}
-                    {/*<p>시설 안내</p>*/}
-                    {/*<p>이용가능한 서비스 안내</p>*/}
-
-
-                    {/*<img src="images/introduction banner.png" alt="Icon" className="scale-100"/>*/}
                     <div className="row-auto">
                         <img className="scale-75 ml-16" src="/images/hansukjupshow_logo.png" alt="Logo Light"/>
                         <p style={{textAlign: "center"}} className="mb-12">직장인 5명 중 2명은 퇴근 후 ‘공부한다’라고 답할 만큼<br/>
