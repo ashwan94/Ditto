@@ -27,5 +27,4 @@ public interface RentMapper {
 
     List<RentVO> adminPageBookRentList();
 
-    List<RentVO> adminPageBookRentListSearch(RentVO memberId);
 }

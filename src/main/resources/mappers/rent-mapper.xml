@@ -104,6 +104,7 @@
         WHERE
             R.MEMBER_ID = #{memberId}
     </select>
+    <!-- 도서 반납 -->
     <update id="rentReturn" parameterType="rentVO">
         UPDATE
             RENT R
@@ -113,6 +114,7 @@
             R.BOOK_NO = #{bookNo} AND
             R.RENT_NO = #{rentNo}
     </update>
+    <!-- 도서 반납 -->
     <update id="rentBookReturn" parameterType="rentVO">
         UPDATE
             BOOK B
@@ -140,26 +142,5 @@
             BOOK B
         ON
             R.BOOK_NO = B.BOOK_NO
-    </select>
-    <!-- 관리자 페이지 회원 아이디검색 도서 대여 이력 정보 조회 -->
-    <select id="adminPageBookRentListSearch" parameterType="rentVO" resultType="rentVO">
-        SELECT
-            R.RENT_NO,
-            R.BOOK_NO,
-            R.BOOK_NAME,
-            R.RENT_START,
-            R.RENT_END,
-            R.RENT_RETURN,
-            R.RENT_DELAY,
-            B.BOOK_RENT,
-            R.MEMBER_ID
-        FROM
-            RENT R
-        JOIN
-            BOOK B
-        ON
-            R.BOOK_NO = B.BOOK_NO
-        WHERE
-            R.MEMBER_ID = #{memberId}
     </select>
 </mapper>

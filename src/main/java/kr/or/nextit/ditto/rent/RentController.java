@@ -63,15 +63,4 @@ public class RentController {
         return service.adminPageBookRentList();
     }
 
-    // 관리자 페이지 아이디검색된 도서 대여 이력
-    @PostMapping("/adminBookRentListSearch")
-    public List<RentVO> adminBookRentListSearch(@RequestBody RentVO memberId){
-        return service.adminPageBookRentListSearch(memberId);
-    }
-
-    // 관리자 페이지 아이디 클릭시 해당 아이디 도서 대여 이력
-    @PostMapping("/idClickSearch")
-    public List<RentVO> adminIdClick(@RequestBody RentVO memberId){
-        return service.adminPageBookRentListSearch(memberId);
-    }
 }

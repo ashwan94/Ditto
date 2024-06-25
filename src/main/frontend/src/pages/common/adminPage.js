@@ -7,15 +7,22 @@ export default function AdminPage(){
     const [freeBoardList, setFreeBoardList] = useState([])// 자유게시판 리스트
     const [relayBoardList, setRelayBoardList] = useState([]) // 릴레이 소설게시판 리스트
     const [bookRentList, setBookRentList] = useState([]) // 도서 대여 이력 리스트
+    const [podcastList, setPodcastList] = useState([]) // 팟캐스트 리스트
     const [showMemberList, setShowMemberList] = useState(false) // 회원 정보 화면표시
     const [showFreeBoardList, setShowFreeBoardList] = useState(false) // 자유게시판 화면표시
     const [showRelayBoardList, setShowRelayBoardList] = useState(false) // 릴레이 소설 게시판 화면표시
     const [showBookList, setShowBookList] = useState(false) // 도서 대여 이력 화면표시
-    const [searchId,setSearchId] = useState("") // 아이디 검색
+    const [showPodcastList, setShowPodcastList] = useState(false) // 팟캐스트 화면표시
+    const [searchType, setSearchType] = useState("아이디") // 회원 정보 검색타입
+    const [searchKeyword, setSearchKeyword] = useState("") // 회원 정보 검색키워드
 
-    const searchIdOnChangeHandler = useCallback((e) => {
-        setSearchId(e.target.value)
-    },[searchId])
+    const searchTypeOnChangeHandler = useCallback((e) => {
+        setSearchType(e.target.value)
+    },[])
+
+    const searchKeywordOnChangeHandler = useCallback((e) => {
+        setSearchKeyword(e.target.value)
+    },[])
 
     // 회원정보 전체 조회
     const getMemberData = async () => {
@@ -78,76 +85,83 @@ export default function AdminPage(){
 
     // 멤버 아이디로 회원 정보, 게시판, 도서 대여이력 검색
     const searchBtn = async () => {
-        if (searchId != ""){
-            if (showMemberList){
-                searchMemId();
-            }else if (showFreeBoardList){
-                searchFreeBoardList();
-            }else if(showRelayBoardList){
-                searchRelayBoardList();
-            }else if(showBookList){
-                searchBookList();
-            }
-        }else {
-            getMemberData();
-            getFreeBoardData();
-            getRelayBoardData();
-            getBookRentData();
-        }
+
     }
 
-    // 회원정보 검색아이디 요청
-    const searchMemId = async () => {
+    // 회원정보 검색요청
+    const searchMemberList = async () => {
         try {
-            const resMB = await axios.post("/adminMemberListSearch",{
-                memberId : searchId
+            const res = await axios.post("/adminMemberListSearch",{
+                type: searchType,
+                keyword : searchKeyword
+            },{
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
-            setMemberList(resMB.data)
+            setMemberList(res.data)
 
         } catch (error) {
             console.error("도서 대여 이력조회 에러", error);
         }
     }
 
-    // 자유게시판 검색아이디 정보 요청
+    // 자유게시판 검색요청
     const searchFreeBoardList = async () => {
         try {
-            const resFB = await axios.post("/adminFreeBoardListSearch",{
-                memberId : searchId
+            const res = await axios.post("/adminFreeBoardListSearch",{
+                type: searchType,
+                keyword : searchKeyword
             });
-            setFreeBoardList(resFB.data)
+            setFreeBoardList(res.data)
 
         } catch (error) {
             console.error("도서 대여 이력조회 에러", error);
         }
     }
 
-    // 릴레이 소설게시판 검색아이디 요청
+    // 릴레이 소설게시판 검색요청
     const searchRelayBoardList = async () => {
         try {
-            const resRB = await axios.post("/adminRelayBoardListSearch",{
-                memberId : searchId
+            const res = await axios.post("/adminRelayBoardListSearch",{
+                type: searchType,
+                keyword : searchKeyword
             });
-            setRelayBoardList(resRB.data)
+            setRelayBoardList(res.data)
 
         } catch (error) {
             console.error("도서 대여 이력조회 에러", error);
         }
     }
 
-    // 도서 대역 이력 검색아이디 요청
+    // 도서 대여 이력 검색요청
     const searchBookList = async () => {
         try {
-            const resBK = await axios.post("/adminBookRentListSearch",{
-                memberId : searchId
+            const res = await axios.post("/adminBookListSearch",{
+                type: searchType,
+                keyword : searchKeyword
             });
-            setBookRentList(resBK.data)
-            console.log(resBK.data)
+            setBookRentList(res.data)
 
         } catch (error) {
             console.error("도서 대여 이력조회 에러", error);
         }
     }
+
+    // 팟캐스트 검색요청
+    const searchPodcastList = async () => {
+        try {
+            const res = await axios.post("/adminPodcastListSearch",{
+                type: searchType,
+                keyword : searchKeyword
+            });
+            setPodcastList(res.data)
+
+        } catch (error) {
+            console.error("도서 대여 이력조회 에러", error);
+        }
+    }
+
 
     // 회원 비활성화 요청
     const memberDeleteY = async (mem) => {
@@ -198,7 +212,9 @@ export default function AdminPage(){
             const res = await axios.post("/idClickSearch",{
                 memberId : memId
             });
-            setBookRentList(res.data)
+            setShowBookList(false)
+            setShowMemberList(true)
+            setMemberList(res.data)
         } catch (error) {
             console.error("도서 대여 이력조회 에러", error);
         }
@@ -220,38 +236,142 @@ export default function AdminPage(){
                     <div className="border-b border-gray-900/10 pb-12">
                         <div>
                             <span
-                                onClick={() => {setShowMemberList(true); setShowFreeBoardList(false); setShowRelayBoardList(false); setShowBookList(false); getMemberData(); setSearchId("");}}
+                                onClick={() => {
+                                    setShowMemberList(true);
+                                    setShowFreeBoardList(false);
+                                    setShowRelayBoardList(false);
+                                    setShowBookList(false);
+                                    setShowPodcastList(false);
+                                    getMemberData();
+                                    setSearchKeyword("");
+                                }}
                                 className={`btn mt-1 text-lg leading-6 mx-3 ${showMemberList ? 'text-blue-600' : 'text-gray-600'}`}>회원정보</span>
                             <span
-                                onClick={() => {setShowMemberList(false); setShowFreeBoardList(true); setShowRelayBoardList(false); setShowBookList(false); getFreeBoardData(); setSearchId("");}}
+                                onClick={() => {
+                                    setShowMemberList(false);
+                                    setShowFreeBoardList(true);
+                                    setShowRelayBoardList(false);
+                                    setShowBookList(false);
+                                    setShowPodcastList(false);
+                                    getFreeBoardData();
+                                    setSearchKeyword("");
+                                }}
                                 className={`btn mt-1 text-lg leading-6 mx-3 ${showFreeBoardList ? 'text-blue-600' : 'text-gray-600'}`}>자유게시판</span>
                             <span
-                                onClick={() => {setShowMemberList(false); setShowFreeBoardList(false); setShowRelayBoardList(true); setShowBookList(false); getRelayBoardData(); setSearchId("");}}
+                                onClick={() => {
+                                    setShowMemberList(false);
+                                    setShowFreeBoardList(false);
+                                    setShowRelayBoardList(true);
+                                    setShowBookList(false);
+                                    setShowPodcastList(false);
+                                    getRelayBoardData();
+                                    setSearchKeyword("");
+                                }}
                                 className={`btn mt-1 text-lg leading-6 mx-3 ${showRelayBoardList ? 'text-blue-600' : 'text-gray-600'}`}>릴레이 소설게시판</span>
                             <span
-                                onClick={() => {setShowMemberList(false); setShowFreeBoardList(false); setShowRelayBoardList(false); setShowBookList(true); getBookRentData(); setSearchId("");}}
+                                onClick={() => {
+                                    setShowMemberList(false);
+                                    setShowFreeBoardList(false);
+                                    setShowRelayBoardList(false);
+                                    setShowBookList(true);
+                                    setShowPodcastList(false);
+                                    getBookRentData();
+                                    setSearchKeyword("");
+                                }}
                                 className={`btn mt-1 text-lg leading-6 mx-3 ${showBookList ? 'text-blue-600' : 'text-gray-600'}`}>도서 대여 이력</span>
+                            <span
+                                onClick={() => {
+                                    setShowMemberList(false);
+                                    setShowFreeBoardList(false);
+                                    setShowRelayBoardList(false);
+                                    setShowBookList(false);
+                                    setShowPodcastList(true);
+                                    // getPodcastData();
+                                    setSearchKeyword("");
+                                }}
+                                className={`btn mt-1 text-lg leading-6 mx-3 ${showPodcastList ? 'text-blue-600' : 'text-gray-600'}`}>팟캐스트</span>
+                            {showMemberList ? (
                             <label className="float-right">
+                                <select onChange={searchTypeOnChangeHandler}>
+                                    <option value="아이디">아이디</option>
+                                </select>
                                 <input
-                                    onChange={searchIdOnChangeHandler}
-                                    className="border" style={{borderRadius: "4px"}} value={searchId}/>
+                                    onChange={searchKeywordOnChangeHandler}
+                                    type="text"
+                                    className="border" style={{borderRadius: "4px"}} value={searchKeyword}/>
                                 <button
                                     onClick={searchBtn}
-                                    className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius:"4px"}}>검색</button>
-                            </label>
+                                    className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
+                                </button>
+                            </label>) : showFreeBoardList ? (
+                                <label className="float-right">
+                                    <select onChange={searchTypeOnChangeHandler}>
+                                        <option value="아이디">아이디</option>
+                                        <option value="제목">제목</option>
+                                    </select>
+                                    <input
+                                        onChange={searchKeywordOnChangeHandler}
+                                        className="border" style={{borderRadius: "4px"}} value={searchKeyword}/>
+                                    <button
+                                        onClick={searchBtn}
+                                        className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
+                                    </button>
+                                </label>) : showRelayBoardList ? (
+                                <label className="float-right">
+                                    <select onChange={searchTypeOnChangeHandler}>
+                                        <option value="아이디">아이디</option>
+                                        <option value="제목">제목</option>
+                                    </select>
+                                    <input
+                                        onChange={searchKeywordOnChangeHandler}
+                                        className="border" style={{borderRadius: "4px"}} value={searchKeyword}/>
+                                    <button
+                                        onClick={searchBtn}
+                                        className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
+                                    </button>
+                                </label>) : showBookList ? (
+                                <label className="float-right">
+                                    <select onChange={searchTypeOnChangeHandler}>
+                                        <option value="아이디">아이디</option>
+                                        <option value="대여일">대여일</option>
+                                        <option value="반납예정일">반납예정일</option>
+                                        <option value="실제반납일">실제반납일</option>
+                                    </select>
+                                    <input
+                                        onChange={searchKeywordOnChangeHandler}
+                                        className="border" style={{borderRadius: "4px"}} value={searchKeyword}/>
+                                    <button
+                                        onClick={searchBtn}
+                                        className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
+                                    </button>
+                                </label>) : showPodcastList ? (
+                                <label className="float-right">
+                                    <select onChange={searchTypeOnChangeHandler}>
+                                        <option value="생성일">생성일</option>
+                                        <option value="수정일">수정일</option>
+                                    </select>
+                                    <input
+                                        onChange={searchKeywordOnChangeHandler}
+                                        className="border" style={{borderRadius: "4px"}} value={searchKeyword}/>
+                                    <button
+                                        onClick={searchBtn}
+                                        className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
+                                    </button>
+                                </label>
+                            ) : null}
                         </div>
                         <div
                             className="mt-10 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
-                                {/* 회원정보 리스트 */}
-                                {showMemberList ? (
-                                    <table class="table-auto w-full border-collapse border border-gray-800">
-                                        <tr className="text-center">
-                                            <td class="border border-gray-800 px-4 py-2">회원번호</td>
-                                            <td class="border border-gray-800 px-4 py-2">아이디</td>
-                                            <td class="border border-gray-800 px-4 py-2">이름</td>
-                                            <td class="border border-gray-800 px-4 py-2">닉네임</td>
-                                            <td class="border border-gray-800 px-4 py-2">멤버십</td>
-                                            <td class="border border-gray-800 px-4 py-2">전화번호</td>
+                            {/* 회원정보 리스트 */}
+                            {showMemberList ? (
+                                <table class="table-auto w-full border-collapse border border-gray-800">
+                                    <tr className="text-center">
+                                        <td class="border border-gray-800 px-4 py-2">회원번호</td>
+                                        <td class="border border-gray-800 px-4 py-2">아이디</td>
+                                        <td class="border border-gray-800 px-4 py-2">이름</td>
+                                        <td class="border border-gray-800 px-4 py-2">닉네임</td>
+                                        <td class="border border-gray-800 px-4 py-2">멤버십</td>
+                                        <td class="border border-gray-800 px-4 py-2">전화번호</td>
                                             <td class="border border-gray-800 px-4 py-2">회원상태 변경</td>
                                         </tr>
                                         {memberList && memberList.length > 0 ? (

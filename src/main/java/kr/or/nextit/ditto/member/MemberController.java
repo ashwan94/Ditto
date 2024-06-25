@@ -1,6 +1,7 @@
 package kr.or.nextit.ditto.member;
 
 
+import kr.or.nextit.ditto.rent.RentVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
@@ -144,12 +145,6 @@ public class MemberController {
         return service.adminPageMemberList();
     }
 
-    // 관리자 검색 아이디 회원정보
-    @PostMapping("/adminMemberListSearch")
-    public List<MemberVO> adminSearchMemberList(@RequestBody MemberVO memberId){
-        return service.adminPageSearchMemberList(memberId);
-    }
-
     // 관리자 페이지 회원 비활성화
     @PostMapping("/memberDeleteY")
     public void adminMemberDeleteY(@RequestBody MemberVO memberId){
@@ -168,4 +163,19 @@ public class MemberController {
         service.adminMemberSubStatus(memberVO);
     }
 
+    // 관리자 페이지 도서대여이력에서 아이디 클릭시 해당 아이디 회원정보로 이동
+    @PostMapping("/idClickSearch")
+    public List<MemberVO> adminIdClick(@RequestBody MemberVO memberId){
+        return service.adminPageMemberClickListSearch(memberId);
+    }
+
+    // 회원정보 타입 검색
+    @PostMapping("/adminMemberListSearch")
+    public List<MemberVO> adminPageSearchMemberId(@RequestBody MemberVO memberVO{
+        String type = memberVO.
+        if ("아이디".equals(type)){
+            vo = service.adminPageSearchMemberIdData(keyword); // 아이디 기준 검색
+        }
+        return vo;
+    }
 }

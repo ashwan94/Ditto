@@ -2,6 +2,7 @@ package kr.or.nextit.ditto.member;
 
 
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Member;
@@ -42,11 +43,6 @@ public class MemberService {
     public List<MemberVO> adminPageMemberList(){
         return mapper.adminPageMemberList();
     } // 관리자 페이지 회원 정보 리스트
-
-    public List<MemberVO> adminPageSearchMemberList(MemberVO memberId){
-        return mapper.adminPageSearchMemberList(memberId); // 관리자 페이지 검색아이디 회원 정보
-    }
-
     public void adminPageMemberDeleteY(MemberVO memberId){
         mapper.adminPageMemberDeleteY(memberId); // 관리자 페이지 회원 비활성화
     }
@@ -61,6 +57,14 @@ public class MemberService {
             memberVO.setMemberSub("Y");
         }
         mapper.adminMemberSubStatus(memberVO);
+    }
+
+    public List<MemberVO> adminPageMemberClickListSearch (MemberVO memberId){
+        return mapper.adminPageMemberClickListSearch(memberId); // 도서 대여 이력 아이디 클릭시 해당 회원정보 조회
+    }
+
+    public List<MemberVO> adminPageSearchMemberIdData(@Param("keyword") String keyword){
+        return mapper.adminPageSearchMemberIdData(keyword);
     }
 
 

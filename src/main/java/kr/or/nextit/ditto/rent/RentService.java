@@ -58,8 +58,4 @@ public class RentService {
         return mapper.adminPageBookRentList();
     }
 
-    public List<RentVO> adminPageBookRentListSearch (RentVO memberId){
-        return mapper.adminPageBookRentListSearch(memberId);
-    }
-
 }
