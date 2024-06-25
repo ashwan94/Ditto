@@ -131,10 +131,20 @@ public class MemberController {
 
         System.out.println(message);
         messageService.sendOne(new SingleMessageSendingRequest(message));
-//        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
-//        System.out.println(response);
 
         return verificationCode;
+    }
+
+
+
+    // 회원 멤버십 구독 가입
+    @PostMapping("/updateMemberSubscribe")
+    public void updateMemberSubscribe(String memberId) {
+
+        // 쿼리 실행
+        service.updateMemberSubscribe(memberId);
+
+
     }
 
 

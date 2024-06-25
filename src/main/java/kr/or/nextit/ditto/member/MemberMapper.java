@@ -13,4 +13,8 @@ public interface MemberMapper {
     MemberVO searchMemberInfo(String memberId);
     void passwordChange(MemberVO post); // 마이페이지 비밀번호 수정
     void updateMemberData(MemberVO post); // 마이페이지 회원정보 수정
+
+
+    // 회원 멤버십 구독 가입
+    void updateMemberSubscribe(String memberId);
 }

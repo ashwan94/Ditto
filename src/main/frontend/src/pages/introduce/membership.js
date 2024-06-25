@@ -1,17 +1,46 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
+
+
+
 
 export default function Membership() {
 
 
+    const [memberId, setMemberId] = useState();
+
+
     // 첫 랜더링 시 사이트 가장 상단으로 위치
     useEffect(() => {
+
+        const memberData = sessionStorage.getItem("member"); // 세션스토리지에담긴 로그인 회원정보 가져오기
+        const memberObj = JSON.parse(memberData); // 문자열을 JSON 객체로 변환
+
+        // 회원 아이디가 없는 경우 빈 문자로 설정
+        if(!memberObj){
+            setMemberId("");
+        } else {
+            // 회원 아이디가 있는 경우 세션에 담겨있는 값으로 담기
+            setMemberId(memberObj.memberId);
+        }
+
         window.scrollTo({
             top: 0,
             behavior: 'auto',
         })
+
     }, []);
 
+
+
+
+
     const clickChargeBtn = (pg_method, amount, nickname, redirect_url) => {
+        if(memberId == "") {
+            return alert("로그인이 필요한 서비스입니다.");
+        }
+
+
         const {IMP} = window;
         IMP.init('imp18537852') // 가맹점 번호 지정
         IMP.request_pay({
@@ -26,14 +55,27 @@ export default function Membership() {
                 buyer_addr: '서울특별시 강남구 삼성동',
                 buyer_postcode: '123-456',
                 m_redirect_url: `${redirect_url}` // 만약 새창에서 열린다면 결제 완료 후 리다이렉션할 주소
-            }, function (rsp) {
+            }, async function (rsp) {
                 if (rsp.success) {
-                    alert("결제 성공");
-                    // 테이블 수정
+                    // TODO member 테이블의 member_sub N -> Y로 변경
+                    // 여기서 쿼리 쏘기
+                    const res = await axios.post("/updateMemberSubscribe", null, {
+                        params: {
+                            memberId: memberId
+                        }
+                    }, {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    });
+                    if (res.status == 200) {
+                        alert("결제 성공! 마이페이지로 이동합니다.");
+                        // 결제 성공 후 마이페이지로 이동
+                        window.location.href = '/mypage';
 
-
-
-
+                    } else {
+                        alert("결제 실패");
+                    }
 
                 } else {
                     alert("결제 실패");

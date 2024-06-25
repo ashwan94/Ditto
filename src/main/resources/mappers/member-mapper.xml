@@ -83,6 +83,8 @@
             A.MEMBER_ID = #{memberId}
     </update>
 
+
+    <!--  회원 정보 수정   -->
     <update id="updateMemberData" parameterType="MemberVO">
         UPDATE
             MEMBER A
@@ -94,5 +96,16 @@
             A.MEMBER_BIRTH = #{memberBirth}
         WHERE
             A.MEMBER_ID = #{memberId}
+    </update>
+
+
+    <!-- 회원 멤버십 구독 가입 -->
+    <update id="updateMemberSubscribe" parameterType="String">
+        UPDATE
+            MEMBER A
+        SET
+            A.MEMBER_SUB = "Y"
+        WHERE
+            A.MEMBER_ID =  #{memberId}
     </update>
 </mapper>
