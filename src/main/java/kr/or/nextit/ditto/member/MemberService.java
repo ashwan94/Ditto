@@ -39,4 +39,14 @@ public class MemberService {
     }
 
 
+
+    // 회원 멤버십 구독 가입
+    public void updateMemberSubscribe(String memberId) {
+        mapper.updateMemberSubscribe(memberId);
+    }
+
+
+
+
+
 }

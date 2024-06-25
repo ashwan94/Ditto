@@ -77,7 +77,6 @@ export default function Mypage() {
                 }
             });
 
-            console.log(res.data)
             setMemberView(res.data) // 요청한 로그인 회원의 정보 전체 담기
             setMemberNickname(res.data.memberNickname) // 닉네임만
             setMemberPostcode(res.data.memberPostcode)// 우편번호만
@@ -105,7 +104,6 @@ export default function Mypage() {
                 }
             })
             setShowBookRentalList(resData.data)// 책 대여 이력 리스트에 담기
-            console.log(resData.data)
         }catch (error){
             console.error("Error fetching data:", error);
         }
@@ -324,15 +322,15 @@ export default function Mypage() {
                         {showBook ? (
                         <div
                             className="mt-10 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
-                            <table class="table-auto w-full border-collapse border border-gray-800">
+                            <table className="table-auto w-full border-collapse border border-gray-800">
                                 <tr className="text-center">
-                                    <td class="border border-gray-800 px-4 py-2">도서 번호</td>
-                                    <td class="border border-gray-800 px-4 py-2">도서명</td>
-                                    <td class="border border-gray-800 px-4 py-2">대여일</td>
-                                    <td class="border border-gray-800 px-4 py-2">반납예정일</td>
-                                    <td class="border border-gray-800 px-4 py-2">실제 반납일</td>
-                                    <td class="border border-gray-800 px-4 py-2">연체여부</td>
-                                    <td class="border border-gray-800 px-4 py-2">반납여부</td>
+                                    <td className="border border-gray-800 px-4 py-2">도서 번호</td>
+                                    <td className="border border-gray-800 px-4 py-2">도서명</td>
+                                    <td className="border border-gray-800 px-4 py-2">대여일</td>
+                                    <td className="border border-gray-800 px-4 py-2">반납예정일</td>
+                                    <td className="border border-gray-800 px-4 py-2">실제 반납일</td>
+                                    <td className="border border-gray-800 px-4 py-2">연체여부</td>
+                                    <td className="border border-gray-800 px-4 py-2">반납여부</td>
                                 </tr>
                                 {/* 도서대여 이력이 한개이상 존재 할때나옴 */}
                                 {showBookRentalList && showBookRentalList.length > 0 ? (
@@ -611,7 +609,6 @@ export default function Mypage() {
                         <button
                             onClick={saveMemberData}
                             className="btn btn-dark"
-                            // className="rounded-md bg-blue-600 px-3 py-2 text-lg font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
                         Save
                         </button>
