@@ -1,6 +1,7 @@
 import SignIn from "./signIn";
 import axios from "axios";
 import {useCallback, useEffect, useState} from "react";
+import '../../css/mypage.css'
 
 export default function Mypage() {
 
@@ -30,37 +31,37 @@ export default function Mypage() {
     //현재 비밀번호 입력값 핸들러
     const currentPasswordOnChangeHandler = useCallback((e) => {
         setCurrentMemberPw(e.target.value);
-    },[])
+    }, [])
 
     // 비밀번호 수정 핸들러
     const passwordOnChangeHandler = useCallback((e) => {
         setChangeMemberPw(e.target.value);
-    },[])
+    }, [])
 
     // 닉네임 핸들러
     const memberNicknameOnChangeHandler = useCallback((e) => {
         setMemberNickname(e.target.value);
-    },[])
+    }, [])
 
     // 생년월일 핸들러
     const memberBirthOnChangeHandler = useCallback((e) => {
         setMemberBrith(e.target.value);
-    },[])
+    }, [])
 
     // 우편번호 핸들러
     const memberPostcodeOnChangeHandler = useCallback((e) => {
         setMemberPostcode(e.target.value);
-    },[])
+    }, [])
 
     // 주소 핸들러
     const memberAddOnChangeHandler = useCallback((e) => {
         setMemberAdd(e.target.value);
-    },[])
+    }, [])
 
     // 상세주소 핸들러
     const memberDetailAddOnChangeHandler = useCallback((e) => {
         setMemberDetailAdd(e.target.value);
-    },[])
+    }, [])
 
     // 프로필 이미지 핸들러(미리보기)
     const profileOnChangeHandler = useCallback((e) => {
@@ -68,7 +69,7 @@ export default function Mypage() {
         const imageUrl = URL.createObjectURL(file);
         setProfile(file); // 프로필 파일 저장
         setPrevProfile(imageUrl); // 프로필 이미지 미리보기
-    },[])
+    }, [])
 
     const memberData = sessionStorage.getItem("member"); // 세션스토리지에담긴 로그인 회원정보 가져오기
     const memberObj = JSON.parse(memberData); // 문자열을 JSON 객체로 변환
@@ -104,13 +105,13 @@ export default function Mypage() {
         }
 
         try {
-            const resData = await axios.post("/showBookRentalList",bookData,{
+            const resData = await axios.post("/showBookRentalList", bookData, {
                 headers: {
                     "Content-Type": "application/json"
                 }
             })
             setShowBookRentalList(resData.data)// 책 대여 이력 리스트에 담기
-        }catch (error){
+        } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
@@ -118,8 +119,8 @@ export default function Mypage() {
     // 프로필 이미지 가져오기
     const getProfile = async () => {
         const res = await axios.get("/getProfile", {
-            params:{
-                memberId : memberView.memberId,
+            params: {
+                memberId: memberView.memberId,
             }
         })
         setPrevProfile(res.data);
@@ -131,7 +132,7 @@ export default function Mypage() {
 
     // 페이지 첫 랜더링 시 가져오기
     useEffect(() => {
-        if (JSON.parse(sessionStorage.getItem("bookRent"))){
+        if (JSON.parse(sessionStorage.getItem("bookRent"))) {
             setShowBook(true);
             sessionStorage.removeItem("bookRent");
         }
@@ -149,21 +150,21 @@ export default function Mypage() {
         }
 
         try {
-            await axios.post("/rentReturn",rentData,{
+            await axios.post("/rentReturn", rentData, {
                 headers: {
                     "Content-Type": "application/json"
                 }
             })
 
             getBookData(); // 책 대여 이력 정보 가져오기 실행
-        }catch (error){
+        } catch (error) {
             console.error("Error fetching data:", error);
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         bookRentReturn() // 반납버튼 클릭시 rentNo 값 바뀔때마다 실행
-    },[rentNo]) // 반납버튼 눌렀을때 렌트넘버의 상태값이 변할때마다 실행
+    }, [rentNo]) // 반납버튼 눌렀을때 렌트넘버의 상태값이 변할때마다 실행
 
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
 
@@ -171,14 +172,14 @@ export default function Mypage() {
     const checkMemberPw = () => {
         // 이름이 두글자 이하인 경우 경고 메세지 출력
         // 비밀번호 정규식 부합하지 않은 경우 에러메세지 출력
-        if(changeMemberPw != ""){
+        if (changeMemberPw != "") {
             if (!passwordRegex.test(changeMemberPw) || !changeMemberPw) {
                 setPwErrorMessage("최소 특수문자 1개 포함하여 8글자 이상의 비밀번호를 입력해주세요");
                 // 오류 메시지 초기화
             } else {
                 setPwErrorMessage("");
             }
-        }else {
+        } else {
             setPwErrorMessage("")
         }
     }
@@ -187,14 +188,14 @@ export default function Mypage() {
     const checkCurrentMemberPw = () => {
         // 이름이 두글자 이하인 경우 경고 메세지 출력
         // 비밀번호 정규식 부합하지 않은 경우 에러메세지 출력
-        if (currentMemberPw != ""){ // 현재 비밀번호가 ""가 아니면
+        if (currentMemberPw != "") { // 현재 비밀번호가 ""가 아니면
             if (currentMemberPw != memberView.memberPw) { // 현재 비멀번호와 일치하지 않으면
                 setCurrentPwErrorMessage("비밀번호가 일치하지 않습니다."); // 현재 비밀번호 onblur 수정
                 // 오류 메시지 초기화
             } else {
                 setCurrentPwErrorMessage(""); // 현재 비밀번호 onblur 수정
             }
-        }else {
+        } else {
             setCurrentPwErrorMessage(""); // 현재 비밀번호 칸이 비어 있을때
         }
     }
@@ -203,10 +204,10 @@ export default function Mypage() {
     const passwordChange = async () => {
 
         // 현재 비밀번호가 일치하고 새로운 비밀먼호가 ""가 아니고 새로운 비밀번호가 조건에 충족할 때
-        if (currentMemberPw == memberView.memberPw && changeMemberPw != "" && pwErrorMessage == ""){
+        if (currentMemberPw == memberView.memberPw && changeMemberPw != "" && pwErrorMessage == "") {
             const passChange = {
-                memberId : memberView.memberId, // 로그인 회원 아이디
-                memberPw : changeMemberPw // 새로 바꿀 비밀번호
+                memberId: memberView.memberId, // 로그인 회원 아이디
+                memberPw: changeMemberPw // 새로 바꿀 비밀번호
             }
             try {
                 const res = await axios.post("/passwordChange", passChange, {
@@ -252,7 +253,7 @@ export default function Mypage() {
 
     // save버튼 클릭시 회원정보 수정
     const saveMemberData = async () => {
-        if (memberNickname.length == 0){
+        if (memberNickname.length == 0) {
             alert("닉네임을 입력해 주세요.")
             return;
         } else if (memberNickname.length < 2) {
@@ -262,20 +263,20 @@ export default function Mypage() {
             alert("사용할 수 없는 키워드가 들어간 닉네임입니다.")
             return;
         }
-        if (duplicatedNickname){ // true일때 중복될때
+        if (duplicatedNickname) { // true일때 중복될때
             alert("사용할수없는 닉네임 입니다 닉네임을 수정해주세요.")
             return
         }
-        const memberData =  {
-            memberId : memberView.memberId, // 로그인 회원 아이디
-            memberNickname : memberNickname, // 바꿀닉네임, 현상유지도 가능
-            memberPostcode : memberPostcode, // 우편번호
-            memberAdd : memberAdd, // 주소
-            memberDetailAdd : memberDetailAdd, // 상세주소
-            memberBirth : memberBirth // 생일
+        const memberData = {
+            memberId: memberView.memberId, // 로그인 회원 아이디
+            memberNickname: memberNickname, // 바꿀닉네임, 현상유지도 가능
+            memberPostcode: memberPostcode, // 우편번호
+            memberAdd: memberAdd, // 주소
+            memberDetailAdd: memberDetailAdd, // 상세주소
+            memberBirth: memberBirth // 생일
         }
         try {
-            await axios.put("/changeMemberData", memberData,{
+            await axios.put("/changeMemberData", memberData, {
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -285,7 +286,7 @@ export default function Mypage() {
             // TODO
             // 프로필 이미지 변경했을때 sessionStorage 에는 변경 전 이미지 정보가 담겨 있으므로
             // 프로필 이미지가 변경된 data 를 sessionStorage 로 변경해주기
-            if(profile){
+            if (profile) {
                 const imageForm = new FormData();
                 imageForm.append('profile', profile);
                 imageForm.append('memberId', memberView.memberId);
@@ -293,12 +294,12 @@ export default function Mypage() {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
-                }).then(response => (console.log("이미지 경로 : ",response.data)))
+                }).then(response => (console.log("이미지 경로 : ", response.data)))
             }
             alert("회원정보가 수정되었습니다.")
             getData();
-        }catch (error){
-            console.error("회원수정 에러야! => ",error)
+        } catch (error) {
+            console.error("회원수정 에러야! => ", error)
         }
     }
 
@@ -314,11 +315,11 @@ export default function Mypage() {
         }
 
         try {
-            const res = await axios.post("/checkNick",  {
-                    memberNickname : memberNickname // 닉네임
+            const res = await axios.post("/checkNick", {
+                memberNickname: memberNickname // 닉네임
             });
 
-            if (memberNickname != memberView.memberNickname){ // 닉네임이 현재 닉네임과 다를때 실행
+            if (memberNickname != memberView.memberNickname) { // 닉네임이 현재 닉네임과 다를때 실행
                 // 닉네임 중복 체크 확인
                 if (res.data != 0) {
                     //   중복
@@ -337,323 +338,365 @@ export default function Mypage() {
 
     }
 
+    const [activeTab, setActiveTab] = useState('tab1');
 
     return (
-        <main className="rundry">
-            <section className="i pg fh rm ki xn vq gj qp gr hj rp hr ">
+        <main>
+            <section className="i pg fh rm ki xn vq gj qp gr hj rp hr rundry">
                 <div className="bb ze ki xn 2xl:ud-px-0">
-                    <div className="border-b border-gray-900/10 pb-12">
-
-                        <h2 className="text-xl font-semibold leading-7 text-gray-900 rundry">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-12" >
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
-                            {memberView.memberNickname}님
-                            환영합니다.
-                        </h2>
-                        <div className="py-5">
-                            {/* 내 정보 보기 */}
-                            <span onClick={() => setShowBook(false)} className="btn mt-1 text-lg leading-6 text-gray-600">내 정보 보기</span>
-                            {/* 도서 대출 이력 보기 */}
-                            <span onClick={() => setShowBook(true)} className="btn mt-1 text-lg leading-6 text-gray-600 mx-3">도서 대출 이력 보기</span>
-                        </div>
-                        {showBook ? (
-                        <div
-                            className="mt-10 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
-                            <table className="table-auto w-full border-collapse border border-gray-800">
-                                <tr className="text-center">
-                                    <td className="border border-gray-800 px-4 py-2">도서 번호</td>
-                                    <td className="border border-gray-800 px-4 py-2">도서명</td>
-                                    <td className="border border-gray-800 px-4 py-2">대여일</td>
-                                    <td className="border border-gray-800 px-4 py-2">반납예정일</td>
-                                    <td className="border border-gray-800 px-4 py-2">실제 반납일</td>
-                                    <td className="border border-gray-800 px-4 py-2">연체여부</td>
-                                    <td className="border border-gray-800 px-4 py-2">반납여부</td>
-                                </tr>
-                                {/* 도서대여 이력이 한개이상 존재 할때나옴 */}
-                                {showBookRentalList && showBookRentalList.length > 0 ? (
-                                    showBookRentalList.map((v,i)=>
-                                        (
-                                            <tr key={i} className="text-center">
-                                                <td className="border border-gray-800 px-4 py-2">{v.bookNo}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.bookName}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.rentStart}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.rentEnd}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.rentReturn}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.rentDelay}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.rentReturn == null && v.bookRent == 'Y' ? (<button className="text-red" type="button" onClick={() => {setRentNo(v.rentNo); setBookNo(v.bookNo); }}>
-                                                    반납하기</button>) : (<span className="text-blue-500">반납완료</span>)}</td>
-                                            </tr>
-                                        )
-                                    )
-                                ) : null}
-                            </table>
-                        </div>
-                        ) : (
-                            <>
-                                <div
-                                    className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
-
-                                    <div className="sm:col-span-2 border-gray-900/10">
-                                        <label htmlFor="memberName"
-                                               className="block text-lg font-medium leading-6 text-gray-900">
-                                            이름
-                                        </label>
-                                    <div className="mt-2">
-                                        <input
-                                            readOnly={true}
-                                            type="text"
-                                            name="memberName"
-                                            value={memberView.memberName}
-                                            id="memberName"
-                                            autoComplete="given-name"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="memberNickname"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        닉네임
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            type="text"
-                                            name="memberNickname"
-                                            onChange={memberNicknameOnChangeHandler}
-                                            onBlur={nicknameDupCheck}
-                                            value={memberNickname}
-                                            id="memberNickname"
-                                            autoComplete="family-name"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
-                                    </div>
-                                    <p id="nicknameErrorMessage" className="text-red">{nicknameErrorMessage}</p>
-                                </div>
-
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="memberId"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        아이디
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            readOnly={true}
-                                            type="text"
-                                            name="memberId"
-                                            id="memberId"
-                                            value={memberView.memberId}
-                                            autoComplete="given-name"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
-                                    </div>
-                                </div>
-
-
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="memberPw"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        현재 비밀번호
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            id="memberPw"
-                                            name="memberPw"
-                                            type="password"
-                                            onChange={currentPasswordOnChangeHandler}
-                                            onBlur={checkCurrentMemberPw}
-                                            value={currentMemberPw}
-                                            autoComplete="memberPw"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
-                                        <p id="pwErrorMessage" className="text-red">{currentPwErrorMessage}</p>
-                                    </div>
-                                </div>
-
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="memberNewPw"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        새로운 비밀번호
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            id="memberNewPw"
-                                            name="memberNewPw"
-                                            type="password"
-                                            autoComplete="memberNewPw"
-                                            onChange={passwordOnChangeHandler}
-                                            value={changeMemberPw}
-                                            onBlur={checkMemberPw}
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
-                                        <p id="pwErrorMessage" className="text-red">{pwErrorMessage}</p>
-                                    </div>
-                                </div>
-
-                                <div className="sm:col-span-2 mt-8 text-xl">
-                                    <button
-                                        onClick={passwordChange}
-                                        // className="rounded-md bg-blue-600 px-3 py-2 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                        className="btn btn-dark"
-                                    >
-                                        비밀번호 수정
-                                    </button>
-                                </div>
-
-
-                                    <div className="sm:col-span-2">
-                                        <label htmlFor="memberTel"
-                                               className="block text-lg font-medium leading-6 text-gray-900">
-                                            전화번호
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                readOnly={true}
-                                                id="memberTel"
-                                                name="memberTel"
-                                                value={memberView.memberTel}
-                                                type="text"
-                                                autoComplete="memberTel"
-                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                            />
-                                        </div>
-                                        <label htmlFor="memberTel"
-                                               className="block text-lg font-medium leading-6 text-gray-900">
-                                            프로필 사진
-                                        </label>
+                    <body>
+                    <section id="content" className="container">
+                        <div className="page-heading">
+                            <div className="media clearfix">
+                                <div className="media-left pr30">
+                                    <a href="#">
                                         <div className="mt-2">
                                             {prevProfile
                                                 ?
                                                 <img src={prevProfile}/>
                                                 :
-                                                <img src="/images/profile/basic_profile.png" />
+                                                <img src="/images/profile/basic_profile.png"/>
                                             }
-                                            <input
-                                                name="memberProfile"
-                                                accept='image/jpg, image/png, image/jpeg'
-                                                type="file"
-                                                onChange={profileOnChangeHandler}
-                                                className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                            />
-                                            <button onClick={()=>setProfile(null)}>이미지 삭제</button>
+
                                         </div>
-                                    </div>
-
-                                    <div className="sm:col-span-2 sm:col-start-1">
-                                        <label htmlFor="memberPostcode"
-                                               className="block text-lg font-medium leading-6 text-gray-900">
-                                            우편번호
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                readOnly={true}
-                                                type="text"
-                                                name="memberPostcode"
-                                                id="memberPostcode"
-                                                onChange={memberPostcodeOnChangeHandler}
-                                                value={memberPostcode}
-                                                autoComplete="memberPostcode"
-                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
-                                    </div>
+                                    </a>
                                 </div>
-
-
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="memberAdd"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        도로명 주소
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            readOnly={true}
-                                            type="text"
-                                            name="memberAdd"
-                                            id="memberAdd"
-                                            onChange={memberAddOnChangeHandler}
-                                            value={memberAdd}
-                                            autoComplete="memberAdd"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="sm:col-span-1">
-                                    <label htmlFor="memberDetailAdd"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        상세주소
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            type="text"
-                                            name="memberDetailAdd"
-                                            value={memberDetailAdd}
-                                            id="memberDetailAdd"
-                                            onChange={memberDetailAddOnChangeHandler}
-                                            autoComplete="memberDetailAdd"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="sm:col-span-1">
-                                    <div className="mt-2">
-                                        <button
-                                            onClick={handlePostcode}
-                                            className="mt-5 bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
-                                        >검색
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="memberSub"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        멤버십 구독 여부
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            readOnly={true}
-                                            type="text"
-                                            name="memberSub"
-                                            id="memberSub"
-                                            value={memberView.memberSub}
-                                            autoComplete="memberSub"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="memberBirth"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        생년월일
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            type="date"
-                                            name="memberBirth"
-                                            id="memberBirth"
-                                            value={memberBirth}
-                                            onChange={memberBirthOnChangeHandler}
-                                            autoComplete="memberBirth"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
-                                    </div>
+                                <div className="media-body va-m">
+                                    <h2 className="media-heading">OOO회원 환영합니다</h2>
                                 </div>
                             </div>
-                        </>)}
-                    </div>
-                    {!showBook ?
-                        (<div className="mt-6 flex items-center justify-end gap-x-6">
-                        <button type="button" className="text-lg font-semibold leading-6 text-gray-900">
-                            Cancel
-                        </button>
-                        <button
-                            onClick={saveMemberData}
-                            className="btn btn-dark"
-                        >
-                        Save
-                        </button>
-                    </div>) :null}
+                        </div>
+
+
+                        <div className="row">
+                            <div className="tab-block">
+                                <ul className="nav nav-tabs">
+                                    <li className="active">
+                                        <a
+                                            data-toggle="tab"
+                                            className={` ${activeTab === 'tab1' ? 'active' : ''}`}
+                                            onClick={() => setActiveTab('tab1')}
+                                        >
+                                            내 정보 보기
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            data-toggle="tab"
+                                            className={`${activeTab === 'tab2' ? 'active' : ''}`}
+                                            onClick={() => setActiveTab('tab2')}
+                                        >
+                                            도서 대출 이력 보기
+                                        </a>
+
+                                    </li>
+                                    <li>
+                                        <a
+                                            data-toggle="tab"
+                                            className={` ${activeTab === 'tab3' ? 'active' : ''}`}
+                                            onClick={() => setActiveTab('tab3')}
+                                        >
+                                            회원탈퇴
+                                        </a>
+
+                                    </li>
+                                </ul>
+
+
+                                <br />
+                                <div className="tab-content p30" style={{color: "black"}}>
+                                    {activeTab === 'tab1' && (
+                                        <div id="tab1" className="tab-pane active">
+                                            <div className="media mt25">
+                                                <div
+                                                    className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+                                                    <div className="sm:col-span-2 border-gray-900/10">
+                                                        <label htmlFor="memberName"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            이름
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <input
+                                                                readOnly={true}
+                                                                type="text"
+                                                                name="memberName"
+                                                                value={memberView.memberName}
+                                                                id="memberName"
+                                                                autoComplete="given-name"
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="sm:col-span-2">
+                                                        <label htmlFor="memberNickname"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            닉네임
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <input
+                                                                type="text"
+                                                                name="memberNickname"
+                                                                onChange={memberNicknameOnChangeHandler}
+                                                                onBlur={nicknameDupCheck}
+                                                                value={memberNickname}
+                                                                id="memberNickname"
+                                                                autoComplete="family-name"
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                        </div>
+                                                        <p id="nicknameErrorMessage"
+                                                           className="text-red">{nicknameErrorMessage}</p>
+                                                    </div>
+
+                                                    <div className="sm:col-span-2">
+                                                        <label htmlFor="memberId"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            아이디
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <input
+                                                                readOnly={true}
+                                                                type="text"
+                                                                name="memberId"
+                                                                id="memberId"
+                                                                value={memberView.memberId}
+                                                                autoComplete="given-name"
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div className="sm:col-span-2">
+                                                        <label htmlFor="memberPw"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            현재 비밀번호
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <input
+                                                                id="memberPw"
+                                                                name="memberPw"
+                                                                type="password"
+                                                                onChange={currentPasswordOnChangeHandler}
+                                                                onBlur={checkCurrentMemberPw}
+                                                                value={currentMemberPw}
+                                                                autoComplete="memberPw"
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                            <p id="pwErrorMessage"
+                                                               className="text-red">{currentPwErrorMessage}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="sm:col-span-2">
+                                                        <label htmlFor="memberNewPw"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            새로운 비밀번호
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <input
+                                                                id="memberNewPw"
+                                                                name="memberNewPw"
+                                                                type="password"
+                                                                autoComplete="memberNewPw"
+                                                                onChange={passwordOnChangeHandler}
+                                                                value={changeMemberPw}
+                                                                onBlur={checkMemberPw}
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                            <p id="pwErrorMessage"
+                                                               className="text-red">{pwErrorMessage}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="sm:col-span-2 mt-8 text-xl">
+                                                        <button
+                                                            onClick={passwordChange}
+                                                            className="btn btn-dark"
+                                                        >
+                                                            비밀번호 수정
+                                                        </button>
+                                                    </div>
+
+
+                                                    <div className="sm:col-span-2">
+                                                        <label htmlFor="memberTel"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            전화번호
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <input
+                                                                readOnly={true}
+                                                                id="memberTel"
+                                                                name="memberTel"
+                                                                value={memberView.memberTel}
+                                                                type="text"
+                                                                autoComplete="memberTel"
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                        </div>
+                                                        <label htmlFor="memberTel"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            프로필 사진
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            {prevProfile
+                                                                ?
+                                                                <img src={prevProfile}/>
+                                                                :
+                                                                <img src="/images/profile/basic_profile.png"/>
+                                                            }
+                                                            <input
+                                                                name="memberProfile"
+                                                                accept='image/jpg, image/png, image/jpeg'
+                                                                type="file"
+                                                                onChange={profileOnChangeHandler}
+                                                                className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                            <button onClick={() => setProfile(null)}>이미지 삭제</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="sm:col-span-2 sm:col-start-1">
+                                                        <label htmlFor="memberPostcode"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            우편번호
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <input
+                                                                readOnly={true}
+                                                                type="text"
+                                                                name="memberPostcode"
+                                                                id="memberPostcode"
+                                                                onChange={memberPostcodeOnChangeHandler}
+                                                                value={memberPostcode}
+                                                                autoComplete="memberPostcode"
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div className="sm:col-span-2">
+                                                        <label htmlFor="memberAdd"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            도로명 주소
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <input
+                                                                readOnly={true}
+                                                                type="text"
+                                                                name="memberAdd"
+                                                                id="memberAdd"
+                                                                onChange={memberAddOnChangeHandler}
+                                                                value={memberAdd}
+                                                                autoComplete="memberAdd"
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="sm:col-span-1">
+                                                        <label htmlFor="memberDetailAdd"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            상세주소
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <input
+                                                                type="text"
+                                                                name="memberDetailAdd"
+                                                                value={memberDetailAdd}
+                                                                id="memberDetailAdd"
+                                                                onChange={memberDetailAddOnChangeHandler}
+                                                                autoComplete="memberDetailAdd"
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="sm:col-span-1">
+                                                        <div className="mt-2">
+                                                            <button
+                                                                onClick={handlePostcode}
+                                                                className="mt-5 bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
+                                                            >검색
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="sm:col-span-2">
+                                                        <label htmlFor="memberSub"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            멤버십 구독 여부
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <input
+                                                                readOnly={true}
+                                                                type="text"
+                                                                name="memberSub"
+                                                                id="memberSub"
+                                                                value={memberView.memberSub}
+                                                                autoComplete="memberSub"
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="sm:col-span-2">
+                                                        <label htmlFor="memberBirth"
+                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                            생년월일
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <input
+                                                                type="date"
+                                                                name="memberBirth"
+                                                                id="memberBirth"
+                                                                value={memberBirth}
+                                                                onChange={memberBirthOnChangeHandler}
+                                                                autoComplete="memberBirth"
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>)}
+                                    {activeTab === 'tab2' && (
+                                        <div id="tab2" className="tab-pane">
+                                            <div className="media mt25">
+                                                {!showBook ?
+                                                    (
+                                                        <div className="mt-6 flex items-center justify-end gap-x-6">
+
+                                                        <button
+                                                            onClick={saveMemberData}
+                                                            className="btn btn-dark"
+                                                        >
+                                                            저장
+                                                        </button>
+                                                    </div>) :null}
+                                            </div>
+                                        </div>)}
+                                    {activeTab === 'tab3' &&
+                                        (
+                                            <div id="tab3" className="tab-pane">
+                                                <div className="media mt25">
+                                                    <button
+                                                        className="bg-red-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
+                                                      > 회원 탈퇴
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </section>
+                    </body>
+
                 </div>
             </section>
         </main>

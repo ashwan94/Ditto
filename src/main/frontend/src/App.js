@@ -22,6 +22,7 @@
   import Membership from "./pages/introduce/membership";
   import Faq from "./pages/introduce/faq";
   import "./css/style.css";
+  import Mypage2 from "./pages/common/mypage2";
 
   function App() {
     return (
@@ -49,6 +50,7 @@
               <Route path="/book/view" element={<BookView/>}/>
               <Route path="/faq" element={<Faq />} />
               <Route path="/community/podcast/list" element={<PodcastList />} />
+              <Route path="/mypage2" element={<Mypage2 />} />
           </Routes>
           <KaKaoTalk />
           <Footer />
