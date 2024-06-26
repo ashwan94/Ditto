@@ -254,6 +254,7 @@ export default function AdminPage(){
             });
             setShowBookList(false)
             setShowMemberList(true)
+            setSearchWord(memId)
             setMemberList(res.data)
         } catch (error) {
             console.error("도서 대여 이력조회 에러", error);
@@ -495,10 +496,10 @@ export default function AdminPage(){
                                                         <td className="border border-gray-800 px-4 py-2">{v.memberSub != 'N' ? (
                                                             <button
                                                                 onClick={() => memberSubStatus(v.memberId,v.memberSub)}
-                                                                className="text-blue-600">O</button>
+                                                                className="text-blue-600">구독중</button>
                                                         ) : <button
                                                                 onClick={() => memberSubStatus(v.memberId,v.memberSub)}
-                                                                className="text-red">X</button>}
+                                                                className="text-red">미가입</button>}
                                                         </td>
                                                         <td className="border border-gray-800 px-4 py-2">{formatPhoneNumber(v.memberTel)}</td>
                                                         <td className="border border-gray-800 px-4 py-2">{v.memberDelete == 'N' ? (
