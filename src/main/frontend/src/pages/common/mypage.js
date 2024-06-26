@@ -17,7 +17,6 @@ export default function Mypage() {
     const [memberAdd, setMemberAdd] = useState("") // 회원 도로명 주소
     const [memberPostcode, setMemberPostcode] = useState("") // 회원 우편번호
     const [memberDetailAdd, setMemberDetailAdd] = useState("") // 회원 상세주소
-    const [showBook, setShowBook] = useState(false); // 도서 대여 내역 on/off
     const [showBookRentalList, setShowBookRentalList] = useState([]) // 도서 대여 내역 리스트
     const [bookNo, setBookNo] = useState(0); // 책 번호
     const [rentNo, setRentNo] = useState(0); // 렌트 번호
@@ -134,7 +133,6 @@ export default function Mypage() {
     // 페이지 첫 랜더링 시 가져오기
     useEffect(() => {
         if (JSON.parse(sessionStorage.getItem("bookRent"))) {
-            setShowBook(true);
             sessionStorage.removeItem("bookRent");
         }
         getData() // 로그인한 유저의 정보 가져오기
@@ -363,7 +361,7 @@ export default function Mypage() {
                                     </a>
                                 </div>
                                 <div className="media-body va-m">
-                                    <h2 className="media-heading">OOO회원 환영합니다</h2>
+                                    <h1 className="media-heading">{memberNickname}님 환영합니다</h1>
                                 </div>
                             </div>
                         </div>
@@ -538,7 +536,7 @@ export default function Mypage() {
                                                             />
                                                         </div>
                                                         <label htmlFor="memberTel"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="block text-lg font-medium leading-6 text-gray-900 mt-9">
                                                             프로필 사진
                                                         </label>
                                                         <div className="mt-2">
@@ -555,7 +553,10 @@ export default function Mypage() {
                                                                 onChange={profileOnChangeHandler}
                                                                 className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
-                                                            <button onClick={() => setProfile(null)}>이미지 삭제</button>
+                                                            <button onClick={() => setProfile(null)}
+                                                                className="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white px-4 border border-red-500 hover:border-transparent rounded mx-2">
+                                                                이미지 삭제
+                                                            </button>
                                                         </div>
                                                     </div>
 
@@ -666,7 +667,7 @@ export default function Mypage() {
                                         <div id="tab2" className="tab-pane">
 
                                                 <div
-                                                    className="media mt-10 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
+                                                    className="media mt-5 gap-x-6 gap-y-8 sm:grid-cols-6">
                                                     <table className="table-auto w-full border-collapse border border-gray-800">
                                                         <tr className="text-center">
                                                             <td className="border border-gray-800 px-4 py-2">도서 번호</td>
