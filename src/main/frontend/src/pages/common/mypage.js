@@ -555,7 +555,7 @@ export default function Mypage() {
                                                             />
                                                             <button onClick={() => setProfile(null)}
                                                                 className="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white px-4 border border-red-500 hover:border-transparent rounded mx-2">
-                                                                이미지 삭제
+                                                                프로필 삭제
                                                             </button>
                                                         </div>
                                                     </div>
