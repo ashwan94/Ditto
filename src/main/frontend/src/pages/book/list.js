@@ -108,9 +108,11 @@ export default function BookList() {
             top: 0,
             behavior: 'smooth',
         });
-        if (currentPage < 30) {
+        if (currentPage < totalPageNum && pageNumList.length % pageNumListSize == 0) {
             getPageNumList(pageNumList[0] + 10)
-        } else {
+
+        }
+        else {
             return alert("정보가 없습니다.")
         }
     }

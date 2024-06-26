@@ -26,7 +26,7 @@
             FILE
     </select>
 
-    <insert id="registerFile" parameterType="fileVO">
+    <insert id="registerFile" parameterType="fileVO" useGeneratedKeys="true" keyProperty="fileNo">
         INSERT INTO FILE
             (FILE_NAME, FILE_ORIGINALNAME, FILE_PATH, FILE_SIZE, FILE_TYPE)
         VALUES

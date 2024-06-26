@@ -18,11 +18,7 @@ export default function List(){
     const [num, setNum] = useState(0); // MQTT 통신 횟수 확인용
     useEffect(() => {
         // 최초 null 로 시작할때 브라우저 로딩 시 발생하는 에러에 대한 처리
-        if(message){
-            console.log("착석 여부 : ");
-            console.log(message)
-            console.log(num);
-        }
+
     }, [message]);
 
     // MQTT connect 에 대한 event -> subscribe, publish 모두 처리
@@ -79,6 +75,7 @@ export default function List(){
     // 레이아웃은 grid, grid-cols-2 로 지정해줌
 
     // TODO
+    // 좌석 배치도 | 안승환 | 06.10(아마 이쯤?)
     // 1. 예약이 가능한 좌석 클릭 시 clicked 이미지로 변경
     // 2. 예약 button 클릭 시 해당 좌석의 정보를 DB 에 UPDATE 후 재렌더링
     // 3. My page 에서 좌석 예약 취소하기(연지님이랑 추후 논의)

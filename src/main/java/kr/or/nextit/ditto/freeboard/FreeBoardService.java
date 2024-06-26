@@ -2,12 +2,14 @@ package kr.or.nextit.ditto.freeboard;
 
 import kr.or.nextit.ditto.common.SearchVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class FreeBoardService {
     private final FreeBoardMapper mapper;

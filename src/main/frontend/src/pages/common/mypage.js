@@ -298,7 +298,7 @@ export default function Mypage() {
             alert("회원정보가 수정되었습니다.")
             getData();
         }catch (error){
-            console.error("회원수정 에러야! => ",error)
+            console.error("회원정보 수정 실패")
         }
     }
 
@@ -337,6 +337,12 @@ export default function Mypage() {
 
     }
 
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'auto',
+        });
+    }, []);
 
     return (
         <main className="rundry">
@@ -351,17 +357,18 @@ export default function Mypage() {
                             {memberView.memberNickname}님
                             환영합니다.
                         </h2>
-                        <div className="py-5">
+                        <div className="py-5" style={{fontSize:"20px"}}>
                             {/* 내 정보 보기 */}
-                            <span onClick={() => setShowBook(false)} className="btn mt-1 text-lg leading-6 text-gray-600">내 정보 보기</span>
+                            <button onClick={() => setShowBook(false)} className="mt-1 leading-6 text-gray-600">내 정보 보기</button>
+                            <span> | </span>
                             {/* 도서 대출 이력 보기 */}
-                            <span onClick={() => setShowBook(true)} className="btn mt-1 text-lg leading-6 text-gray-600 mx-3">도서 대출 이력 보기</span>
+                            <button onClick={() => setShowBook(true)} className="mt-1 leading-6 text-gray-600 ">도서 대출 이력 보기</button>
                         </div>
                         {showBook ? (
                         <div
                             className="mt-10 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
                             <table className="table-auto w-full border-collapse border border-gray-800">
-                                <tr className="text-center">
+                                <tr className="text-center text-xl" style={{backgroundColor:"lightgray"}}>
                                     <td className="border border-gray-800 px-4 py-2">도서 번호</td>
                                     <td className="border border-gray-800 px-4 py-2">도서명</td>
                                     <td className="border border-gray-800 px-4 py-2">대여일</td>
@@ -375,13 +382,13 @@ export default function Mypage() {
                                     showBookRentalList.map((v,i)=>
                                         (
                                             <tr key={i} className="text-center">
-                                                <td className="border border-gray-800 px-4 py-2">{v.bookNo}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.bookName}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.rentStart}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.rentEnd}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.rentReturn}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.rentDelay}</td>
-                                                <td className="border border-gray-800 px-4 py-2">{v.rentReturn == null && v.bookRent == 'Y' ? (<button className="text-red" type="button" onClick={() => {setRentNo(v.rentNo); setBookNo(v.bookNo); }}>
+                                                <td className="border border-gray-800 px-4 py-2 text-lg" style={{backgroundColor:"lightgray"}}>{v.bookNo}</td>
+                                                <td className="border border-gray-800 px-4 py-2 text-lg">{v.bookName}</td>
+                                                <td className="border border-gray-800 px-4 py-2 text-lg">{v.rentStart}</td>
+                                                <td className="border border-gray-800 px-4 py-2 text-lg">{v.rentEnd}</td>
+                                                <td className="border border-gray-800 px-4 py-2 text-lg">{v.rentReturn}</td>
+                                                <td className="border border-gray-800 px-4 py-2 text-lg">{v.rentDelay}</td>
+                                                <td className="border border-gray-800 px-4 py-2 text-lg">{v.rentReturn == null && v.bookRent == 'Y' ? (<button className="text-red" type="button" onClick={() => {setRentNo(v.rentNo); setBookNo(v.bookNo); }}>
                                                     반납하기</button>) : (<span className="text-blue-500">반납완료</span>)}</td>
                                             </tr>
                                         )
@@ -493,7 +500,6 @@ export default function Mypage() {
                                 <div className="sm:col-span-2 mt-8 text-xl">
                                     <button
                                         onClick={passwordChange}
-                                        // className="rounded-md bg-blue-600 px-3 py-2 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                         className="btn btn-dark"
                                     >
                                         비밀번호 수정
@@ -644,14 +650,12 @@ export default function Mypage() {
                     </div>
                     {!showBook ?
                         (<div className="mt-6 flex items-center justify-end gap-x-6">
-                        <button type="button" className="text-lg font-semibold leading-6 text-gray-900">
-                            Cancel
-                        </button>
+                    
                         <button
                             onClick={saveMemberData}
-                            className="btn btn-dark"
+                            className="btn btn-dark "
                         >
-                        Save
+                        저장
                         </button>
                     </div>) :null}
                 </div>

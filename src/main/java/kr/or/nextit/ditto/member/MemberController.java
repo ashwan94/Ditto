@@ -81,6 +81,17 @@ public class MemberController {
         return service.getProfile(memberId);
     }
 
+    // TODO
+    // MEMBER 테이블 변경 | 06.27(목) | 안승환
+    // -> FILE 테이블을 사용하도록 하기 위함
+    // MEMBER 테이블의 MEMBER_PROFILE 을 FILE_NO 로 변경하고 FILE 테이블의 NO 로 기입하도록 변경
+    // 작동 순서
+    // 1. 프로필 저장
+    // 2. 이미지 정보 분석
+    // 3. FILE 테이블에 2번 정보 저장(파일명, 파일 사이즈, 파일 경로 등) + useGeneratedKeys
+    // 4. MEMBER 의 FILE_NO 에 3번을 저장
+    // 5. 4번을 SELECT 로 프로필 이미지 정보 가져오기
+
     // 마이페이지 프로필 이미지 변경
     @PostMapping("/changeMemberProfile")
     public ResponseEntity<?> updateProfile(MultipartFile profile, String memberId) throws IOException {
