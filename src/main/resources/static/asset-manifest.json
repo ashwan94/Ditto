@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.076cf894.css",
-    "main.js": "/static/js/main.65d3a5c3.js",
+    "main.css": "/static/css/main.2c41648c.css",
+    "main.js": "/static/js/main.cb3edb1d.js",
     "static/media/BMEuljiro10yearslater.ttf": "/static/media/BMEuljiro10yearslater.c3312e3562ba1f1088db.ttf",
     "static/media/런드리고딕 Regular.ttf": "/static/media/런드리고딕 Regular.1321609c824ac4aec2b4.ttf",
     "static/media/BMDOHYEON_ttf.ttf": "/static/media/BMDOHYEON_ttf.d20f6c68004f7588ee16.ttf",
@@ -11,11 +11,11 @@
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
     "static/media/WavvePADO-Regular.ttf": "/static/media/WavvePADO-Regular.31d6cfe0d16ae931b73c.ttf",
-    "main.076cf894.css.map": "/static/css/main.076cf894.css.map",
-    "main.65d3a5c3.js.map": "/static/js/main.65d3a5c3.js.map"
+    "main.2c41648c.css.map": "/static/css/main.2c41648c.css.map",
+    "main.cb3edb1d.js.map": "/static/js/main.cb3edb1d.js.map"
   },
   "entrypoints": [
-    "static/css/main.076cf894.css",
-    "static/js/main.65d3a5c3.js"
+    "static/css/main.2c41648c.css",
+    "static/js/main.cb3edb1d.js"
   ]
 }

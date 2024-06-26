@@ -11,10 +11,6 @@ export default function PodcastList() {
   // DB 에서 전체 podcast 내용 조회
   const getData = async () => {
     const res = await axios.get("/podcast/list");
-<<<<<<<<<<< Temporary merge branch 1
-    console.log("컨트롤러에서 받은 data");
-===========
->>>>>>>>>>> Temporary merge branch 2
     console.log(res.data);
     setPodcasts(res.data);
   };

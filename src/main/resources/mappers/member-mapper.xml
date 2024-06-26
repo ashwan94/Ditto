@@ -96,7 +96,7 @@
     </update>
 
     <!-- 마이페이지 비밀번호 수정   -->
-    <update id="passwordChange" parameterType="MemberVO">
+    <update id="passwordChange" parameterType="memberVO">
         UPDATE
             MEMBER A
         SET
@@ -105,9 +105,8 @@
             A.MEMBER_ID = #{memberId}
     </update>
 
-
-    <!--  회원 정보 수정   -->
-    <update id="updateMemberData" parameterType="MemberVO">
+    <!-- 회원정보 수정 -->
+    <update id="updateMemberData" parameterType="memberVO">
         UPDATE
             MEMBER A
         SET
@@ -130,4 +129,106 @@
         WHERE
             A.MEMBER_ID =  #{memberId}
     </update>
+
+    <!-- 관리자 페이지 전체 회원정보 조회 -->
+    <select id="adminPageMemberList" resultType="memberVO">
+        SELECT
+        A.MEMBER_NO,
+        A.MEMBER_ID,
+        A.MEMBER_NAME,
+        A.MEMBER_NICKNAME,
+        A.MEMBER_SUB,
+        A.MEMBER_TEL,
+        A.MEMBER_DELETE
+        FROM
+        MEMBER A
+    </select>
+    <!-- 관리자 페이지 회원정보 비활성화 -->
+    <update id="adminPageMemberDeleteY" parameterType="memberVO">
+        UPDATE
+        MEMBER A
+        SET
+        A.MEMBER_DELETE = 'Y'
+        WHERE
+        A.MEMBER_ID = #{memberId}
+    </update>
+    <!-- 관리자 페이지 회원정보 활성화 -->
+    <update id="adminPageMemberDeleteN" parameterType="memberVO">
+        UPDATE
+        MEMBER A
+        SET
+        A.MEMBER_DELETE = 'N'
+        WHERE
+        A.MEMBER_ID = #{memberId}
+    </update>
+    <!-- 관리자 페이지 회원 구독 상태 변경 -->
+    <update id="adminMemberSubStatus" parameterType="memberVO">
+        UPDATE
+        MEMBER A
+        SET
+        A.MEMBER_SUB = #{memberSub}
+        WHERE
+        A.MEMBER_ID = #{memberId}
+    </update>
+    <!-- 관리자 페이지 도서대여이력 아이디 클릭식 회원정보 조회 -->
+    <select id="adminPageMemberClickListSearch" parameterType="memberVO" resultType="memberVO">
+        SELECT
+        A.MEMBER_NO,
+        A.MEMBER_ID,
+        A.MEMBER_NAME,
+        A.MEMBER_NICKNAME,
+        A.MEMBER_SUB,
+        A.MEMBER_TEL,
+        A.MEMBER_DELETE
+        FROM
+        MEMBER A
+        WHERE
+        A.MEMBER_ID = #{memberId}
+    </select>
+    <!-- 관리자 페이지 맴버십 검색어로 조회 -->
+    <select id="adminPageSearchMemberIdData" parameterType="string" resultType="memberVO">
+        SELECT
+        A.MEMBER_NO,
+        A.MEMBER_ID,
+        A.MEMBER_NAME,
+        A.MEMBER_NICKNAME,
+        A.MEMBER_SUB,
+        A.MEMBER_TEL,
+        A.MEMBER_DELETE
+        FROM
+        MEMBER A
+        WHERE
+        A.MEMBER_ID LIKE CONCAT('%', #{searchWord}, '%')
+    </select>
+    <!-- 관리자 페이지 멤버십 OX 정렬 조회 -->
+    <select id="adminPageMemberSubChangeOX" parameterType="memberVO" resultType="memberVO">
+        SELECT
+        A.MEMBER_NO,
+        A.MEMBER_ID,
+        A.MEMBER_NAME,
+        A.MEMBER_NICKNAME,
+        A.MEMBER_SUB,
+        A.MEMBER_TEL,
+        A.MEMBER_DELETE
+        FROM
+        MEMBER A
+        WHERE
+        A.MEMBER_SUB = #{memberSub}
+    </select>
+    <!-- 관리자 페이지 회원상태 활성화, 정지 정렬 조회 -->
+    <select id="adminPageMemberDeleteChangeOX" parameterType="memberVO" resultType="memberVO">
+        SELECT
+        A.MEMBER_NO,
+        A.MEMBER_ID,
+        A.MEMBER_NAME,
+        A.MEMBER_NICKNAME,
+        A.MEMBER_SUB,
+        A.MEMBER_TEL,
+        A.MEMBER_DELETE
+        FROM
+        MEMBER A
+        WHERE
+        A.MEMBER_DELETE = #{memberDelete}
+    </select>
 </mapper>
+
