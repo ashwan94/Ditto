@@ -1,6 +1,7 @@
 package kr.or.nextit.ditto.book;
 
 import kr.or.nextit.ditto.common.SearchVO;
+import kr.or.nextit.ditto.member.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

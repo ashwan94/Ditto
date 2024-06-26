@@ -2,6 +2,8 @@ package kr.or.nextit.ditto.member;
 
 
 import kr.or.nextit.ditto.file.FileController;
+import kr.or.nextit.ditto.common.SearchVO;
+import kr.or.nextit.ditto.rent.RentVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
@@ -24,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.lang.reflect.Member;
+import java.util.*;
 
 import static kr.or.nextit.ditto.file.FileController.getUuid;
 
@@ -152,18 +156,64 @@ public class MemberController {
         return verificationCode;
     }
 
+    // 관리자 회원 정보 리스트
+    @GetMapping("/adminMemberList")
+    public List<MemberVO> adminPageMemberList(){
+        return service.adminPageMemberList();
+    }
 
+    // 관리자 페이지 회원 비활성화
+    @PostMapping("/memberDeleteY")
+    public void adminMemberDeleteY(@RequestBody MemberVO memberId){
+        service.adminPageMemberDeleteY(memberId);
+    }
 
     // 회원 멤버십 구독 가입
     @PostMapping("/updateMemberSubscribe")
     public void updateMemberSubscribe(String memberId) {
-
         // 쿼리 실행
         service.updateMemberSubscribe(memberId);
-
-
+    }
+    // 관리자 페이지 회원 활성화
+    @PostMapping("/memberDeleteN")
+    public void adminMemberDeleteN(@RequestBody MemberVO memberId){
+        service.adminPageMemberDeleteN(memberId);
     }
 
+    // 관리자 페이지 멤버십 상태변경
+    @PostMapping("/memberSubStatus")
+    public void adminMemberSubStatus(@RequestBody MemberVO memberVO){
+        service.adminMemberSubStatus(memberVO);
+    }
 
+    // 관리자 페이지 도서대여이력에서 아이디 클릭시 해당 아이디 회원정보로 이동
+    @PostMapping("/idClickSearch")
+    public List<MemberVO> adminIdClick(@RequestBody MemberVO memberId){
+        return service.adminPageMemberClickListSearch(memberId);
+    }
+
+    // 회원정보 타입 검색
+    @PostMapping("/adminMemberListSearch")
+    public List<MemberVO> adminPageSearchMemberId(@RequestBody SearchVO searchVO){
+        List<MemberVO> vo = new ArrayList<MemberVO>();
+        String searchType = searchVO.getSearchType();
+        String searchWord = searchVO.getSearchWord();
+        if ("아이디".equals(searchType)){
+            vo = service.adminPageSearchMemberIdData(searchWord); // 아이디 기준 검색
+        }
+        return vo;
+    }
+
+    // 멤버십 클릭시 O X정렬 회원조회
+    @PostMapping("/memberSubChangeOX")
+    public List<MemberVO> adminPageMemberSubChangeOX(@RequestBody MemberVO memberVO){
+        return service.adminPageMemberSubChangeOX(memberVO);
+    }
+
+    // 화원상태 변경 클릭시 활성화, 정지 정렬 회원 조회
+    @PostMapping("/memberStatusChangeOX")
+    public List<MemberVO> adminPageMemberDeleteChangeOX(@RequestBody MemberVO memberVO){
+        return service.adminPageMemberDeleteChangeOX(memberVO);
+    }
 
 }

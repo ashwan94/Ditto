@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class RentService {
@@ -51,6 +52,31 @@ public class RentService {
     // 도서 반납 update 두번 나눠서 실행됨
     public void rentBookReturn(RentVO rentNo){
         mapper.rentBookReturn(rentNo);
+    }
+
+    // 관리자 페이지 도서 대여 이력
+    public List<RentVO> adminPageBookRentList(){
+        return mapper.adminPageBookRentList();
+    }
+
+    public List<RentVO> adminBookSearchPageId(String searchWord) {
+        return mapper.adminBookSearchPageId(searchWord);
+    }
+    public List<RentVO> adminBookSearchPageBook(String searchWord) {
+        return mapper.adminBookSearchPageBook(searchWord);
+    }
+
+    public List<RentVO> adminBookSearchPageRentStart(String searchWord) {
+        return mapper.adminBookSearchPageRentStart(searchWord);
+    }
+    public List<RentVO> adminBookSearchPageRentEnd(String searchWord) {
+        return mapper.adminBookSearchPageRentEnd(searchWord);
+    }
+    public List<RentVO> adminBookSearchPageRentReturn(String searchWord) {
+        return mapper.adminBookSearchPageRentReturn(searchWord);
+    }
+    public List<RentVO> rentDelaySearch() {
+        return mapper.rentDelaySearch();
     }
 
 }
