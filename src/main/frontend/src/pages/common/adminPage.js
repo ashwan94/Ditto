@@ -15,6 +15,10 @@ export default function AdminPage(){
     const [showPodcastList, setShowPodcastList] = useState(false) // 팟캐스트 화면표시
     const [searchType, setSearchType] = useState("아이디") // 회원 정보 검색타입
     const [searchWord, setSearchWord] = useState("") // 회원 정보 검색키워드
+    const [memberSubChangeData, setMemberSubChangeData] = useState("Y") // 멤버십 상태 변경용
+    const [memberDelete, setMemberDelete] = useState("Y") // 회원 활동 상태 변경용
+
+    // TODO 날짜 검색 타입클릭시 자동으로 날짜선택 열리도록 할수있나 알아보기
 
     const searchTypeOnChangeHandler = useCallback((e) => {
         setSearchType(e.target.value)
@@ -239,7 +243,7 @@ export default function AdminPage(){
         }catch (error){
             console.log("멤버쉽 구독상태 수정 에러야!", error)
         }
-        searchBtn();
+        searchBtn()
     }
 
     // 도서목록에서 회원 아이디 클릭시 해당 회원 번호 검색
@@ -273,6 +277,48 @@ export default function AdminPage(){
             setBookRentList(res.data)
         } catch (error) {
             console.error("도서 대여 이력조회 에러", error);
+        }
+    }
+
+    // 멤버십 클릭시 각각 X 또는 O 인것만 조회
+    const memberSubChange = async () => {
+        if (memberSubChangeData == "Y"){
+            setMemberSubChangeData("N")
+        }else {
+            setMemberSubChangeData("Y")
+        }
+        try {
+            const res = await axios.post("/memberSubChangeOX",{
+                memberSub: memberSubChangeData
+            },{
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            setMemberList(res.data)
+        } catch (error){
+            console.log("멤버십 O X 조회 에러", error)
+        }
+    }
+
+    // 회원 상태변경 클릭시 활성화 또는 정지 인것만 조회
+    const memberStatusChange = async () => {
+        if (memberDelete == "N"){
+            setMemberDelete("Y")
+        }else {
+            setMemberDelete("N")
+        }
+        try {
+            const res = await axios.post("/memberStatusChangeOX", {
+                memberDelete: memberDelete
+            },{
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            setMemberList(res.data)
+        }catch (error){
+            console.log("멤버 상태 정렬조회 에러",error)
         }
     }
 
@@ -434,10 +480,10 @@ export default function AdminPage(){
                                         <td class="border border-gray-800 px-4 py-2">아이디</td>
                                         <td class="border border-gray-800 px-4 py-2">이름</td>
                                         <td class="border border-gray-800 px-4 py-2">닉네임</td>
-                                        <td class="border border-gray-800 px-4 py-2">멤버십</td>
+                                        <td class="border border-gray-800 px-4 py-2 text-purple-700"><button onClick={memberSubChange}>멤버십</button></td>
                                         <td class="border border-gray-800 px-4 py-2">전화번호</td>
-                                            <td class="border border-gray-800 px-4 py-2">회원상태 변경</td>
-                                        </tr>
+                                        <td class="border border-gray-800 px-4 py-2 text-purple-700"><button onClick={memberStatusChange}>회원상태</button></td>
+                                    </tr>
                                         {memberList && memberList.length > 0 ? (
                                             memberList.map((v,i)=>
                                                 (
@@ -466,7 +512,7 @@ export default function AdminPage(){
                                                     </tr>
                                                 )
                                             )
-                                        ) : null}
+                                        ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
                                     </table>) : showFreeBoardList ? (
                                             // 자유게시판 리스트
                                             <table className="table-auto w-full border-collapse border border-gray-800">
@@ -499,7 +545,7 @@ export default function AdminPage(){
                                                             </tr>
                                                         )
                                                     )
-                                                ) : null}
+                                                ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
                                     </table>
                                     ) : showRelayBoardList ? (
                                     // 릴레이 소설게시판 리스트
@@ -533,7 +579,7 @@ export default function AdminPage(){
                                                     </tr>
                                                 )
                                             )
-                                        ) : null}
+                                        ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
                                     </table>
                                     ) : showBookList ? (
                                     // 도서 대여 이력 리스트
@@ -546,7 +592,7 @@ export default function AdminPage(){
                                             <td className="border border-gray-800 px-4 py-2">실제 반납일</td>
                                             <td className="border border-gray-800 px-4 py-2">회원 아이디</td>
                                             <td
-                                                className="border border-gray-800 px-4 py-2 text-purple-500">
+                                                className="border border-gray-800 px-4 py-2 text-purple-700">
                                                 <button onClick={rentDelaySearch}>연체여부</button></td>
                                         </tr>
                                         {/* 도서대여 이력이 한개이상 존재 할때나옴 */}
@@ -564,7 +610,7 @@ export default function AdminPage(){
                                                     </tr>
                                                 )
                                             )
-                                        ) : null}
+                                        ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
                                     </table>
                                     ) : null}
                                     < /div>

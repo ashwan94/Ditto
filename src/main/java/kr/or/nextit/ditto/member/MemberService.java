@@ -65,7 +65,15 @@ public class MemberService {
     }
 
     public List<MemberVO> adminPageSearchMemberIdData(String searchWord){
-        return mapper.adminPageSearchMemberIdData(searchWord);
+        return mapper.adminPageSearchMemberIdData(searchWord); // 관리자 페이지 멤버아이디로 조회
+    }
+
+    public List<MemberVO> adminPageMemberSubChangeOX(MemberVO memberVO){ // 관리자 페이지 멤버십 N일때는 Y Y일때는 N 조회
+        return mapper.adminPageMemberSubChangeOX(memberVO);
+    }
+
+    public List<MemberVO> adminPageMemberDeleteChangeOX(MemberVO memberVO){ // 관리자 페이지 회원상태 활성화,비활성화 정렬 조회
+        return mapper.adminPageMemberDeleteChangeOX(memberVO);
     }
 
 

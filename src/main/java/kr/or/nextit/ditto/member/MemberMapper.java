@@ -24,4 +24,7 @@ public interface MemberMapper {
 
     List<MemberVO> adminPageMemberClickListSearch(MemberVO memberId); // 도서대여 이력에서 회원 아이디클릭시 해당 회원정보조회
     List<MemberVO> adminPageSearchMemberIdData(String searchWord); // 멤버아이디 타입 키워드로 검색
+
+    List<MemberVO> adminPageMemberSubChangeOX(MemberVO memberVO); // 관리자페이지 멤버십 OX 정렬 조회
+    List<MemberVO> adminPageMemberDeleteChangeOX(MemberVO memberVO); // 관리자페이지 회원상태 활성화, 정지 정렬 조회
 }
