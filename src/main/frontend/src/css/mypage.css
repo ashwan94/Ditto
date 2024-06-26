@@ -834,3 +834,12 @@ Tab Navigation - Tabs Right
     border-top: 1px solid #fff;
 }
 
+@font-face {
+    font-family: "rundry";
+    font-weight: 300;
+    src: url("/src/fonts/런드리고딕 Regular.ttf") format("truetype");
+}
+
+.rundry{
+    font-family: "rundry";
+}

@@ -3,6 +3,7 @@ import axios from "axios";
 import {useCallback, useEffect, useState} from "react";
 import '../../css/mypage.css'
 
+
 export default function Mypage() {
 
     // TODO 연체 여부가 Y일때 는 update rent_delay 컬럼 수정 되지 않게 해야됨
@@ -350,7 +351,7 @@ export default function Mypage() {
                             <div className="media clearfix">
                                 <div className="media-left pr30">
                                     <a href="#">
-                                        <div className="mt-2">
+                                        <div className="mt-2" style={{width:"200px", height:"200px", borderRadius:"50px"}}>
                                             {prevProfile
                                                 ?
                                                 <img src={prevProfile}/>
@@ -663,19 +664,45 @@ export default function Mypage() {
                                         </div>)}
                                     {activeTab === 'tab2' && (
                                         <div id="tab2" className="tab-pane">
-                                            <div className="media mt25">
-                                                {!showBook ?
-                                                    (
-                                                        <div className="mt-6 flex items-center justify-end gap-x-6">
 
-                                                        <button
-                                                            onClick={saveMemberData}
-                                                            className="btn btn-dark"
-                                                        >
-                                                            저장
-                                                        </button>
-                                                    </div>) :null}
-                                            </div>
+                                                <div
+                                                    className="media mt-10 gap-x-6 gap-y-8 sm:grid-cols-6 border-t border-gray-900/10 pt-12">
+                                                    <table className="table-auto w-full border-collapse border border-gray-800">
+                                                        <tr className="text-center">
+                                                            <td className="border border-gray-800 px-4 py-2">도서 번호</td>
+                                                            <td className="border border-gray-800 px-4 py-2">도서명</td>
+                                                            <td className="border border-gray-800 px-4 py-2">대여일</td>
+                                                            <td className="border border-gray-800 px-4 py-2">반납예정일</td>
+                                                            <td className="border border-gray-800 px-4 py-2">실제 반납일</td>
+                                                            <td className="border border-gray-800 px-4 py-2">연체여부</td>
+                                                            <td className="border border-gray-800 px-4 py-2">반납여부</td>
+                                                        </tr>
+                                                        {/* 도서대여 이력이 한개이상 존재 할때나옴 */}
+                                                        {showBookRentalList && showBookRentalList.length > 0 ? (
+                                                            showBookRentalList.map((v, i) =>
+                                                                (
+                                                                    <tr key={i} className="text-center">
+                                                                        <td className="border border-gray-800 px-4 py-2">{v.bookNo}</td>
+                                                                        <td className="border border-gray-800 px-4 py-2">{v.bookName}</td>
+                                                                        <td className="border border-gray-800 px-4 py-2">{v.rentStart}</td>
+                                                                        <td className="border border-gray-800 px-4 py-2">{v.rentEnd}</td>
+                                                                        <td className="border border-gray-800 px-4 py-2">{v.rentReturn}</td>
+                                                                        <td className="border border-gray-800 px-4 py-2">{v.rentDelay}</td>
+                                                                        <td className="border border-gray-800 px-4 py-2">{v.rentReturn == null && v.bookRent == 'Y' ? (
+                                                                            <button className="text-red" type="button" onClick={() => {
+                                                                                setRentNo(v.rentNo);
+                                                                                setBookNo(v.bookNo);
+                                                                            }}>
+                                                                                반납하기</button>) : (
+                                                                            <span className="text-blue-500">반납완료</span>)}</td>
+                                                                    </tr>
+                                                                )
+                                                            )
+                                                        ) : null}
+                                                    </table>
+                                                </div>
+
+
                                         </div>)}
                                     {activeTab === 'tab3' &&
                                         (
