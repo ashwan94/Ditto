@@ -39,12 +39,11 @@ export default function BookList() {
                 }
             });
             setBookList(res.data.list);
-            setResultCount(res.data.list.length)
+            setResultCount(res.data.list.length);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
-
 
     /* 검색 기능을 위한 검색 키워드, 검색 타이틀 체인지 핸들러 */
     const searchWordOnChangeHandler = (e) => {
@@ -127,9 +126,7 @@ export default function BookList() {
         <main>
             <section className="gj do hj sp jr i pg rundry">
                 <div className="bb ze ki xn 2xl:ud-px-0">
-
                     <div id="board-search">
-
                         <form action={`/book/list?searchWord=${searchWord}`} method="get">
                             <label>
                                 <select name="searchType" onChange={searchTypeOnChangeHandler}>
@@ -177,7 +174,6 @@ export default function BookList() {
                         null
                     )
                     }
-                    {/* 페이지 버튼 시작 */}
                     {bookList.length < 10 && currentPage != totalPageNum ? null :
                         <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
                              className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">

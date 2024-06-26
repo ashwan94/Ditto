@@ -1,6 +1,7 @@
 package kr.or.nextit.ditto.member;
 
 
+import kr.or.nextit.ditto.file.FileController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
@@ -9,13 +10,22 @@ import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import static kr.or.nextit.ditto.file.FileController.getUuid;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,26 +35,15 @@ public class MemberController {
 
     private final MemberService service;
     private DefaultMessageService messageService;
-
-
-    // 로그인
-    @GetMapping("/SignIn")
-    public String SignIn() {
-        return "true";
-    }
+    private String UPLOAD_DIR = "src/main/frontend/public/images/"; // 프로필 이미지 저장 경로
+    Path uploadPath =  Paths.get(UPLOAD_DIR + "profile"); // public 의 profile 을 실제 파일 경로로 지정
 
     // 로그인
     @PostMapping("/SignIn")
     public MemberVO findMember(MemberVO memberVO) {
-        System.out.println("==>");
-        // 파라미터로 들어온 갑 확인
-        System.out.println("파라미터 : " + memberVO);
-
         // DB 회원과 비교
         MemberVO member = service.findMember(memberVO);
-        System.out.println("쿼리 결과 확인용, DB와 비교 조회 : " + member);
         return member;
-
     }
 
     // 마이페이지 회원정보 조회
@@ -52,8 +51,6 @@ public class MemberController {
     public MemberVO searchMemberInfo(@RequestBody Map<String, String> payload){
         String memberId = payload.get("memberId");
         MemberVO member = service.searchMemberInfo(memberId);
-        System.out.println("회원 아이디" + memberId);
-        System.out.println("회원 정보 ======>" +member);
         return member;
     }
 
@@ -78,37 +75,57 @@ public class MemberController {
         service.updateMemberData(post); // 회원정보 수정버튼 클릭시
     }
 
+    // 마이페이지 프로필 이미지 조회
+    @GetMapping("/getProfile")
+    public String select(String memberId){
+        return service.getProfile(memberId);
+    }
+
+    // 마이페이지 프로필 이미지 변경
+    @PostMapping("/changeMemberProfile")
+    public ResponseEntity<?> updateProfile(MultipartFile profile, String memberId) throws IOException {
+
+        // 해당 경로에 폴더가 존재하지 않으면 생성
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        String fileName = new String(StringUtils.cleanPath(profile.getOriginalFilename()).replaceAll(" ", "").getBytes("8859_1"), "UTF-8");
+        String ext = fileName.substring(fileName.lastIndexOf(".")); // 확장자명 추출
+        String uuidFileName = getUuid() + ext;
+
+        // Local PC 에 파일 정보 복사해 실제 파일로 저장
+        Path filePath = uploadPath.resolve(uuidFileName);
+        Files.copy(profile.getInputStream(), filePath);
+
+        // Front(React) 에서 파일 미리보기를 위해 URL 형식으로 경로 지정
+        String imageUrl = "/images/profile/" + uuidFileName;
+
+        // DB MEMBER 테이블의 PROFILE 내용 UPDATE
+        service.registerProfile(imageUrl, memberId);
+
+        return ResponseEntity.ok().body(new FileController.ImageUploadResponse(imageUrl));
+    }
 
     // 회원가입
     @PostMapping("/register")
     public void SignUp(MemberVO memberVO) {
-        System.out.println("==>");
-        System.out.println("파라미터: " + memberVO);
-
         int result = service.signUp(memberVO);
-
-        System.out.println("result " + result);
     }
 
     // 아이디 중복체크
     @PostMapping("/checkId")
     public int checkId(@RequestBody MemberVO memberVO) {
-        System.out.println("==>" + memberVO);
-
         // 아이디 중복
         int checkId = service.checkIdIsDuplicated(memberVO.getMemberId());
-        System.out.println("아이디 중복되는가? : " + checkId);
         return checkId;
     }
 
     // 닉네임 중복체크
     @PostMapping("/checkNickname")
     public int checkNickname(MemberVO memberVO) {
-        System.out.println("==>" + memberVO);
-
         // 닉네임 중복
         int checkNickname = service.checkNicknameIsDuplicated(memberVO.getMemberNickname());
-        System.out.println("닉네임 중복되는가? : " + checkNickname);
         // 0 = 사용가능한 아이디나 닉네임
 
         return checkNickname;

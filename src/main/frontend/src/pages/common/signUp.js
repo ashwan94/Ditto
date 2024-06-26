@@ -117,7 +117,6 @@ export default function SignUp() {
             return;
         }
         try {
-            // console.log("닉네임: ", memberNickname);
             const res = await axios.post("/checkNickname", null, {
                 params: {
                     memberNickname: memberNickname
@@ -134,8 +133,6 @@ export default function SignUp() {
                 setDuplicatedNickname(false);
                 setNicknameErrorMessage("");
             }
-
-            // console.log("DB 조회 결과 : ", res.data);
 
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -350,12 +347,6 @@ export default function SignUp() {
         }
     };
 
-    // 값 변화 감지 확인용
-    useEffect(() => {
-        // console.log(memberPostcode, memberAdd, memberDetailAdd )
-    }, [memberPostcode, memberAdd, memberDetailAdd]);
-
-
     return (
         <main className="rundry">
             <section className="i pg fh rm ki xn vq gj qp gr hj rp hr ">
@@ -506,7 +497,13 @@ export default function SignUp() {
                                 className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
                                 onChange={memberTelOnChangeHandler}
                             />
-                            <button onClick={sendMessage}
+                            {/* TODO
+                            테스트를 위해 임시로 인증 상태를 조작함
+                            인증문자 발송 시 발생하는 비용 낭비 방지 목적
+                            완료되면 onClick={sendMessage} 로 변경하면 됨
+                            06.26 | 안승환 | 마이페이지 프로필 이미지 삽입 작업 중
+                            */}
+                            <button onClick={()=>setCheckCode(false)}
                                     className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
                             >인증 요청
                             </button>

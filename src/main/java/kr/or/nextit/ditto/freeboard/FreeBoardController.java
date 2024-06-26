@@ -1,9 +1,12 @@
 package kr.or.nextit.ditto.freeboard;
 
+import kr.or.nextit.ditto.common.SearchVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
+
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -15,11 +18,15 @@ public class FreeBoardController {
 
     private final FreeBoardService freeBoardService;
 
-    // 전체 게시글 조회
+    // 전체 게시글 조회 + 개수 조회
     @GetMapping("/list")
-    public List<FreeBoardVO> getBoardList() {
-        List<FreeBoardVO> vo = freeBoardService.getBoardList();
-        return vo;
+    public HashMap<String, Object> getBoardList(SearchVO vo) {
+        List<FreeBoardVO> boardList = freeBoardService.getBoardList(vo);
+        int boardListCount = freeBoardService.getBoardListCount(vo);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("boardList", boardList);
+        map.put("boardListCount", boardListCount);
+        return map;
     }
 
     // 게시글 검색
@@ -63,14 +70,12 @@ public class FreeBoardController {
     // 이미지 처리 때문에 자잘한 에러가 많이 발생하는듯함!
     @PostMapping("/update")
     public void updatePost(FreeBoardVO vo) {
-        log.info("글 번호 : {}", vo);
         freeBoardService.updatePost(vo);
     }
 
     // 게시글 삭제
     @PutMapping("/delete")
     public void deletePost(int freeBoardNo) {
-        log.info("전달받은 게시글 번호 : {}", freeBoardNo);
         freeBoardService.deletePost(freeBoardNo);
     }
 }

@@ -58,7 +58,7 @@ export default function Main() {
 
     return (
         <main className="rundry text-xl">
-            <section className="gj do ir hj sp jr i pg rundry">
+            <section className="gj do hj sp jr i pg rundry">
                 <div className="bb ze ki xn 2xl:ud-px-0" style={{borderTop: "1px solid lightgray"}}>
                     <div className="row-auto">
                         <img className="scale-75 ml-16" src="/images/hansukjupshow_logo.png" alt="Logo Light"/>

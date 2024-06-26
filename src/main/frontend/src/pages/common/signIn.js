@@ -22,7 +22,6 @@ export default function SignIn() {
     // 로그인 함수
     const login = async () => {
         try {
-            console.log("아이디: ", memberId, "비밀번호: ", memberPw)
             const res = await axios.post("/SignIn", null, {
                 // 파라미터로 memberId, memberPw를 파라미터로 넘기기
                 params: {
@@ -30,8 +29,6 @@ export default function SignIn() {
                     memberPw: memberPw
                 }
             });
-            // console.log("DB 조회 결과 : ", res.data.memberId);
-            // console.log("DB 조회 결과 : ", res.data.memberNickname);
             if (!res.data) {
                 // 로그인 실패
                 // 경고 메세지 출력 X
@@ -46,16 +43,17 @@ export default function SignIn() {
                 const memberNickname = res.data.memberNickname; // 회원 닉네임
                 const memberAdmin = res.data.memberAdmin; // 회원 관리자 권한 확인 (member,admin)
                 const memberSub = res.data.memberSub; // 회원 멤버십 구독 여부
+                const memberProfile = res.data.memberProfile; // 회원 프로필 이미지
 
                 // 조회된 정보들 세션에 저장
                 sessionStorage.setItem("member", JSON.stringify
                 ({
                     memberNo: memberNo, memberId: memberId, memberNickname: memberNickname,
-                    memberAdmin: memberAdmin, memberSub: memberSub
+                    memberAdmin: memberAdmin, memberSub: memberSub, memberProfile:memberProfile
                 }))
 
                 // 회원 정보 저장 후 메인 페이지로 화면 이동
-                window.location.href = '/';
+                window.location.href="/"
             }
         } catch (error) {
             console.error("Error fetching data:", error);

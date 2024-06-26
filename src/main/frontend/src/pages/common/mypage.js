@@ -19,6 +19,8 @@ export default function Mypage() {
     const [showBookRentalList, setShowBookRentalList] = useState([]) // 도서 대여 내역 리스트
     const [bookNo, setBookNo] = useState(0); // 책 번호
     const [rentNo, setRentNo] = useState(0); // 렌트 번호
+    const [prevProfile, setPrevProfile] = useState(null); // 프로필 이미지(미리보기)
+    const [profile, setProfile] = useState(null); // 프로필 이미지(파일 저장)
 
     /* 에러 메세지 */
     const [currentPwErrorMessage, setCurrentPwErrorMessage] = useState(""); // 현재 패스워드 에러 메세지
@@ -60,9 +62,16 @@ export default function Mypage() {
         setMemberDetailAdd(e.target.value);
     },[])
 
+    // 프로필 이미지 핸들러(미리보기)
+    const profileOnChangeHandler = useCallback((e) => {
+        const file = e.target.files[0];
+        const imageUrl = URL.createObjectURL(file);
+        setProfile(file); // 프로필 파일 저장
+        setPrevProfile(imageUrl); // 프로필 이미지 미리보기
+    },[])
+
     const memberData = sessionStorage.getItem("member"); // 세션스토리지에담긴 로그인 회원정보 가져오기
     const memberObj = JSON.parse(memberData); // 문자열을 JSON 객체로 변환
-
 
     // 로그인한 유저의 정보 가져오기
     const getData = async () => {
@@ -76,14 +85,12 @@ export default function Mypage() {
                     "Content-Type": "application/json"
                 }
             });
-
             setMemberView(res.data) // 요청한 로그인 회원의 정보 전체 담기
             setMemberNickname(res.data.memberNickname) // 닉네임만
             setMemberPostcode(res.data.memberPostcode)// 우편번호만
             setMemberAdd(res.data.memberAdd)// 주소만
             setMemberDetailAdd(res.data.memberDetailAdd)// 상세주소만
             setMemberBrith(res.data.memberBirth)// 생일만
-
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -92,7 +99,6 @@ export default function Mypage() {
 
     // 책 대여 이력 정보 가져오기
     const getBookData = async () => {
-
         const bookData = {
             memberId: memberObj.memberId // 세션에 담긴 회원 아이디
         }
@@ -108,6 +114,20 @@ export default function Mypage() {
             console.error("Error fetching data:", error);
         }
     };
+
+    // 프로필 이미지 가져오기
+    const getProfile = async () => {
+        const res = await axios.get("/getProfile", {
+            params:{
+                memberId : memberView.memberId,
+            }
+        })
+        setPrevProfile(res.data);
+    }
+
+    useEffect(() => {
+        getProfile();
+    }, [memberView])
 
     // 페이지 첫 랜더링 시 가져오기
     useEffect(() => {
@@ -227,6 +247,9 @@ export default function Mypage() {
         }).open();
     };
 
+    // TODO
+    // 프로필 이미지 리사이즈
+
     // save버튼 클릭시 회원정보 수정
     const saveMemberData = async () => {
         if (memberNickname.length == 0){
@@ -257,6 +280,21 @@ export default function Mypage() {
                     "Content-Type": "application/json"
                 }
             });
+
+            // 사용자가 프로필 이미지를 등록했을 경우
+            // TODO
+            // 프로필 이미지 변경했을때 sessionStorage 에는 변경 전 이미지 정보가 담겨 있으므로
+            // 프로필 이미지가 변경된 data 를 sessionStorage 로 변경해주기
+            if(profile){
+                const imageForm = new FormData();
+                imageForm.append('profile', profile);
+                imageForm.append('memberId', memberView.memberId);
+                axios.post('/changeMemberProfile', imageForm, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }).then(response => (console.log("이미지 경로 : ",response.data)))
+            }
             alert("회원정보가 수정되었습니다.")
             getData();
         }catch (error){
@@ -463,39 +501,59 @@ export default function Mypage() {
                                 </div>
 
 
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="memberTel"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        전화번호
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            readOnly={true}
-                                            id="memberTel"
-                                            name="memberTel"
-                                            value={memberView.memberTel}
-                                            type="text"
-                                            autoComplete="memberTel"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
+                                    <div className="sm:col-span-2">
+                                        <label htmlFor="memberTel"
+                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                            전화번호
+                                        </label>
+                                        <div className="mt-2">
+                                            <input
+                                                readOnly={true}
+                                                id="memberTel"
+                                                name="memberTel"
+                                                value={memberView.memberTel}
+                                                type="text"
+                                                autoComplete="memberTel"
+                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                            />
+                                        </div>
+                                        <label htmlFor="memberTel"
+                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                            프로필 사진
+                                        </label>
+                                        <div className="mt-2">
+                                            {prevProfile
+                                                ?
+                                                <img src={prevProfile}/>
+                                                :
+                                                <img src="/images/profile/basic_profile.png" />
+                                            }
+                                            <input
+                                                name="memberProfile"
+                                                accept='image/jpg, image/png, image/jpeg'
+                                                type="file"
+                                                onChange={profileOnChangeHandler}
+                                                className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                            />
+                                            <button onClick={()=>setProfile(null)}>이미지 삭제</button>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="sm:col-span-2 sm:col-start-1">
-                                    <label htmlFor="memberPostcode"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        우편번호
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            readOnly={true}
-                                            type="text"
-                                            name="memberPostcode"
-                                            id="memberPostcode"
-                                            onChange={memberPostcodeOnChangeHandler}
-                                            value={memberPostcode}
-                                            autoComplete="memberPostcode"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                    <div className="sm:col-span-2 sm:col-start-1">
+                                        <label htmlFor="memberPostcode"
+                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                            우편번호
+                                        </label>
+                                        <div className="mt-2">
+                                            <input
+                                                readOnly={true}
+                                                type="text"
+                                                name="memberPostcode"
+                                                id="memberPostcode"
+                                                onChange={memberPostcodeOnChangeHandler}
+                                                value={memberPostcode}
+                                                autoComplete="memberPostcode"
+                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                         />
                                     </div>
                                 </div>
@@ -577,23 +635,6 @@ export default function Mypage() {
                                             value={memberBirth}
                                             onChange={memberBirthOnChangeHandler}
                                             autoComplete="memberBirth"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
-                                        />
-                                    </div>
-                                </div>
-
-
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="memberCard"
-                                           className="block text-lg font-medium leading-6 text-gray-900">
-                                        결제카드
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            type="text"
-                                            name="memberCard"
-                                            id="memberCard"
-                                            autoComplete="memberCard"
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                         />
                                     </div>

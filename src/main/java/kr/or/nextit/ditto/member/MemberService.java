@@ -27,7 +27,8 @@ public class MemberService {
     public int signUp(MemberVO memberVO) {
         return mapper.signup(memberVO);
     }
-
+    public String getProfile(String memberId){return mapper.getProfile(memberId);} // 프로필 이미지 조회
+    public void registerProfile(String imageUrl, String memberId) {mapper.registerProfile(imageUrl, memberId);} // 프로필 이미지 등록
     public MemberVO searchMemberInfo(String memberId) {
         return mapper.searchMemberInfo(memberId);
     }
