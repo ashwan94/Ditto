@@ -346,37 +346,67 @@ export default function Mypage() {
                     <body>
                     <section id="content" className="container">
                         <div className="page-heading">
-                            <div className="media clearfix">
+                            <div className="media clearfix" style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}>
                                 <div className="media-left pr30">
-                                    <a href="#">
-                                        <div className="mt-2" style={{width:"200px", height:"200px", borderRadius:"50px"}}>
+                                    <a>
+                                        <div className="mt-2"
+                                             style={{width: "200px", height: "200px", display: "flex"}}>
                                             {prevProfile
-                                                ?
-                                                <img src={prevProfile}/>
-                                                :
-                                                <img src="/images/profile/basic_profile.png"/>
+                                                ? <img src={prevProfile} style={{
+                                                    borderRadius: "50%",
+                                                    border: "2px solid hsl(0 0% 50%)",
+                                                    padding: "2%",
+                                                }}/>
+                                                : <img src="/images/profile/basic_profile.png" style={{
+                                                    borderRadius: "50%",
+                                                    border: "2px solid hsl(0 0% 50%)",
+                                                    padding: "2%"
+                                                }}/>
                                             }
-
                                         </div>
                                     </a>
                                 </div>
-                                <div className="media-body va-m">
-                                    <h1 className="media-heading">{memberNickname}님 환영합니다</h1>
+                                <br/>
+                                <div className="media-body va-m" style={{flex:"none"}}>
+                                    <ul className="media-heading text-center rundry text-xl" style={{color:"black"}}>
+                                        <li style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            marginLeft: "2"
+                                        }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="35px"
+                                                 viewBox="0 -960 960 960" width="35px" className="ml-7 rundry">
+                                                <path
+                                                    d="M400-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM80-160v-112q0-33 17-62t47-44q51-26 115-44t141-18h14q6 0 12 2-8 18-13.5 37.5T404-360h-4q-71 0-127.5 18T180-306q-9 5-14.5 14t-5.5 20v32h252q6 21 16 41.5t22 38.5H80Zm560 40-12-60q-12-5-22.5-10.5T584-204l-58 18-40-68 46-40q-2-14-2-26t2-26l-46-40 40-68 58 18q11-8 21.5-13.5T628-460l12-60h80l12 60q12 5 22.5 11t21.5 15l58-20 40 70-46 40q2 12 2 25t-2 25l46 40-40 68-58-18q-11 8-21.5 13.5T732-180l-12 60h-80Zm40-120q33 0 56.5-23.5T760-320q0-33-23.5-56.5T680-400q-33 0-56.5 23.5T600-320q0 33 23.5 56.5T680-240ZM400-560q33 0 56.5-23.5T480-640q0-33-23.5-56.5T400-720q-33 0-56.5 23.5T320-640q0 33 23.5 56.5T400-560Zm0-80Zm12 400Z"/>
+                                            </svg>
+                                            {memberNickname}님 환영합니다
+
+
+                                        </li>
+                                        <li className="rundry">아이디 : {memberView.memberId}</li>
+                                        <li className="rundry">이 름 : {memberView.memberName}</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
 
 
                         <div className="row">
-                            <div className="tab-block">
-                                <ul className="nav nav-tabs">
+                            <div className="tab-block py-5 px-2">
+                                <ul className="nav nav-tabs rundry ">
                                     <li className="active">
                                         <a
                                             data-toggle="tab"
                                             className={` ${activeTab === 'tab1' ? 'active' : ''}`}
                                             onClick={() => setActiveTab('tab1')}
+                                            style={{fontSize: "20px"}}
                                         >
-                                            내 정보 보기
+                                        내 정보 보기
                                         </a>
                                     </li>
                                     <li>
@@ -384,6 +414,7 @@ export default function Mypage() {
                                             data-toggle="tab"
                                             className={`${activeTab === 'tab2' ? 'active' : ''}`}
                                             onClick={() => setActiveTab('tab2')}
+                                            style={{fontSize:"20px"}}
                                         >
                                             도서 대출 이력 보기
                                         </a>
@@ -394,6 +425,7 @@ export default function Mypage() {
                                             data-toggle="tab"
                                             className={` ${activeTab === 'tab3' ? 'active' : ''}`}
                                             onClick={() => setActiveTab('tab3')}
+                                            style={{fontSize:"20px"}}
                                         >
                                             회원탈퇴
                                         </a>
@@ -412,7 +444,7 @@ export default function Mypage() {
 
                                                     <div className="sm:col-span-2 border-gray-900/10">
                                                         <label htmlFor="memberName"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="block text-lg font-medium leading-6 text-gray-900  rundry">
                                                             이름
                                                         </label>
                                                         <div className="mt-2">
@@ -423,13 +455,13 @@ export default function Mypage() {
                                                                 value={memberView.memberName}
                                                                 id="memberName"
                                                                 autoComplete="given-name"
-                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                                className="block  rundry w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
                                                         </div>
                                                     </div>
                                                     <div className="sm:col-span-2">
                                                         <label htmlFor="memberNickname"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="block rundry text-lg font-medium leading-6 text-gray-900">
                                                             닉네임
                                                         </label>
                                                         <div className="mt-2">
@@ -441,7 +473,7 @@ export default function Mypage() {
                                                                 value={memberNickname}
                                                                 id="memberNickname"
                                                                 autoComplete="family-name"
-                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                                className="block rundry w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
                                                         </div>
                                                         <p id="nicknameErrorMessage"
@@ -450,7 +482,7 @@ export default function Mypage() {
 
                                                     <div className="sm:col-span-2">
                                                         <label htmlFor="memberId"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="block text-lg font-medium leading-6 text-gray-900 rundry">
                                                             아이디
                                                         </label>
                                                         <div className="mt-2">
@@ -461,7 +493,7 @@ export default function Mypage() {
                                                                 id="memberId"
                                                                 value={memberView.memberId}
                                                                 autoComplete="given-name"
-                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                                className="block rundry w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
                                                         </div>
                                                     </div>
@@ -469,7 +501,7 @@ export default function Mypage() {
 
                                                     <div className="sm:col-span-2">
                                                         <label htmlFor="memberPw"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="block text-lg font-medium leading-6 text-gray-900 rundry">
                                                             현재 비밀번호
                                                         </label>
                                                         <div className="mt-2">
@@ -481,7 +513,7 @@ export default function Mypage() {
                                                                 onBlur={checkCurrentMemberPw}
                                                                 value={currentMemberPw}
                                                                 autoComplete="memberPw"
-                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                                className="block rundry w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
                                                             <p id="pwErrorMessage"
                                                                className="text-red">{currentPwErrorMessage}</p>
@@ -490,7 +522,7 @@ export default function Mypage() {
 
                                                     <div className="sm:col-span-2">
                                                         <label htmlFor="memberNewPw"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="rundry block text-lg font-medium leading-6 text-gray-900">
                                                             새로운 비밀번호
                                                         </label>
                                                         <div className="mt-2">
@@ -502,7 +534,7 @@ export default function Mypage() {
                                                                 onChange={passwordOnChangeHandler}
                                                                 value={changeMemberPw}
                                                                 onBlur={checkMemberPw}
-                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                                className="rundry block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
                                                             <p id="pwErrorMessage"
                                                                className="text-red">{pwErrorMessage}</p>
@@ -512,7 +544,7 @@ export default function Mypage() {
                                                     <div className="sm:col-span-2 mt-8 text-xl">
                                                         <button
                                                             onClick={passwordChange}
-                                                            className="btn btn-dark"
+                                                            className="btn btn-dark rundry"
                                                         >
                                                             비밀번호 수정
                                                         </button>
@@ -521,7 +553,7 @@ export default function Mypage() {
 
                                                     <div className="sm:col-span-2">
                                                         <label htmlFor="memberTel"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="rundry block text-lg font-medium leading-6 text-gray-900">
                                                             전화번호
                                                         </label>
                                                         <div className="mt-2">
@@ -532,40 +564,41 @@ export default function Mypage() {
                                                                 value={memberView.memberTel}
                                                                 type="text"
                                                                 autoComplete="memberTel"
-                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                                className="block rundry w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
                                                         </div>
                                                         <label htmlFor="memberTel"
-                                                               className="block text-lg font-medium leading-6 text-gray-900 mt-9">
+                                                               className="block rundry text-lg font-medium leading-6 text-gray-900 mt-9">
                                                             프로필 사진
                                                         </label>
                                                         <div className="mt-2">
                                                             {prevProfile
                                                                 ?
-                                                                <img src={prevProfile}/>
+                                                                <img src={prevProfile} className="border-2 p-2"/>
                                                                 :
-                                                                <img src="/images/profile/basic_profile.png"/>
+                                                                <img src="/images/profile/basic_profile.png"
+                                                                     className="border-2 p-2"/>
                                                             }
                                                             <input
                                                                 name="memberProfile"
                                                                 accept='image/jpg, image/png, image/jpeg'
                                                                 type="file"
                                                                 onChange={profileOnChangeHandler}
-                                                                className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                                className="rundry my-4 block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
                                                             <button onClick={() => setProfile(null)}
-                                                                className="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white px-4 border border-red-500 hover:border-transparent rounded mx-2">
+                                                                    className="rundry bg-red-500 hover:bg-transparent text-white font-semibold hover:text-red-700 px-6 py-1.5 border border-transparent hover:border-red-500 rounded text-lg">
                                                                 프로필 삭제
                                                             </button>
                                                         </div>
                                                     </div>
 
-                                                    <div className="sm:col-span-2 sm:col-start-1">
+                                                    <div className="sm:col-span-2 sm:col-start-1 rundry">
                                                         <label htmlFor="memberPostcode"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="block text-lg font-medium leading-6 text-gray-900 rundry">
                                                             우편번호
                                                         </label>
-                                                        <div className="mt-2">
+                                                        <div className="mt-2 rundry">
                                                             <input
                                                                 readOnly={true}
                                                                 type="text"
@@ -574,18 +607,18 @@ export default function Mypage() {
                                                                 onChange={memberPostcodeOnChangeHandler}
                                                                 value={memberPostcode}
                                                                 autoComplete="memberPostcode"
-                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 rundry shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
                                                         </div>
                                                     </div>
 
 
-                                                    <div className="sm:col-span-2">
+                                                    <div className="sm:col-span-2 rundry">
                                                         <label htmlFor="memberAdd"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="block text-lg font-medium leading-6 text-gray-900 rundry">
                                                             도로명 주소
                                                         </label>
-                                                        <div className="mt-2">
+                                                        <div className="mt-2 rundry">
                                                             <input
                                                                 readOnly={true}
                                                                 type="text"
@@ -594,16 +627,16 @@ export default function Mypage() {
                                                                 onChange={memberAddOnChangeHandler}
                                                                 value={memberAdd}
                                                                 autoComplete="memberAdd"
-                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                                className="block rundry w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
                                                         </div>
                                                     </div>
-                                                    <div className="sm:col-span-1">
+                                                    <div className="sm:col-span-1 rundry">
                                                         <label htmlFor="memberDetailAdd"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="block text-lg font-medium leading-6 text-gray-900 rundry">
                                                             상세주소
                                                         </label>
-                                                        <div className="mt-2">
+                                                        <div className="mt-2 rundry">
                                                             <input
                                                                 type="text"
                                                                 name="memberDetailAdd"
@@ -615,22 +648,22 @@ export default function Mypage() {
                                                             />
                                                         </div>
                                                     </div>
-                                                    <div className="sm:col-span-1">
-                                                        <div className="mt-2">
+                                                    <div className="sm:col-span-1 rundry">
+                                                        <div className="mt-2 rundry">
                                                             <button
                                                                 onClick={handlePostcode}
-                                                                className="mt-5 bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
+                                                                className="mt-5 bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold rundry"
                                                             >검색
                                                             </button>
                                                         </div>
                                                     </div>
 
-                                                    <div className="sm:col-span-2">
+                                                    <div className="sm:col-span-2 rundry">
                                                         <label htmlFor="memberSub"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="block text-lg font-medium leading-6 text-gray-900 rundry">
                                                             멤버십 구독 여부
                                                         </label>
-                                                        <div className="mt-2">
+                                                        <div className="mt-2 rundry">
                                                             <input
                                                                 readOnly={true}
                                                                 type="text"
@@ -638,17 +671,17 @@ export default function Mypage() {
                                                                 id="memberSub"
                                                                 value={memberView.memberSub}
                                                                 autoComplete="memberSub"
-                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                                className="block rundry w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
                                                         </div>
                                                     </div>
 
-                                                    <div className="sm:col-span-2">
+                                                    <div className="sm:col-span-2 rundry">
                                                         <label htmlFor="memberBirth"
-                                                               className="block text-lg font-medium leading-6 text-gray-900">
+                                                               className="block rundry text-lg font-medium leading-6 text-gray-900">
                                                             생년월일
                                                         </label>
-                                                        <div className="mt-2">
+                                                        <div className="mt-2 rundry">
                                                             <input
                                                                 type="date"
                                                                 name="memberBirth"
@@ -656,20 +689,28 @@ export default function Mypage() {
                                                                 value={memberBirth}
                                                                 onChange={memberBirthOnChangeHandler}
                                                                 autoComplete="memberBirth"
-                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
+                                                                className="block rundry w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg sm:leading-6"
                                                             />
                                                         </div>
                                                     </div>
+
+                                                    <button
+                                                        onClick={saveMemberData}
+                                                        className="btn btn-dark rundry rounded-xl h-10 w-28 mt-7"
+                                                    >
+                                                        저장
+                                                    </button>
                                                 </div>
                                             </div>
-                                        </div>)}
+                                        </div>
+                                    )}
                                     {activeTab === 'tab2' && (
-                                        <div id="tab2" className="tab-pane">
+                                        <div id="tab2" className="tab-pane rundry">
 
-                                                <div
-                                                    className="media mt-5 gap-x-6 gap-y-8 sm:grid-cols-6">
-                                                    <table className="table-auto w-full border-collapse border border-gray-800">
-                                                        <tr className="text-center">
+                                        <div
+                                                    className="media rundry mt-5 gap-x-6 gap-y-8 sm:grid-cols-6">
+                                                    <table className="table-auto w-full border-collapse border border-gray-800 rundry">
+                                                        <tr className="text-center rundry">
                                                             <td className="border border-gray-800 px-4 py-2">도서 번호</td>
                                                             <td className="border border-gray-800 px-4 py-2">도서명</td>
                                                             <td className="border border-gray-800 px-4 py-2">대여일</td>
