@@ -34,12 +34,24 @@ export default function Membership() {
 
 
 
-
-    const clickChargeBtn = (pg_method, amount, nickname, redirect_url) => {
+    const clickChargeBtn = async (pg_method, amount, nickname, redirect_url) => {
         if(memberId == "") {
             return alert("로그인이 필요한 서비스입니다.");
         }
 
+        // 로그인한 사용자가 존재하는 경우
+        // 사용자의 멤버십 구독 여부 파악 후
+        // 멤버십 구독중인 경우 return
+
+            const res = await axios.post("/searchMembership", null, {
+                params:{
+                    memberId:memberId
+                }
+            });
+
+        if(res.data.memberSub == "Y"){
+            return alert("이미 멤버십 구독중인 사용자입니다.")
+        }
 
         const {IMP} = window;
         IMP.init('imp18537852') // 가맹점 번호 지정
@@ -88,42 +100,17 @@ export default function Membership() {
 
     return (
         <main className="rundry text-xl">
-            <div className="gj do hj sp jr pg rundry" >
-                <div style={{borderTop: "1px solid lightgray"}}>
-                </div>
+            <div className="gj do hj sp jr pg rundry">
+                <div className="bb ze ki xn 2xl:ud-px-0 mb-8" style={{borderTop: "1px solid lightgray"}} />
 
-                <section className="gj do ir hj sp jr i pg" style={{paddingBottom:"14.75rem"}}>
-                    <div className="xc fn zd/2 2xl:ud-w-187.5 bd 2xl:ud-h-171.5 h q r me-36">
-                        <img src="/images/shape-01.svg" alt="shape"
-                             className="xc 2xl:ud-block h t -ud-left-[10%] ua scale-75"/>
-                        <img src="https://cdn.wadiz.kr/ft/images/green001/2021/0702/20210702193533979_7.gif"
-                             alt="library" className="rounded-3xl my-52"
-                             style={{width: "100%", height: "80%"}}/>
-                    </div>
-                    <div className="bb ze ki xn 2xl:ud-px-0 mt-32">
-                        <div className="tc _o">
-                            <div className="animate_left jn/2">
-                                <h1 className="fk vj zp or kk wm wbss font-extrabold rundry px-2 py-3"
-                                    style={{fontSize: "65px"}}>
-                                    나와 너, 그리고 우리를<br/> 위한 공간
-                                </h1>
-                                <p className="fq mt-2">
-                                    생각은 곱씹으면 깊어지고, 아이디어는 부딪힐수록 커집니다.<br/> 한석줍쇼에서는 사람과 사람을 연결하는<br/> 커뮤니케이션 공간을
-                                    제공하며,<br/> 많은 사람들이 반짝이는
-                                    영감을 얻을 수 있는 환경 조성을<br/> 최우선 목표로 두고 있습니다.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
                 <section className="lj tp kr mb-10">
                     <div>
-                        <div className="text-center text-8xl text-black">Features</div>
+                    <div className="text-center text-8xl text-black">Features</div>
                         <div className="text-center text-2xl mt-3">멤버십 구독 회원분들께 드리는 무료 혜택!</div>
                     </div>
 
-                    /' <div className="bb ze ki xn yq mb en">
+                     <div className="bb ze ki xn yq mb en">
                     {/* 무료 혜택 안내 화면 구역 리셉션 데스크, 주방 및 휴게실 등 6가지 */}
                     <div className="wc qf pn xo ng">
                         <div className="animate_top sg oi pi zq ml il am cn _m">

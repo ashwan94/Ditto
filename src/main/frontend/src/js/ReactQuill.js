@@ -57,8 +57,6 @@ const Editor = ({boardNo, addBtn, updateBtn}) => {
             handlers: {
                 image: imageHandler, // 이미지 선택 됐을때 실행됨
             },
-            // TODO
-            // 이미지 리사이즈 모듈 내용 추가
         },
     }), []);
 

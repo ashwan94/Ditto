@@ -221,4 +221,11 @@ public class MemberController {
         return service.adminPageMemberDeleteChangeOX(memberVO);
     }
 
+    // 회원 멤버십 구독 여부 판독
+    @PostMapping("/searchMembership")
+    public MemberVO searchMembership(String memberId){
+        MemberVO member =service.searchMemberInfo(memberId);
+        return member;
+    }
+
 }
