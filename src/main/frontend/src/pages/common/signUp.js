@@ -101,6 +101,8 @@ export default function SignUp() {
             } else {
                 setDuplicatedId(false);
                 setIdErrorMessage("사용가능한 아이디입니다.");
+                const idErrorMessage = document.querySelector("#idErrorMessage")
+                idErrorMessage.style.color = "blue";
             }
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -131,7 +133,9 @@ export default function SignUp() {
 
             } else {
                 setDuplicatedNickname(false);
-                setNicknameErrorMessage("");
+                setNicknameErrorMessage("사용가능한 닉네임입니다.")
+                const nicknameErrorMessage = document.querySelector("#nicknameErrorMessage");
+                nicknameErrorMessage.style.color = "blue";
             }
 
         } catch (error) {
