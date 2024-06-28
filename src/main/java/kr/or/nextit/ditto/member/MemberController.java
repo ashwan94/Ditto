@@ -203,12 +203,17 @@ public class MemberController {
         }
         return vo;
     }
+    @PostMapping("/deleteMember")
+    public void deleteMember(String memberId) {
+        service.deleteMember(memberId);
+    }
 
     // 멤버십 클릭시 O X정렬 회원조회
     @PostMapping("/memberSubChangeOX")
     public List<MemberVO> adminPageMemberSubChangeOX(@RequestBody MemberVO memberVO){
         return service.adminPageMemberSubChangeOX(memberVO);
     }
+
 
     // 화원상태 변경 클릭시 활성화, 정지 정렬 회원 조회
     @PostMapping("/memberStatusChangeOX")

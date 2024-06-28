@@ -21,8 +21,8 @@
   import KaKaoTalk from "./pages/common/kakaoTalk";
   import Membership from "./pages/introduce/membership";
   import Faq from "./pages/introduce/faq";
+  import AdminPage from "./pages/common/adminPage";
   import "./css/style.css";
-import AdminPage from "./pages/common/adminPage";
 
   function App() {
     return (
