@@ -58,16 +58,66 @@ export default function Main() {
 
     return (
         <main className="rundry text-xl">
-            <section className="gj do hj sp jr i pg rundry">
-                <div className="bb ze ki xn 2xl:ud-px-0" style={{borderTop: "1px solid lightgray"}}>
-                    <div className="row-auto">
-                        <img className="scale-75 ml-16" src="/images/hansukjupshow_logo.png" alt="Logo Light"/>
+            <section className="gj do ir hj sp jr i pg">
+                <div className="bb ze ki xn 2xl:ud-px-0" style={{borderTop: "1px solid lightgray"}}/>
+
+                {/* 로고 구역 */}
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100vh"
+                }}>
+                    <div>
+                        <img src="/images/hansukjupshow_logo.png" alt="Logo Light"
+                             style={{
+                                 display: "block",
+                                 margin: "0 auto"
+                             }}/>
                         <p style={{textAlign: "center"}} className="mb-12">직장인 5명 중 2명은 퇴근 후 ‘공부한다’라고 답할 만큼<br/>
                             분초사회라 일컫는 현대사회에 자기계발에 시간과 돈을 아끼지 않는 ‘샐러던트’들을 위해 <br/>
                             업무 공간과 그룹 스터디와 같은 미팅룸, 개인 작업을 할 수 있는 시스템과 공간을 마련하였습니다</p>
                     </div>
+                </div>
+                <div className="bb ze ki xn 2xl:ud-px-0" style={{borderTop: "1px solid lightgray"}}/>
+                {/* gif 구역 */}
+                <div className="bb ze ki xn 2xl:ud-px-0">
 
-                    {/* 상단 이미지 갤러리 섹션 */}
+
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                        <div className="animate_left jn/2">
+                            <h1 className="fk vj zp or kk wm wbss font-extrabold rundry px-2 py-3"
+                                style={{fontSize: "65px"}}>
+                                나와 너, 그리고 우리를<br/> 위한 공간
+                            </h1>
+                            <p className="fq mt-2">
+                                생각은 곱씹으면 깊어지고, 아이디어는 부딪힐수록 커집니다.<br/> 한석줍쇼에서는 사람과 사람을 연결하는<br/> 커뮤니케이션 공간을
+                                제공하며,<br/> 많은 사람들이 반짝이는
+                                영감을 얻을 수 있는 환경 조성을<br/> 최우선 목표로 두고 있습니다.
+                            </p>
+                        </div>
+
+                        <img src="/images/shape-01.svg" alt="shape"
+                             className="xc 2xl:ud-block h t -ud-left-[10%] ua scale-75"/>
+                        <img src="https://cdn.wadiz.kr/ft/images/green001/2021/0702/20210702193533979_7.gif"
+                             alt="library" className="rounded-3xl my-52"
+                             style={{width: "60%", height: "80%"}}/>
+                    </div>
+
+
+                </div>
+            </section>
+
+
+            <section>
+                <div className="bb ze ki xn 2xl:ud-px-0">
+
+                {/* 상단 이미지 갤러리 섹션 */}
                     <section className="image-gallery">
                         <Slider {...settings}>
                             <div>
@@ -200,7 +250,7 @@ export default function Main() {
 
                     {/* 비전 섹션 */}
                     <section className="vision">
-                        <p style={{fontSize: "30px", color:"black"}} className="mb-12">한석줍쇼 시설 안내</p>
+                        <p style={{fontSize: "30px", color: "black"}} className="mb-12">한석줍쇼 시설 안내</p>
                         <div className="bb ze ki xn yq mb en">
                             <div className="wc qf pn xo ng">
                                 <div className="animate_top sg oi pi zq ml il am cn _m">
@@ -250,7 +300,7 @@ export default function Main() {
                     </section>
 
                     {/* 연락처 섹션 */}
-                    <section className="contact" style={{marginTop:"10%"}}>
+                    <section className="contact" style={{marginTop: "10%"}}>
                         <p className="rundry" style={{fontSize: "30px", color: "black"}}>
                             오시는 길</p>
                         <p style={{color: "black", fontSize: "20px"}}>대전광역시 중구 계룡로 825</p>
@@ -258,10 +308,11 @@ export default function Main() {
                         <div className="bb ze ki xn yq mb en">
                             <div className="wc qf pn xo ng">
                                 <div className="sg oi pi zq ml il am cn _m">
-                                    <h4 className="ek zj kk wm nb _b rundry ml-20" style={{display:"flex", alignItems:"center", textAlign:"center"}}>
+                                    <h4 className="ek zj kk wm nb _b rundry ml-20"
+                                        style={{display: "flex", alignItems: "center", textAlign: "center"}}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                              className="size-6 mr-1 text-blue-900"
-                                       >
+                                        >
                                             <path
                                                 d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"/>
                                             <path fillRule="evenodd"
@@ -285,7 +336,8 @@ export default function Main() {
                                 </div>
 
                                 <div className="animate_top sg oi pi zq ml il am cn _m">
-                                    <h4 className="ek zj kk wm nb _b rundry  ml-20" style={{display:"flex", alignItems:"center", textAlign:"center"}}>
+                                    <h4 className="ek zj kk wm nb _b rundry  ml-20"
+                                        style={{display: "flex", alignItems: "center", textAlign: "center"}}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                              className="size-6 mr-1 text-blue-900">
                                             <path fillRule="evenodd"
@@ -299,7 +351,8 @@ export default function Main() {
                                 </div>
 
                                 <div className="animate_top sg oi pi zq ml il am cn _m">
-                                    <h4 className="ek zj kk wm nb _b rundry  ml-20" style={{display:"flex", alignItems:"center", textAlign:"center"}}>
+                                    <h4 className="ek zj kk wm nb _b rundry  ml-20"
+                                        style={{display: "flex", alignItems: "center", textAlign: "center"}}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                              className="size-6 mr-1 text-blue-900">
                                             <path fillRule="evenodd"
@@ -569,7 +622,7 @@ export default function Main() {
                                     </div>
                                     <div className="w-full md:w-1/2 lg:w-1/3 px-4">
                                         <div
-                                            style={{height:"238px"}}
+                                            style={{height: "238px"}}
                                             className="
                 ud-single-testimonial
                 p-8
