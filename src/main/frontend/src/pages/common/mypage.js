@@ -22,6 +22,7 @@ export default function Mypage() {
     const [rentNo, setRentNo] = useState(0); // 렌트 번호
     const [prevProfile, setPrevProfile] = useState(null); // 프로필 이미지(미리보기)
     const [profile, setProfile] = useState(null); // 프로필 이미지(파일 저장)
+    const [memberId, setMemberId] = useState("");
 
     /* 에러 메세지 */
     const [currentPwErrorMessage, setCurrentPwErrorMessage] = useState(""); // 현재 패스워드 에러 메세지
@@ -87,11 +88,14 @@ export default function Mypage() {
                 }
             });
             setMemberView(res.data) // 요청한 로그인 회원의 정보 전체 담기
+            setMemberId(res.data.memberId); // 아이디만
             setMemberNickname(res.data.memberNickname) // 닉네임만
             setMemberPostcode(res.data.memberPostcode)// 우편번호만
             setMemberAdd(res.data.memberAdd)// 주소만
             setMemberDetailAdd(res.data.memberDetailAdd)// 상세주소만
             setMemberBrith(res.data.memberBirth)// 생일만
+
+            console.log(res.data.memberId)
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -337,7 +341,35 @@ export default function Mypage() {
 
     }
 
+    // 탭변경을 위한 useState
     const [activeTab, setActiveTab] = useState('tab1');
+
+
+    // 회원탈퇴 버튼 이벤트
+    const deleteMember = async () => {
+        if(window.confirm("회원 탈퇴 하시겠습니까?")){
+            const res = await axios.post("/deleteMember", null,{
+                params: {
+                    memberId: memberId
+                }// 아이디
+            });
+
+            if (res.status == 200) {
+                alert("회원 탈퇴 성공 !")
+            } else {
+                alert("회원 탈퇴 실패 ..")
+            }
+        } else {
+            alert("회원 탈퇴를 취소하였습니다.")
+        }
+
+        // 세션에 저장된 값 삭제
+        sessionStorage.removeItem("member")
+
+        // 메인 페이지로 이동
+        window.location.href="/"
+    }
+
 
     return (
         <main>
@@ -371,8 +403,8 @@ export default function Mypage() {
                                     </a>
                                 </div>
                                 <br/>
-                                <div className="media-body va-m" style={{flex:"none"}}>
-                                    <ul className="media-heading text-center rundry text-xl" style={{color:"black"}}>
+                                <div className="media-body va-m" style={{flex: "none"}}>
+                                    <ul className="media-heading text-center rundry text-xl" style={{color: "black"}}>
                                         <li style={{
                                             display: "flex",
                                             justifyContent: "center",
@@ -404,7 +436,7 @@ export default function Mypage() {
                                             onClick={() => setActiveTab('tab1')}
                                             style={{fontSize: "20px"}}
                                         >
-                                        내 정보 보기
+                                            내 정보 보기
                                         </a>
                                     </li>
                                     <li>
@@ -412,7 +444,7 @@ export default function Mypage() {
                                             data-toggle="tab"
                                             className={`${activeTab === 'tab2' ? 'active' : ''}`}
                                             onClick={() => setActiveTab('tab2')}
-                                            style={{fontSize:"20px"}}
+                                            style={{fontSize: "20px"}}
                                         >
                                             도서 대출 이력 보기
                                         </a>
@@ -423,7 +455,7 @@ export default function Mypage() {
                                             data-toggle="tab"
                                             className={` ${activeTab === 'tab3' ? 'active' : ''}`}
                                             onClick={() => setActiveTab('tab3')}
-                                            style={{fontSize:"20px"}}
+                                            style={{fontSize: "20px"}}
                                         >
                                             회원탈퇴
                                         </a>
@@ -432,7 +464,7 @@ export default function Mypage() {
                                 </ul>
 
 
-                                <br />
+                                <br/>
                                 <div className="tab-content p30" style={{color: "black"}}>
                                     {activeTab === 'tab1' && (
                                         <div id="tab1" className="tab-pane active">
@@ -705,42 +737,45 @@ export default function Mypage() {
                                     {activeTab === 'tab2' && (
                                         <div id="tab2" className="tab-pane rundry">
 
-                                        <div
-                                                    className="media rundry mt-5 gap-x-6 gap-y-8 sm:grid-cols-6">
-                                                    <table className="table-auto w-full border-collapse border border-gray-800 rundry">
-                                                        <tr className="text-center rundry">
-                                                            <td className="border border-gray-800 px-4 py-2">도서 번호</td>
-                                                            <td className="border border-gray-800 px-4 py-2">도서명</td>
-                                                            <td className="border border-gray-800 px-4 py-2">대여일</td>
-                                                            <td className="border border-gray-800 px-4 py-2">반납예정일</td>
-                                                            <td className="border border-gray-800 px-4 py-2">실제 반납일</td>
-                                                            <td className="border border-gray-800 px-4 py-2">연체여부</td>
-                                                            <td className="border border-gray-800 px-4 py-2">반납여부</td>
-                                                        </tr>
-                                                        {/* 도서대여 이력이 한개이상 존재 할때나옴 */}
-                                                        {showBookRentalList && showBookRentalList.length > 0 ? (
-                                                            showBookRentalList.map((v, i) =>
-                                                                (
-                                                                    <tr key={i} className="text-center">
-                                                                        <td className="border border-gray-800 px-4 py-2">{v.bookNo}</td>
-                                                                        <td className="border border-gray-800 px-4 py-2">{v.bookName}</td>
-                                                                        <td className="border border-gray-800 px-4 py-2">{v.rentStart}</td>
-                                                                        <td className="border border-gray-800 px-4 py-2">{v.rentEnd}</td>
-                                                                        <td className="border border-gray-800 px-4 py-2">{v.rentReturn}</td>
-                                                                        <td className="border border-gray-800 px-4 py-2">{v.rentDelay}</td>
-                                                                        <td className="border border-gray-800 px-4 py-2">{v.rentReturn == null && v.bookRent == 'Y' ? (
-                                                                            <button className="text-red" type="button" onClick={() => {
-                                                                                setRentNo(v.rentNo);
-                                                                                setBookNo(v.bookNo);
-                                                                            }}>
-                                                                                반납하기</button>) : (
-                                                                            <span className="text-blue-500">반납완료</span>)}</td>
-                                                                    </tr>
-                                                                )
+                                            <div
+                                                className="media rundry mt-5 gap-x-6 gap-y-8 sm:grid-cols-6">
+                                                <table
+                                                    className="table-auto w-full border-collapse border border-gray-800 rundry">
+                                                    <tr className="text-center rundry">
+                                                        <td className="border border-gray-800 px-4 py-2">도서 번호</td>
+                                                        <td className="border border-gray-800 px-4 py-2">도서명</td>
+                                                        <td className="border border-gray-800 px-4 py-2">대여일</td>
+                                                        <td className="border border-gray-800 px-4 py-2">반납예정일</td>
+                                                        <td className="border border-gray-800 px-4 py-2">실제 반납일</td>
+                                                        <td className="border border-gray-800 px-4 py-2">연체여부</td>
+                                                        <td className="border border-gray-800 px-4 py-2">반납여부</td>
+                                                    </tr>
+                                                    {/* 도서대여 이력이 한개이상 존재 할때나옴 */}
+                                                    {showBookRentalList && showBookRentalList.length > 0 ? (
+                                                        showBookRentalList.map((v, i) =>
+                                                            (
+                                                                <tr key={i} className="text-center">
+                                                                    <td className="border border-gray-800 px-4 py-2">{v.bookNo}</td>
+                                                                    <td className="border border-gray-800 px-4 py-2">{v.bookName}</td>
+                                                                    <td className="border border-gray-800 px-4 py-2">{v.rentStart}</td>
+                                                                    <td className="border border-gray-800 px-4 py-2">{v.rentEnd}</td>
+                                                                    <td className="border border-gray-800 px-4 py-2">{v.rentReturn}</td>
+                                                                    <td className="border border-gray-800 px-4 py-2">{v.rentDelay}</td>
+                                                                    <td className="border border-gray-800 px-4 py-2">{v.rentReturn == null && v.bookRent == 'Y' ? (
+                                                                        <button className="text-red" type="button"
+                                                                                onClick={() => {
+                                                                                    setRentNo(v.rentNo);
+                                                                                    setBookNo(v.bookNo);
+                                                                                }}>
+                                                                            반납하기</button>) : (
+                                                                        <span
+                                                                            className="text-blue-500">반납완료</span>)}</td>
+                                                                </tr>
                                                             )
-                                                        ) : null}
-                                                    </table>
-                                                </div>
+                                                        )
+                                                    ) : null}
+                                                </table>
+                                            </div>
 
 
                                         </div>)}
@@ -749,8 +784,9 @@ export default function Mypage() {
                                             <div id="tab3" className="tab-pane">
                                                 <div className="media mt25">
                                                     <button
+                                                        onClick={deleteMember}
                                                         className="bg-red-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
-                                                      > 회원 탈퇴
+                                                    > 회원 탈퇴
                                                     </button>
                                                 </div>
                                             </div>

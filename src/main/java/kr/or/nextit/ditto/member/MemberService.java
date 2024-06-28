@@ -46,7 +46,10 @@ public class MemberService {
         mapper.updateMemberSubscribe(memberId);
     }
 
-
+    // 회원 탈퇴
+    public void deleteMember(String memberId) {
+        mapper.deleteMember(memberId);
+    }
 
 
 

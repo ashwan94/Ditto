@@ -32,7 +32,7 @@ export default function SignIn() {
             if (!res.data) {
                 // 로그인 실패
                 // 경고 메세지 출력 X
-                setFailMessage("아이디 혹은 비밀번호가 틀렸습니다.")
+                setFailMessage("존재하지 않거나 아이디 혹은 비밀번호가 틀렸습니다.")
                 failMessage.style.color = "red";
 
             } else {

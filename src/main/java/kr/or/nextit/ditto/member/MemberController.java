@@ -164,6 +164,12 @@ public class MemberController {
 
     }
 
+    @PostMapping("/deleteMember")
+    public void deleteMember(String memberId) {
+        service.deleteMember(memberId);
+
+        System.out.println(memberId);
+    }
 
 
 }

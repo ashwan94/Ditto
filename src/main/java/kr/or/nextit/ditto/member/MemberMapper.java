@@ -19,4 +19,7 @@ public interface MemberMapper {
 
     // 회원 멤버십 구독 가입
     void updateMemberSubscribe(String memberId);
+
+    // 회원 탈퇴
+    void deleteMember(String memberId);
 }

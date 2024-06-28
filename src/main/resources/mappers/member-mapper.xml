@@ -12,6 +12,7 @@
         WHERE
             A.MEMBER_ID = #{memberId}
             AND A.MEMBER_PW = #{memberPw}
+            AND A.MEMBER_DELETE = 'N'
     </select>
 
     <!-- 회원가입용   -->
@@ -129,5 +130,15 @@
             A.MEMBER_SUB = "Y"
         WHERE
             A.MEMBER_ID =  #{memberId}
+    </update>
+
+    <!-- 회원 탈퇴  -->
+    <update id="deleteMember" parameterType="String">
+        UPDATE
+             MEMBER A
+        SET
+             A.MEMBER_DELETE = "Y"
+        WHERE
+              A.MEMBER_ID =  #{memberId}
     </update>
 </mapper>
