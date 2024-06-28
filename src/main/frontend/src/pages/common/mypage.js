@@ -356,6 +356,11 @@ export default function Mypage() {
 
             if (res.status == 200) {
                 alert("회원 탈퇴 성공 !")
+                // 세션에 저장된 값 삭제
+                sessionStorage.removeItem("member")
+                // 메인 페이지로 이동
+                window.location.href="/"
+                
             } else {
                 alert("회원 탈퇴 실패 ..")
             }
@@ -363,11 +368,7 @@ export default function Mypage() {
             alert("회원 탈퇴를 취소하였습니다.")
         }
 
-        // 세션에 저장된 값 삭제
-        sessionStorage.removeItem("member")
 
-        // 메인 페이지로 이동
-        window.location.href="/"
     }
 
 
