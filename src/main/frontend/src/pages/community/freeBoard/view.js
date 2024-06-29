@@ -272,7 +272,7 @@ export default function View() {
                                     ?
                                     <button
                                         onClick={goUpdateComment}
-                                        className="font-extrabold text-gray-400 me-3">수정
+                                        className="font-extrabold text-white me-3 bg-blue-600 border-2 py-2 px-2 rounded-xl hover:bg-blue-900">수정
                                     </button>
                                     :
                                     <button
