@@ -95,6 +95,7 @@ export default function List () {
     // 사용자가 페이지 번호 클릭 시 실행
     useEffect(() => {
         getData();
+
     }, [currentPage]);
 
     // 전체 페이지 번호 개수 구하기

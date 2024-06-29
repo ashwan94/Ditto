@@ -150,11 +150,17 @@ export default function List () {
         }
     }
     return (
-        <article className="mt-32 ml-32 mr-32">
+        <article className="mt-32 ml-32 mr-32 rundry">
             <div className="text-black">
                 <br/>
-                <div className="text-center text-4xl mb-10">팟캐스트</div>
-                <hr className="hr1" noshade/>
+
+
+                <div className="text-center text-4xl mb-10">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa9Kcxw9o3KHeZKJ0NDylq2MszcnXq8gJ3lA&s" className="w-48"
+                         style={{display: "flex", margin: "auto"}}/>
+                    팟캐스트
+                </div>
+
                 <span>총 {totalBoardListCount} 개의 게시물이 있습니다.</span>
                 <span className="right">
                     <select onChange={searchTypeOnChangeHandler}>
@@ -163,118 +169,128 @@ export default function List () {
                     </select>
                     <input
                         onChange={searchKeywordOnChangeHandler}
+                        style={{border: "0.5px solid black"}}
+                        className="rounded-xl"
                         type="text" value={searchWord}/>
                     <button
                         onClick={handleSearch}
-                        name="검색" className="gradient">
+                        name="검색"
+                        className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 mb-1 ml-1 px-4 rounded-full">
                         검색
                     </button>
                 </span>
                 <br/>
                 <table>
                     <thead>
-                        <tr>
-                            <th className="small-col">번호</th>
-                            <th className="large-col">제목</th>
-                            <th className="sl-col">글쓴이</th>
-                            <th className="middle-col">작성일</th>
-                            <th className="small-col">조회수</th>
-                            <th className="small-col">방송 상태</th>
+                    <tr className="text-center">
+                        <th className="small-col">번호</th>
+                        <th className="large-col">제목</th>
+                        <th className="sl-col">글쓴이</th>
+                        <th className="middle-col">작성일</th>
+                        <th className="small-col">조회수</th>
+                        <th className="small-col">방송 상태</th>
+                        {memberId && memberId.memberAdmin === 'ADMIN' ?
+                            <th className="small-col">삭제</th>
+                            :
+                            null
+                        }
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {boardList && boardList.map((board, i) => (
+                        <tr key={i}>
+                            <td className="center small-col">
+                                <Link
+                                    to={`/community/${boardType}/view`}
+                                    state={board.podcastBoardNo}>
+                                    {board.podcastBoardNo}
+                                </Link>
+                            </td>
+                            <td className="left large-col">
+                                <Link
+                                    to={`/community/${boardType}/view`}
+                                    state={board.podcastBoardNo}>
+                                    {board.podcastTitle}&nbsp;&nbsp;
+                                </Link>
+                                {board.hits
+                                    ?
+                                    <span>
+                                            <img src="/images/hits.png" className="w-5 inline"/>&nbsp;
+                                        {board.hits}&nbsp;&nbsp;&nbsp;
+                                        {board.onair === 'LIVE'
+                                            ?
+                                            <img src="/images/onair.png" className="w-10 inline"/>
+                                            :
+                                            null
+                                        }
+                                        </span>
+                                    :
+                                    null
+                                }
+                            </td>
+                            <td className="center small-col">{board.memberId}</td>
+                            <td className="center sl-col">{new Date(board.createDate).toLocaleString('ko-kr', {
+                                month: "long",
+                                day: "numeric"
+                            })}</td>
+                            <td className="center small-col">{board.hits}</td>
+                            {board.onair === 'BEFORE'
+                                ?
+                                <td>방송 준비 중</td>
+                                :
+                                board.onair === 'LIVE'
+                                    ?
+                                    <td>방송 중</td>
+                                    :
+                                    <td>방송 종료</td>
+                            }
                             {memberId && memberId.memberAdmin === 'ADMIN' ?
-                                <th className="small-col">삭제</th>
+                                <td className="center small-col">
+                                    <button
+                                        onClick={() => goDelete(board.podcastBoardNo)}
+                                        className="text-red-700">v
+                                    </button>
+                                </td>
                                 :
                                 null
                             }
                         </tr>
-                    </thead>
-                    <tbody>
-                        {boardList && boardList.map((board,i)=> (
-                            <tr key={i}>
-                                <td className="center small-col">
-                                    <Link
-                                        to={`/community/${boardType}/view`}
-                                        state={board.podcastBoardNo}>
-                                        {board.podcastBoardNo}
-                                    </Link>
-                                </td>
-                                <td className="left large-col">
-                                    <Link
-                                        to={`/community/${boardType}/view`}
-                                        state={board.podcastBoardNo}>
-                                        {board.podcastTitle}&nbsp;&nbsp;
-                                    </Link>
-                                    {board.hits
-                                        ?
-                                        <span>
-                                            <img src="/images/hits.png" className="w-5 inline"/>&nbsp;
-                                            {board.hits}&nbsp;&nbsp;&nbsp;
-                                            {board.onair === 'LIVE'
-                                            ?
-                                                <img src="/images/onair.png" className="w-10 inline"/>
-                                            :
-                                                null
-                                            }
-                                        </span>
-                                        :
-                                    null
-                                    }
-                                </td>
-                                <td className="center small-col">{board.memberId}</td>
-                                <td className="center sl-col">{new Date(board.createDate).toLocaleString('ko-kr', {month:"long", day:"numeric"})}</td>
-                                <td className="center small-col">{board.hits}</td>
-                                {board.onair === 'BEFORE'
-                                    ?
-                                    <td>방송 준비 중</td>
-                                    :
-                                    board.onair === 'LIVE'
-                                        ?
-                                        <td>방송 중</td>
-                                        :
-                                        <td>방송 종료</td>
-                                }
-                                {memberId && memberId.memberAdmin === 'ADMIN' ?
-                                    <td className="center small-col">
-                                        <button
-                                            onClick={()=> goDelete(board.podcastBoardNo)}
-                                            className="text-red-700">v</button>
-                                    </td>
-                                :
-                                    null
-                                }
-                            </tr>
-                        ))}
+                    ))}
                     </tbody>
                 </table>
                 <br/>
-                <span className="right">
-                    <Link to={`/community/${boardType}/list`}><button className="greylist" onClick={allList}>목록</button></Link>
-                    <Link to={`/community/${boardType}/add`}><button className="gradient">글쓰기</button></Link>
-                </span>
+                <span className="right mt-3">
+                    <Link to={`/community/${boardType}/list`}><button
+                        className="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-1 mb-1 ml-1 px-4 rounded-full"
+                        onClick={allList}>목록</button></Link>
+                    <Link to={`/community/${boardType}/add`}><button
+                        className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 mb-1 ml-1 px-4 rounded-full">글쓰기</button></Link>
+            </span>
             </div>
-                <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
-                     className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
+            <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
+                 className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
 
-                    <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-                         aria-label="Pagination">
-                        <a
-                            onClick={goClickPrev}
-                            className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                        >
-                            <span className="sr-only">Previous</span>
-                            <img
-                                src="/images/chevron-left-solid.svg"
-                                className="h-5 w-5" aria-hidden="true"
-                            />
-                        </a>
-                        {
-                            pageNumList.map(((v, i) => {
-                                return (
-                                    <Link
-                                        className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                        key={`page` + i}
-                                        to={`/community/${boardType}/list`}
-                                        state={{currentPage:currentPage}}
-                                        onClick={() => {
+                <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                     aria-label="Pagination">
+                    <a
+                        onClick={goClickPrev}
+                        className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                    >
+                        <span className="sr-only">Previous</span>
+                        <img
+                            src="/images/chevron-left-solid.svg"
+                            className="h-5 w-5" aria-hidden="true"
+                        />
+                    </a>
+                    {
+                        pageNumList.map(((v, i) => {
+                            return (
+                                <Link
+                                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                    key={`page` + i}
+                                    to={`/community/${boardType}/list`}
+                                    state={{currentPage: currentPage}}
+                                    onClick={() => {
                                         // 버튼 클릭 시 현재 페이지 번호 변화
                                         setCurrentPage(v)
                                         // 버튼 클릭 시 페이지 변화시킨 후 윈도우 창 올리기
@@ -283,22 +299,22 @@ export default function List () {
                                             behavior: 'smooth',
                                         });
                                     }}>{v}</Link>
-                                )
-                            }))
-                        }
+                            )
+                        }))
+                    }
 
-                        <a
-                            onClick={goClickNext}
-                            className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                        >
-                            <span className="sr-only">Next</span>
-                            <img
-                                src="/images/chevron-right-solid.svg"
-                                className="h-5 w-5" aria-hidden="true"
-                            />
-                        </a>
-                    </nav>
-                </div>
+                    <a
+                        onClick={goClickNext}
+                        className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                    >
+                        <span className="sr-only">Next</span>
+                        <img
+                            src="/images/chevron-right-solid.svg"
+                            className="h-5 w-5" aria-hidden="true"
+                        />
+                    </a>
+                </nav>
+            </div>
         </article>
     );
 };
