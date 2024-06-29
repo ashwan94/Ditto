@@ -6,6 +6,8 @@ import java.util.List;
 
 @Mapper
 public interface CommentMapper {
-    List<CommentVO> getCommentList(int boardNo);
-    int commentRegister(CommentVO vo);
+    List<CommentVO> getCommentList(CommentVO vo); // 모든 댓글 조회
+    int commentRegister(CommentVO vo);           // 댓글 작성
+    void commentUpdate(CommentVO vo);            // 댓글 수정
+    void commentDelete(int commentNo);           // 댓글 삭제
 }

@@ -1,11 +1,15 @@
 package kr.or.nextit.ditto.freeboard;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 
-@Data // Lombok을 사용하여 getter, setter, toString, equals, hashCode 메서드를 자동으로 생성
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FreeBoardVO {
     private int freeBoardNo; // 게시판 번호
     private String memberId; // 회원 ID
@@ -17,5 +21,5 @@ public class FreeBoardVO {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp modifyDate; // 수정 시간
     private String status; // Y : 활성화, N : 비활성화
-    private String type;    // 게시판 종류
+    private int commentCount; // 1 게시글 당 댓글 개수
 }

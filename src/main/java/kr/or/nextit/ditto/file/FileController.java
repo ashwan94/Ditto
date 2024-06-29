@@ -34,14 +34,15 @@ public class FileController {
 
     // 파일 저장
     @PostMapping("/image/register")
-    public ResponseEntity<?> registerFile(@RequestParam("image") MultipartFile file) {
+    public ResponseEntity<?> registerFile(@RequestParam("image") MultipartFile file, @RequestParam("boardType") String boardType) {
+        log.info("게시판 종류 : {}", boardType);
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("파일 내용이 없습니다.");
         }
 
         try {
-            Path uploadPath = Paths.get(UPLOAD_DIR + "freeBoard");    // React 의 public/freeBoard 로 경로 지정
+            Path uploadPath = Paths.get(UPLOAD_DIR + boardType);    // React 의 public/freeBoard 로 경로 지정
 
             // 해당 경로에 폴더가 존재하지 않으면 생성
             if (!Files.exists(uploadPath)) {
@@ -77,7 +78,7 @@ public class FileController {
             ));
 
             // Front(React) 에서 파일 미리보기를 위해 URL 형식으로 경로 지정
-            String imageUrl = "/freeBoard/" + uuidFileName;
+            String imageUrl = "/" + boardType + "/" + uuidFileName;
 
             // axios post 에 대한 response 로 image URL 반환
             return ResponseEntity.ok().body(new ImageUploadResponse(imageUrl));
