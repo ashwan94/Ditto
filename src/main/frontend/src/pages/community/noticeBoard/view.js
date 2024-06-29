@@ -25,16 +25,16 @@ export default function View() {
 
     // 게시글 삭제
     const deletePost = async () => {
-        if(window.confirm("게시글을 삭제하시겠습니까?")){
+        if (window.confirm("게시글을 삭제하시겠습니까?")) {
             const res = await axios.get(`/${boardType}/delete?${boardType}No=${freeBoardNo}`)
                 .then((navigate(`/community/${boardType}/list`)))
-                .catch((error)=> console.log("게시글 삭제 실패"))
+                .catch((error) => console.log("게시글 삭제 실패"))
         }
     }
 
     // 게시글 수정(update.js 로 이동)
     const updatePost = () => {
-        navigate(`/community/${boardType}/update`,{state:{freeBoardNo}})
+        navigate(`/community/${boardType}/update`, {state: {freeBoardNo}})
     }
 
     // 게시글 상세 정보 가져오기
@@ -49,10 +49,10 @@ export default function View() {
 
     // 댓글 목록 가져오기
     const getCommentList = async () => {
-        const res = await axios.get('/comment/list',{
-            params:{
-                boardNo : freeBoardNo,
-                type : typeRef.current.value,
+        const res = await axios.get('/comment/list', {
+            params: {
+                boardNo: freeBoardNo,
+                type: typeRef.current.value,
             }
         })
         if (res.status === 200) {
@@ -62,19 +62,19 @@ export default function View() {
 
     // 댓글 작성
     const goRegisterComment = async () => {
-        if(contentRef.current.value){
+        if (contentRef.current.value) {
             const data = {
-                boardNo:freeBoardNo,
-                memberId:memberLog.memberId,
-                content : commentContent,
-                type : typeRef.current.value,
+                boardNo: freeBoardNo,
+                memberId: memberLog.memberId,
+                content: commentContent,
+                type: typeRef.current.value,
             }
-            const res = await axios.post("/comment/register",data)
-            if(res.status === 200) {
+            const res = await axios.post("/comment/register", data)
+            if (res.status === 200) {
                 contentRef.current.value = "";
                 getCommentList(); // 댓글 작성 완료 시 commentList 재 렌더링
             }
-        }else {
+        } else {
             alert("댓글을 입력하세요")
             contentRef.current.focus();
         }
@@ -91,9 +91,9 @@ export default function View() {
     // 수정된 댓글 내용 DB 저장
     const goUpdateComment = async () => {
         const data = {
-            commentNo : tempCommentNo,
-            content : commentContent,
-            type : typeRef.current.value,
+            commentNo: tempCommentNo,
+            content: commentContent,
+            type: typeRef.current.value,
         }
         const res = await axios.post("/comment/update", data)
         contentRef.current.value = "";
@@ -116,7 +116,7 @@ export default function View() {
 
     // 관리자 공지 글 등록
     const goAnnouncement = async (e) => {
-        if(window.confirm("공지 글로 등록하시겠습니까?")){
+        if (window.confirm("공지 글로 등록하시겠습니까?")) {
             const res = await axios.get(`/${boardType}/announcement?${boardType}No=${e}`)
                 .then(navigate(`/community/${boardType}/list`))
                 .catch((error => console.log("error occurred!")))
@@ -131,71 +131,82 @@ export default function View() {
         getBoard();
         // getCommentList();
         const getMemberLog = sessionStorage.getItem("member");
-        if(getMemberLog){
+        if (getMemberLog) {
             const parse = JSON.parse(getMemberLog);
             setMemberLog(parse);
         }
+        window.scrollTo({
+            top: 0,
+            behavior: 'auto',
+        });
+
     }, []);
 
     return (
         <>
             {board ? (
-                <div className="container" style={{marginTop: "10rem", marginLeft: "6rem"}}>
-                    <div className="header">
-                        <div className="text-black text-2xl my-3">{board.noticeTitle}</div>
-                        <div>
-                            <span>글 번호 : {board.noticeBoardNo}&nbsp;&nbsp;&nbsp;</span>
-                            <span>작성자 : {board.memberId}</span>
+                <article className="mt-32 ml-32 mr-32 rundry">
+                    <div className="container">
+                        <div className="header">
+                            <div className="text-black text-2xl my-3 text-center">{board.noticeTitle}</div>
+                            <div>
+                                <p style = {{borderTop:"2px dashed black" , paddingTop:"10px", paddingBottom:"5px"}}>No. {board.noticeBoardNo}&nbsp;&nbsp;&nbsp;</p>
+                                <p style = {{paddingTop:"5px", paddingBottom:"10px" }}>작성자 : {board.memberId}</p>
+                            </div>
+                            <div>작성일 : {new Date(board.createDate).toLocaleString('ko-kr', {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                                hour: "numeric",
+                                minute: "numeric",
+                                second: "numeric"
+                            })}
+                                <span className="float-right mr-4">조회수: {board.hits}</span>
+                            </div>
                         </div>
-                        <div>작성일 : {new Date(board.createDate).toLocaleString('ko-kr', {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                            second: "numeric"
-                        })}
-                            <span className="float-right mr-4">조회수: {board.hits}</span>
+
+                        
+                        
+                        {/* 글 내용 출력 구역 */}
+                        <div className="comment rounded-xl mt-12" dangerouslySetInnerHTML={{__html: board.noticeContent}}/>
+
+                        <hr className="my-10"/>
+                        <div className="actions me-4">
+                            {
+                                memberLog && memberLog.memberAdmin === 'ADMIN'
+                                    ?
+                                    <>
+                                        <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 mb-1 ml-1 px-4 rounded-full"
+                                                onClick={() => goAnnouncement(freeBoardNo)}>공지 등록
+                                        </button>
+                                        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 mb-1 ml-1 px-4 rounded-full" onClick={deletePost}>삭제
+                                        </button>
+                                    </>
+                                    :
+                                    <>
+                                        {
+                                            memberLog.memberId === board.memberId
+                                                ?
+                                                <>
+                                                    <button className="bg-blue-500 text-white font-bold"
+                                                            onClick={updatePost}>수정
+                                                    </button>
+                                                    <button className="bg-red-500 text-white font-bold"
+                                                            onClick={deletePost}>삭제
+                                                    </button>
+                                                </>
+                                                :
+                                                null
+                                        }
+                                    </>
+                            }
+                            <button onClick={() => navigate(`/community/${boardType}/list`)}
+                                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold">목록
+                            </button>
+
                         </div>
                     </div>
-                    <div className="comment" dangerouslySetInnerHTML={{__html: board.noticeContent}}/>
-                    <div className="actions me-4">
-                        {
-                            memberLog && memberLog.memberAdmin === 'ADMIN'
-                                ?
-                                <>
-                                    <button className="bg-amber-500 text-white font-bold"
-                                            onClick={() => goAnnouncement(freeBoardNo)}>공지 등록
-                                    </button>
-                                    <button className="bg-red-500 text-white font-bold" onClick={deletePost}>삭제</button>
-                                </>
-                                :
-                                <>
-                                    {
-                                        memberLog.memberId === board.memberId
-                                            ?
-                                            <>
-                                                <button className="bg-blue-500 text-white font-bold"
-                                                        onClick={updatePost}>수정
-                                                </button>
-                                                <button className="bg-red-500 text-white font-bold"
-                                                        onClick={deletePost}>삭제
-                                                </button>
-                                            </>
-                                            :
-                                            null
-                        }
-                                </>
-                        }
-                        <button onClick={() => navigate(`/community/${boardType}/list`)}
-                                className="bg-gray-500 text-white font-bold">목록
-                        </button>
-                        <button onClick={() => navigate(-1)}
-                                className="bg-black text-white font-bold">이전
-                        </button>
-                    </div>
-                    <hr className="my-10"/>
-                </div>
+                </article>
             ) : (
                 <p>Loading...</p>
             )}

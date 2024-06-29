@@ -28,12 +28,25 @@ export default function BookList() {
     /* 화면에 도서 목록을 그리는 getData 함수 */
     const getData = async () => {
         try {
-            const fristRecordIndex = (currentPage - 1) * 10 + 1;  //페이지시작
-            // const lastRecordIndex = currentPage * recordsPerPage //페이지종료
+           if(searchWord != ""){
+               const res = await axios.get("/book/list", {
+                   params: {
+                       firstRecordIndex: 0,
+                       searchWord: searchWord,
+                       searchType: searchType
+                   }
+               });
+
+               setBookList(res.data.list);
+               setResultCount(res.data.list.length);
+
+               return;
+           }
+
+            let fristRecordIndex = (currentPage - 1) * 10 + 1;  // 페이지시작
             const res = await axios.get("/book/list", {
                 params: {
                     firstRecordIndex: fristRecordIndex - 1,
-                    // lastRecordIndex: lastRecordIndex,
                     searchWord: searchWord,
                     searchType: searchType
                 }

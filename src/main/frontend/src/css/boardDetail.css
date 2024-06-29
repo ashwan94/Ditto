@@ -4,9 +4,12 @@
 }
 
 .header {
-    border-bottom: 1px solid #E6B0AA;
     padding-bottom: 10px;
     margin-bottom: 10px;
+    margin-top: 3%;
+    border-bottom: 2px dashed #1e1b4b;
+    border-top : 2px dashed #1e1b4b;
+    background-color : #f0f9ff;
 }
 
 .title {
