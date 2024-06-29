@@ -213,7 +213,7 @@ export default function Main() {
                     <section className="mt-5 mb-36">
                         <div className="animate_top_container"
                              style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                            <div className="animate_top kn to/3 tc cg oq mb-12">
+                            <div className="animate_top kn to/3 tc cg oq mb-12 mt-10">
                                 <div className="tc wf xf cf ae cd rg mh">
                                     <img src="images/main_call_icon.png" alt="Icon"/>
                                 </div>

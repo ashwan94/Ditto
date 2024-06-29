@@ -301,8 +301,8 @@ export default function Mypage() {
             }
             alert("회원정보가 수정되었습니다.")
             getData();
-        } catch (error) {
-            console.error("회원수정 에러야! => ", error)
+        }catch (error){
+            console.error("회원정보 수정 실패")
         }
     }
 
@@ -788,10 +788,10 @@ export default function Mypage() {
                                     {activeTab === 'tab3' &&
                                         (
                                             <div id="tab3" className="tab-pane">
-                                                <div className="media mt25">
+                                                <div className="media mt25 text-center">
                                                     <button
                                                         onClick={deleteMember}
-                                                        className="bg-red-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
+                                                        className="bg-red-500 rounded-xl ms-2 text-white h-12 w-28 font-bold text-2xl"
                                                     > 회원 탈퇴
                                                     </button>
                                                 </div>

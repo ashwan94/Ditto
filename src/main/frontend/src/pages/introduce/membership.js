@@ -160,7 +160,7 @@ export default function Membership() {
 
 
                     {/* 멤버십 가격 안내 화면 구역 */}
-                    <section className="rundry px-8 py-24 rounded-xl mt-44" style={{backgroundColor: "lightblue", border:"2px solid black"}}>
+                    <section className="rundry px-8 py-24 rounded-xl" style={{backgroundColor: "lightblue", border:"2px solid black"}}>
                         <div className="container mx-auto text-center">
                             <h2 className="block antialiased tracking-normal text-4xl font-semibold leading-[1.3] text-black mb-4 rundry">멤버십
                                 가격 안내</h2>

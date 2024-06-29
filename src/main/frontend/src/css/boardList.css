@@ -1,5 +1,15 @@
-h2 {
-    font-weight: border;
+/* GPT Logo 회전을 위한 세팅 값*/
+@keyframes rotate-left {
+    from {
+        transform: rotate(360deg); /* 시작 지점 */
+    }
+    to {
+        transform: rotate(0deg); /* 끝 지점 (한 바퀴 회전) */
+    }
+}
+
+.rotate-infinite {
+    animation: rotate-left 4s linear infinite; /* 애니메이션 적용 */
 }
 
 .hr1 {

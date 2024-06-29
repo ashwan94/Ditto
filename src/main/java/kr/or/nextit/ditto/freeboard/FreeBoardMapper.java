@@ -3,6 +3,7 @@ package kr.or.nextit.ditto.freeboard;
 import kr.or.nextit.ditto.common.SearchVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 @Mapper

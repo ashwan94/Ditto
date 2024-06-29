@@ -17,11 +17,12 @@ export default function List () {
     const [endPage, setEndPage] = useState(0);                          // 최대 페이지 번호
     const [pageNumList, setPageNumList] = useState([]);                  // 페이지 번호 리스트
     const pageNumListSize = 10;                                                       // 페이지 번호 개수
+    const boardType = "freeBoard";                                                    // URL 요청을 위한 게시판 종류
 
     // DB 로 게시글 리스트 조회
     const getData = async () => {
         const firstRecordIndex = (currentPage - 1) * pageNumListSize + 1; // 시작 페이지
-        const res = await axios.get('/freeBoard/list',
+        const res = await axios.get(`/${boardType}/list`,
             {
                 params:{
                     firstRecordIndex:firstRecordIndex - 1,
@@ -47,8 +48,12 @@ export default function List () {
 
     // 검색 기능에 대한 게시글 조회
     const handleSearch = async  () => {
+        const data = {
+            searchType : searchType,
+            searchWord : searchWord,
+        }
         const res =
-            await axios.get(`/freeBoard/search?searchWord=${searchWord}&type=${searchType}`)
+            await axios.get(`/${boardType}/search`, data)
         if (res.data) {
             setBoardList(res.data)
         }
@@ -63,7 +68,7 @@ export default function List () {
     // AMDIN 일때 게시글 삭제
     const goDelete = async (number)=> {
         if(window.confirm("게시글 번호 : " + number + " 을 삭제합니까?")){
-            const res = await axios.put("/freeBoard/delete", null,{
+            const res = await axios.put(`/${boardType}/delete`, null,{
                 params:{
                     freeBoardNo : number,
                 }
@@ -146,7 +151,7 @@ export default function List () {
     }
     return (
         <article className="mt-32 ml-32 mr-32">
-            <div>
+            <div className="text-black">
                 <br/>
                 <div className="text-center text-4xl mb-10">자유게시판</div>
                 <hr className="hr1" noshade/>
@@ -168,59 +173,69 @@ export default function List () {
                 <br/>
                 <table>
                     <thead>
-                        <tr>
-                            <th className="small-col">번호</th>
-                            <th className="large-col">제목</th>
-                            <th className="sl-col">글쓴이</th>
-                            <th className="middle-col">작성일</th>
-                            <th className="small-col">조회수</th>
+                    <tr>
+                        <th className="small-col">번호</th>
+                        <th className="large-col">제목</th>
+                        <th className="sl-col">글쓴이</th>
+                        <th className="middle-col">작성일</th>
+                        <th className="small-col">조회수</th>
+                        {memberId && memberId.memberAdmin === 'ADMIN' ?
+                            <th className="small-col">삭제</th>
+                            :
+                            null
+                        }
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {boardList && boardList.map((board, i) => (
+                        <tr key={i}>
+                            <td className="center small-col">
+                                <Link
+                                    to={`/community/${boardType}/view`}
+                                    state={board.freeBoardNo}>
+                                    {board.freeBoardNo}
+                                </Link>
+                            </td>
+                            <td className="left large-col">
+                                <Link
+                                    to={`/community/${boardType}/view`}
+                                    state={board.freeBoardNo}>
+                                    {board.freeTitle}
+                                </Link>
+                                {board.commentCount
+                                    ?
+                                    <span className="ms-2 text-red-400 font-bold">({board.commentCount})</span>
+                                    :
+                                    null
+                                }
+                            </td>
+                            <td className="center small-col">{board.memberId}</td>
+                            <td className="center sl-col">{new Date(board.createDate).toLocaleString('ko-kr', {
+                                month: "long",
+                                day: "numeric"
+                            })}</td>
+                            <td className="center small-col">{board.hits}</td>
                             {memberId && memberId.memberAdmin === 'ADMIN' ?
-                                <th className="small-col">삭제</th>
+                                <td className="center small-col">
+                                    <button
+                                        onClick={() => goDelete(board.freeBoardNo)}
+                                        className="text-red-700">v
+                                    </button>
+                                </td>
                                 :
                                 null
                             }
                         </tr>
-                    </thead>
-                    <tbody>
-                        {boardList && boardList.map((board,i)=> (
-                            <tr key={i}>
-                                <td className="center small-col">
-                                    <Link
-                                        to={`/community/freeBoard/view`}
-                                        state={board.freeBoardNo}>
-                                        {board.freeBoardNo}
-                                    </Link>
-                                </td>
-                                <td className="left large-col">
-                                    <Link
-                                        to={`/community/freeBoard/view`}
-                                        state={board.freeBoardNo}>
-                                        {board.freeTitle}
-                                    </Link>
-                                </td>
-                                <td className="center small-col">{board.memberId}</td>
-                                <td className="center sl-col">{new Date(board.createDate).toLocaleString('ko-kr', {month:"long", day:"numeric"})}</td>
-                                <td className="center small-col">{board.hits}</td>
-                                {memberId && memberId.memberAdmin === 'ADMIN' ?
-                                    <td className="center small-col">
-                                        <button
-                                            onClick={()=> goDelete(board.freeBoardNo)}
-                                            className="text-red-700">v</button>
-                                    </td>
-                                :
-                                    null
-                                }
-                            </tr>
-                        ))}
+                    ))}
                     </tbody>
                 </table>
                 <br/>
                 <span className="right">
-                    <Link to={`/community/freeBoard/list`}><button className="greylist" onClick={allList}>목록</button></Link>
-                    <Link to={`/community/freeBoard/add`}><button className="gradient">글쓰기</button></Link>
+                    <Link to={`/community/${boardType}/list`}><button className="greylist" onClick={allList}>목록</button></Link>
+                    <Link to={`/community/${boardType}/add`}><button className="gradient">글쓰기</button></Link>
                 </span>
             </div>
-                <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
+            <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
                      className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
 
                     <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
@@ -241,7 +256,7 @@ export default function List () {
                                     <Link
                                         className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                                         key={`page` + i}
-                                        to={`/community/freeBoard/list`}
+                                        to={`/community/${boardType}/list`}
                                         state={{currentPage:currentPage}}
                                         onClick={() => {
                                         // 버튼 클릭 시 현재 페이지 번호 변화
