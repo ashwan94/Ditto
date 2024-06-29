@@ -185,10 +185,10 @@ export default function List () {
                     <tr className="text-center">
                         <th className="small-col">번호</th>
                         <th className="large-col">제목</th>
-                        <th className="sl-col">글쓴이</th>
+                        <th className="small-col">글쓴이</th>
                         <th className="middle-col">작성일</th>
                         <th className="small-col">조회수</th>
-                        <th className="small-col">방송 상태</th>
+                        <th className="middle-col">방송 상태</th>
                         {memberId && memberId.memberAdmin === 'ADMIN' ?
                             <th className="small-col">삭제</th>
                             :
