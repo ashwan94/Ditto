@@ -1,11 +1,13 @@
 package kr.or.nextit.ditto.freeboard;
 
 import kr.or.nextit.ditto.common.SearchVO;
+import kr.or.nextit.ditto.member.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,13 +34,15 @@ public class FreeBoardController {
     // TODO
     // 검색 기능에 관련된 query 문 수정 => 게시판 작업하면서 고장난듯 | 06.27(목) | 안승환
     // 게시글 검색
-    @GetMapping("/search")
-    public List<FreeBoardVO> searchBoardList(String searchWord, String searchType) {
-        List<FreeBoardVO> vo;
+    @PostMapping("/search")
+    public List<FreeBoardVO> searchBoardList(@RequestBody SearchVO searchVO) {
+        List<FreeBoardVO> vo = new ArrayList<FreeBoardVO>();
+        String searchType = searchVO.getSearchType();
+        String searchWord = searchVO.getSearchWord();
         if ("아이디".equals(searchType)){
-            vo = freeBoardService.searchBoardListByMemberId(searchWord); // 제목 기준 검색
-        }else{
-            vo = freeBoardService.searchBoardListByTitle(searchWord); // 검색어 기준 검색
+            vo = freeBoardService.searchBoardListByMemberId(searchWord); // 아이디 기준 검색
+        }else if("제목".equals(searchType)){
+            vo = freeBoardService.searchBoardListByTitle(searchWord); // 제목 기준 검색
         }
         return vo;
     }

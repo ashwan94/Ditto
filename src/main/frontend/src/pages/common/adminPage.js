@@ -149,9 +149,13 @@ export default function AdminPage(){
     // 자유게시판 검색요청
     const searchFreeBoardList = async  () => {
         const res =
-            await axios.get("/freeBoard/search", {
+            await axios.post("/freeBoard/search", {
                 searchType : searchType,
                 searchWord : searchWord,
+            },{
+                headers: {
+                    "Content-Type": "application/json"
+                }
             })
         if (res.data) {
             setFreeBoardList(res.data)

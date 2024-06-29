@@ -7,7 +7,7 @@ export default function List () {
     // State 에 대한 Hook
     const [boardList, setBoardList] = useState([]);                       // 전체 게시글 리스트
     const [searchWord, setSearchWord] = useState(null);                           // 검색어
-    const [searchType, setSearchType] = useState("freeTitle");           // 검색 타입
+    const [searchType, setSearchType] = useState("제목");           // 검색 타입
     const [memberId, setMemberId] = useState(null);                               // 로그인한 회원 정보
 
     // 페이징 처리
@@ -48,12 +48,15 @@ export default function List () {
 
     // 검색 기능에 대한 게시글 조회
     const handleSearch = async  () => {
-        const data = {
-            searchType : searchType,
-            searchWord : searchWord,
-        }
         const res =
-            await axios.get(`/${boardType}/search`, data)
+            await axios.post(`/${boardType}/search`, {
+                searchType : searchType,
+                searchWord : searchWord,
+            },{
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
         if (res.data) {
             setBoardList(res.data)
         }
