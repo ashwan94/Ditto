@@ -137,7 +137,7 @@ export default function View() {
                         <div className="header">
                             <div className="text-black text-2xl my-3 text-center">{board.podcastTitle}</div>
                             <div>
-                                <p style={{borderTop:"2px dashed black" , paddingTop:"10px", paddingBottom:"5px"}}>글 번호 : {board.podcastBoardNo}&nbsp;&nbsp;&nbsp;</p>
+                                <p style={{borderTop:"2px dashed black" , paddingTop:"10px", paddingBottom:"5px"}}>방송번호 : {board.podcastBoardNo}&nbsp;&nbsp;&nbsp;</p>
                                 <p style={{paddingTop:"5px", paddingBottom:"10px" }}>작성자 : {board.memberId}</p>
                             </div>
                             <div>작성일 : {new Date(board.createDate).toLocaleString('ko-kr', {
