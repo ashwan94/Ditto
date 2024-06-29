@@ -16,9 +16,11 @@ export default function List () {
 
     const [endPage, setEndPage] = useState(0);                          // 최대 페이지 번호
     const [pageNumList, setPageNumList] = useState([]);                  // 페이지 번호 리스트
-    const pageNumListSize = 10;                                                       // 페이지 번호 개수
-    const boardType = "noticeBoard";                                                    // URL 요청을 위한 게시판 종류
-
+    const pageNumListSize = 5;                                                       // 페이지 번호 개수
+    const boardType = "noticeBoard";
+    // URL 요청을 위한 게시판 종류
+    // 현재 버튼이 몇번째 세트인지 나타내는 수
+    const currentSet = Math.ceil(currentPage/pageNumListSize);
 
     // TODO
     // 공지사항으로 등록된 글에 대한 페이징 처리 | 안승환 | 06.28(금)
@@ -100,9 +102,9 @@ export default function List () {
         getData();
     }, [currentPage]);
 
+    const endNum = Math.ceil(totalBoardListCount / pageNumListSize);
     // 전체 페이지 번호 개수 구하기
     useEffect(() => {
-        const endNum = Math.ceil(totalBoardListCount / pageNumListSize);
         setEndPage(endNum)
     }, [totalBoardListCount]);
 
@@ -119,6 +121,7 @@ export default function List () {
         }
     }, []);
 
+
     // 이전 페이지 버튼
     const goClickPrev = () => {
         window.scrollTo({
@@ -126,16 +129,14 @@ export default function List () {
             behavior:'smooth',
         });
 
-        // TODO
-        // 이전 페이지 에러 해결
-        // 현상 : 1 page 외 다른 숫자 클릭 후 이전 버튼을 누르면 firstRecordIndex 가 -25 로 나와 에러 발생
-        if(currentPage > 1) {
+        if(currentSet > 1) {
             getPageNumList(pageNumList[0] - pageNumListSize);
         }else{
             getPageNumList(1);
-            return alert("1번째 페이지입니다.");
+            return alert("첫번째 페이지입니다.");
         }
     }
+
 
     // 다음 페이지 버튼
     const goClickNext = () => {

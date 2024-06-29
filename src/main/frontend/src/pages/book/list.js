@@ -63,6 +63,9 @@ export default function BookList() {
     const [pageNumList, setPageNumList] = useState([]); //페이지번호 목록
     const pageNumListSize = 10; //페이지 번호 목록(10개)
     const totalPageNum = Math.ceil(totalCount / pageNumListSize); // 최대 페이지 번호
+    // 현재 버튼이 몇번째 세트인지 나타내는 수
+    const currentSet = Math.ceil(currentPage/pageNumListSize);
+
 
     /* 페이지 번호 그리는 함수 */
     const getPageNumList = (startNum) => {
@@ -84,23 +87,18 @@ export default function BookList() {
 
     /* 이전 버튼 클릭 이벤트 */
     const goClickPrev = () => {
-
-        /* 이전 버튼 눌러서 화면 랜더링 시 화면 최상단으로 위치 이동 */
         window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
+            top:10,
+            behavior:'smooth',
         });
 
-        /* 1페이지 이상일때만 페이지 넘버 교체 */
-        if (currentPage > 1) {
-            getPageNumList(pageNumList[0] - 10);
-        } else {
-            // 1 ~ 10 페이지보다 더 앞 페이지는 없으므로 막기
+        if(currentSet > 1) {
+            getPageNumList(pageNumList[0] - pageNumListSize);
+        }else{
             getPageNumList(1);
-            return alert("정보가 없습니다.");
+            return alert("첫번째 페이지입니다.");
         }
     }
-
 
     /* 이후 버튼 클릭 이벤트 */
     const goClickNext = () => {
@@ -127,7 +125,7 @@ export default function BookList() {
     return (
         <main>
             <section className="gj do hj sp jr i pg rundry">
-                <div className="bb ze ki xn 2xl:ud-px-0">
+                <div className="bb ze ki xn 2xl:ud-px-0" >
                     <div id="board-search">
                         <form action={`/book/list?searchWord=${searchWord}`} method="get">
                             <label>

@@ -117,7 +117,7 @@ export default function Main() {
             <section>
                 <div className="bb ze ki xn 2xl:ud-px-0">
 
-                {/* 상단 이미지 갤러리 섹션 */}
+                    {/* 상단 이미지 갤러리 섹션 */}
                     <section className="image-gallery">
                         <Slider {...settings}>
                             <div>
@@ -378,7 +378,11 @@ export default function Main() {
                     <section className="i pg gh ji mt-24">
                         <img className="h p q" src="images/shape-16.svg" alt="Bg Shape"/>
 
-                        <section id="testimonials">
+                        <section id="testimonials" style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}>
                             <div className="container px-4 ms-28">
                                 <div className="flex flex-wrap">
                                     <div className="w-full mx-4">

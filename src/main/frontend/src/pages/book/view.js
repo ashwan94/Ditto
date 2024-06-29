@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Link, useParams, useSearchParams} from "react-router-dom";
 import axios from "axios";
 import "../../css/board.css"
@@ -142,7 +142,7 @@ export default function BookView() {
                     }
                 }
             }
-    }
+        }
     /* 도서 대여 시 대출가능 -> 대출불가로 상태 변화 함수 */
     const updateBookStatus = async () => {
         const res = await axios.post("/book/status", null, {
@@ -166,14 +166,19 @@ export default function BookView() {
     }, []);
 
 
-
     return (
         <main>
-            <section className="gj do hj sp jr i pg">
-                <div>
+            <section className="gj do hj sp jr i pg rundry container">
+                <div className="bb ze ki xn 2xl:ud-px-0 mb-8"
 
+                     style={{
+                         borderTop: "1px solid lightgray",
+                         display: "flex",
+                         justifyContent: "center",
+                         alignItems: "center"
+                     }}>
                     <div className="page-title">
-                        <div className="container">
+                        <div>
                             <img
                                 src="https://i0.wp.com/library.re.kr/wp-content/uploads/2022/08/social-1024x512-1.jpeg"
                                 alt="Example"
@@ -187,20 +192,24 @@ export default function BookView() {
                             />
                         </div>
                     </div>
+
+
                     <div id="board-list" className="rundry">
                         <div className="container">
+
+
                             <div style={{
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
                                 textAlign: "center"
-                            }}>
+                            }} className="mt-14 border-2 py-5 rounded-xl text-lg">
+                                <img
+                                    src="https://img.freepik.com/premium-vector/notification-message-bell-icon-alert-alarm-icon-3d-vector-illustration_365941-650.jpg"
+                                    className="w-75 h-60"/>
                                 책을 깨끗하게 사용해주세요<br/> 우리 모두가 함께 사용하는 소중한 책들입니다. <br/>다음 이용자를 위해 책을 소중히 다뤄주세요.<br/> 감사합니다!
                             </div>
                             <div style={{marginTop: "4%", marginBottom: "2%"}}>
-                                {/*<img src="https://w7.pngwing.com/pngs/676/110/png-transparent-barcode-book-education-library-loan-school-library-icon.png" />*/}
-
-
                                 {memberObj ? <button
                                     className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded my-2"
                                     onClick={bookRentEvent}>

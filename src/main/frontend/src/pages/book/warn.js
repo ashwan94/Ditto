@@ -13,11 +13,12 @@ export default function BookWarn() {
 
 
 
-    return (<main>
+    return (
+        <main>
             <section className="gj do hj sp jr i pg rundry">
                 <div className="bb ze ki xn 2xl:ud-px-0">
                     <div className="bb ze ki xn 2xl:ud-px-0 mb-8" style={{borderTop: "1px solid lightgray"}} />
-                        <div className="container">
+                        <div>
                             <img
                                 className="rounded-xl"
                                 src="https://png.pngtree.com/thumb_back/fw800/background/20230516/pngtree-the-inside-of-a-library-with-lots-of-books-image_2546224.jpg"

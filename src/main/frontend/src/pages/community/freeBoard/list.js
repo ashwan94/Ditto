@@ -14,11 +14,14 @@ export default function List () {
     const [totalBoardListCount, setTotalBoardListCount] = useState(0);  // 전체 게시글 개수
     const [currentPage, setCurrentPage] = useState(1);                  // 현재 페이지 번호
 
+
     const [endPage, setEndPage] = useState(0);                          // 최대 페이지 번호
     const [pageNumList, setPageNumList] = useState([]);                  // 페이지 번호 리스트
-    const pageNumListSize = 10;                                                       // 페이지 번호 개수
+    const pageNumListSize = 5;                                                       // 페이지 번호 개수
     const boardType = "freeBoard";                                                    // URL 요청을 위한 게시판 종류
-
+    // 현재 버튼이 몇번째 세트인지 나타내는 수
+    const currentSet = Math.ceil(currentPage/pageNumListSize);
+    const endNum = Math.ceil(totalBoardListCount / pageNumListSize);
     // DB 로 게시글 리스트 조회
     const getData = async () => {
         const firstRecordIndex = (currentPage - 1) * pageNumListSize + 1; // 시작 페이지
@@ -96,7 +99,6 @@ export default function List () {
 
     // 전체 페이지 번호 개수 구하기
     useEffect(() => {
-        const endNum = Math.ceil(totalBoardListCount / pageNumListSize);
         setEndPage(endNum)
     }, [totalBoardListCount]);
 
@@ -113,6 +115,7 @@ export default function List () {
         }
     }, []);
 
+
     // 이전 페이지 버튼
     const goClickPrev = () => {
         window.scrollTo({
@@ -120,14 +123,11 @@ export default function List () {
             behavior:'smooth',
         });
 
-        // TODO
-        // 이전 페이지 에러 해결
-        // 현상 : 1 page 외 다른 숫자 클릭 후 이전 버튼을 누르면 firstRecordIndex 가 -25 로 나와 에러 발생
-        if(currentPage > 1) {
+        if(currentSet > 1) {
             getPageNumList(pageNumList[0] - pageNumListSize);
         }else{
             getPageNumList(1);
-            return alert("1번째 페이지입니다.");
+            return alert("첫번째 페이지입니다.");
         }
     }
 
