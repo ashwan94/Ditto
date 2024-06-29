@@ -8,7 +8,7 @@ export default function List () {
     const [boardList, setBoardList] = useState([]);
     const [totalBoardList, setTotalBoardList] = useState([]);
 
-    const [memberId, setMemberId] = useState(null);
+    const [memberId, setMemberId] = useState("");
     const [addBtn, setAddBtn] = useState(false);                    // 새 글 작성 버튼
     const [commentBtn, setCommentBtn] = useState(false);            // 댓글 작성 버튼
     const typeRef = useRef();                                 // DB 에 저장할 게시글 종류 Ref
@@ -56,6 +56,15 @@ export default function List () {
             alert("로그인이 필요한 서비스입니다.");
             navigate("/signIn")
         }
+
+        // 멤버십 회원만 첫 글 작성하도록 설정
+        if (memberId.memberSub === 'N') {
+            alert("멤버십 회원만 첫 글을 작성할 수 있습니다.");
+            if(window.confirm("멤버십 구독 화면으로 이동하시겠습니까?")){
+                navigate("/membershipInfo")
+            }
+            return;
+        }
         setTitle("");
         setAddBtn(!addBtn);
     }
@@ -79,25 +88,61 @@ export default function List () {
     }
 
     // 댓글 작성 버튼 활성화
-    const goChangeComment = () => {
+    const [commentIndex, setCommentIndex] = useState(0);
+    const goChangeComment = (e) => {
         if (!memberId) {
             alert("로그인이 필요한 서비스입니다.");
             navigate("/signIn");
+        }
+
+        if (e.commentList.length >= 5) {
+            alert("이미 완결되었습니다.");
             return;
         }
+
+        // 동일 게시글에 동일 회원 댓글 작성 방지
+        for(let commentWriter of e.commentList){
+            if(commentWriter.memberId === memberId.memberId){
+                alert("이미 댓글을 작성하셨습니다.");
+                return;
+            }
+        }
+
         setContent("");
         setCommentBtn(!commentBtn);
     }
 
     // GPT 로 댓글 작성
+    const [gptUsed, setGptUsed] = useState(false); // GPT 사용 여부 판별
     const goGPT = (e) => {
         console.log("GPT 도와줘",e);
         console.log("릴레이 제목 : ",e.relayTitle);
         console.log("댓글 리스트 : ",e.commentList);
+        setGptUsed(true);
     }
+
+    // 댓글 창이 꺼지면 GPT State 를 false 로 변경
+    useEffect(()=>{
+        if(!addBtn){
+            setGptUsed(false);
+        }
+    },[addBtn])
+
+    // GPT 이미지 호버 애니메이션
+    const [gptHover, setGptHover] = useState(false); // GPT 로고 이미지 회전
+    // GPT 로고 호버 할때
+    const handleHover = useCallback(() => {
+        setGptHover(true);
+    },[]);
+
+    // GPT 로고 호버 안 할때
+    const handleLeave = useCallback(() => {
+        setGptHover(false);
+    },[]);
 
     // 댓글 작성
     const goCommentRegister = async () => {
+        console.log("GPT 사용 여부 확인 : ",gptUsed);
         const data = {
             boardNo: relayBoardNo,
             content : content,
@@ -109,6 +154,7 @@ export default function List () {
             setCommentBtn(false);
             getData();
         }
+        setGptUsed(false);
     }
 
     // 댓글 작성 취소
@@ -119,13 +165,29 @@ export default function List () {
     // 댓글 삭제
     const goDeleteComment = async (e) => {
         const res = await axios.post(`/comment/delete?commentNo=${e}`)
-        console.log("삭제 결과 : ",res);
         getData();
     }
 
-    useEffect(() => {
-        console.log("가져온 게시글 : ", boardList)
-    }, [boardList]);
+    // 날짜 형식 변환
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+
+        // Format date as yyyy.MM.dd
+        const formattedDate = date.toLocaleDateString('ko-kr', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).replace(/\./g, '').replace(/ /g, '.').replace(/\.$/, '');
+
+        // Format time as HH:mm
+        const formattedTime = date.toLocaleTimeString('ko-kr', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false  // Use 24-hour format
+        });
+
+        return `${formattedDate} ${formattedTime}`;
+    };
 
     // 로그인된 회원 정보 페이지에 저장
     useEffect(() => {
@@ -137,38 +199,45 @@ export default function List () {
     }, []);
 
     return (
-        <article className="mt-32 ml-32 mr-32">
+        <article className="mt-32 ml-32 mr-32 p-5">
             <br/>
             <div className="text-center text-4xl mb-10">릴레이 소설</div>
             <hr className="hr1" noshade/>
-            <span>총 {boardList.length} 개의 게시물이 있습니다.</span>
-            <button onClick={goAdd} className="bg-blue-600 text-white font-bold p-1 rounded">새 글 작성</button>
+            <div className="text-center mt-5">
+                <button onClick={goAdd}
+                        className="border border-blue-500 w-96 h-20 text-blue-500 hover:bg-blue-500 hover:text-white font-bold p-2 text-4xl rounded">첫
+                    글 쓰기
+                </button>
+            </div>
             <div className="my-5">
-                {addBtn
+                {memberId.memberSub === 'Y' && addBtn
                 ?
-                    <div className="border rounded bg-blue-100">
+                    <div className="border rounded bg-blue-100 mx-80">
                     {memberId
                         ? <>
-                        <span className="ms-5">
-                            <div className="grid grid-cols-1 ms-10">
-                                <img className="ms-5 mt-5 w-10"
+                            <div className="flex justify-center items-center">
+                                <img className="mt-3"
+                                     style={{borderRadius: "100%", width: "50px", height: "50px"}}
                                      src={`http://localhost:3000${memberId.memberProfile}`}
                                      alt={"작성자"}/>
-                                <span className="top-5 font-bold text-black">{memberId.memberId}</span>
                             </div>
-                        </span>
-                            <input type="text"
+                            <div className="font-bold text-black text-center">{memberId.memberId}</div>
+                            <div className="flex justify-center items-center">
+                            <textarea type="text"
                                    maxLength={50}
                                    placeholder={"50자 이내로 작성해주세요"}
-                                   className="w-full h-10 bg-blue-200"
-                                   onChange={titleOnChangeHandler}/>
-                            <div className="grid grid-cols-2">
-                                <div className="ms-10">
+                                      className=" w-3/5 h-40 bg-blue-200 pt-5 text-center rounded text-4xl text-black"
+                                      style={{resize: "none"}}
+                                      onChange={titleOnChangeHandler}></textarea>
+                            </div>
+                            <div className="grid grid-cols-3 mt-5">
+                                <div></div>
+                                <div className="text-center">
                                     {title.length >= 40
                                         ?
-                                        <div className="text-red-600">글자 수 {title.length}</div>
+                                        <div className="text-red-600">{title.length}</div>
                                         :
-                                        <div>글자 수 {title.length}</div>
+                                        <div>{title.length}</div>
                                     }
                                 </div>
                                 <div className="text-end">
@@ -188,52 +257,77 @@ export default function List () {
             <hr className="my-5"/>
             {boardList && boardList.map((v, i) => {
                 return(
-                    <div key={i} className="my-5">
-                        <div className="border rounded">
-                            <div>게시글 번호 : {v.relayBoardNo}</div>
-                            <div>게시글 제목 : {v.relayTitle}</div>
-                            <div>작성자 : {v.memberId}</div>
-                            <div>작성자 프로필 :
-                                <img className="ms-5 mt-5 w-12 inline rounded-full"
-                                     src={`http://localhost:3000${v.memberProfile}`}/>
+                    <div key={i} className="my-5 text-black">
+                        <div
+                            className={`border pt-5 mx-80 h-5/6 rounded ${v.commentList.length >= 5 ? "bg-amber-300" : "bg-blue-100"}`}>
+                            <div>
+                                <div className="flex justify-center">
+                                    <img src={`http://localhost:3000${v.memberProfile}`}
+                                         style={{width: "50px", height: "50px", borderRadius: "100%"}}/>
+                                </div>
+                                <div className="font-bold text-center">
+                                    <span>{v.memberId}</span>
+                                </div>
+                                <div className="text-4xl my-3 mx-10 text-center">
+                                    <span>{v.relayTitle}</span>
+                                </div>
                             </div>
-                            <div>작성일 : {new Date(v.modifyDate).toLocaleString('ko-kr', {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                                hour: "numeric",
-                                minute: "numeric",
-                                second: "numeric"
-                            })}
+                            <div>
+                                <div className="text-sm grid grid-cols-3">
+                                    <div></div>
+                                    <span className="text-center">{formatDate(v.modifyDate)}</span>
+                                    <span className="text-end">
+                                        {v.commentList.length >= 5
+                                            ?
+                                            null
+                                            :
+                                            <div>
+                                                {v.memberId === memberId.memberId
+                                                    ?
+                                                    null
+                                                    :
+                                                    <button onClick={() => {
+                                                        goChangeComment(v);
+                                                        setCommentIndex(i);
+                                                        setRelayBoardNo(v.relayBoardNo);
+                                                    }}
+                                                            className="text-blue-500 font-bold text-sm me-4 mb-2 border border-blue-500 rounded p-2 hover:bg-blue-500 hover:text-white">댓글
+                                                        쓰기
+                                                    </button>
+                                                }
+                                            </div>
+                                        }
+                                    </span>
+                                </div>
                             </div>
-                            <div>활성화 : {v.status}</div>
-                            <button onClick={() => {
-                                goChangeComment();
-                                setRelayBoardNo(v.relayBoardNo)
-                            }} className="bg-blue-600 text-white font-bold p-2 rounded">댓글 쓰기
-                            </button>
-                            {commentBtn
+                            {commentBtn && commentIndex === i
                                 ?
-                                <div className="border rounded p-10">
+                                <div className="border rounded px-10 py-5 m-5">
                                     <span className="text-black font-bold">{memberId.memberId}</span>
                                     <input type="text"
                                            maxLength={50}
                                            onChange={contentOnChangeHandler}
                                            placeholder="50자 이내로 작성해주세요"
-                                           className="bg-blue-100 w-full h-12 rounded"/>
-                                    <div className="grid grid-cols-2">
+                                           className="bg-blue-100 w-full h-12 rounded mb-5"/>
+                                    <div className="grid grid-cols-3">
+                                        <div className="flex justify-center items-center">
+                                            <button className={`font-bold w-10 ${gptHover ? 'rotate-infinite' : ''}`}
+                                                    onMouseEnter={handleHover}
+                                                    onMouseLeave={handleLeave}
+                                                    style={{transition: 'transform 1s ease'}}
+                                                    onClick={() => goGPT(v)}>
+                                                <img src="/images/GPT_logo.png" className="w-10" alt="GPT Logo"/>
+                                            </button>
+                                        </div>
                                         <div className="text-center">
                                             {content.length >= 40
                                                 ?
-                                                <span className="text-red-600">글자 수 {content.length}</span>
+                                                <span className="text-red-600">{content.length}</span>
                                                 :
-                                                <span className="text-start"> 글자 수 {content.length}</span>
+                                                <span className="text-start">{content.length}</span>
                                             }
-                                            <button className="me-5 mb-3 font-bold" onClick={()=>goGPT(v)}>
-                                                <img src="/images/GPT_logo.png" className="w-8 mt-3"/>
-                                            </button>
                                         </div>
-                                        <div className="mt-5 text-end">
+                                        <div className="text-end">
                                             <button className="me-5 mb-3 font-bold" onClick={goCommentRegister}>등록
                                             </button>
                                             <button className="me-5 mb-3 font-bold" onClick={goCommentCancle}>취소
@@ -245,51 +339,58 @@ export default function List () {
                                 null
                             }
                         </div>
-                        <div className="my-5 mb-14">
-                            <div>{v.commentList.map((c, j) => {
+                        {v.commentList.map((c, j) => {
                                 return (
-                                    <div key={j} className="my-12">
-                                            <>
-                                                <img src="/images/comment_arrow.png" className="w-16 ms-20 inline"/>
+                                    <div key={j} className="grid grid-cols-3 ms-20 pt-3"
+                                         style={{gridTemplateColumns: '0.8fr 2.2fr 1fr'}}>
+                                        <div className="flex justify-end items-center"><img
+                                            src="/images/comment_arrow.png" className="w-20 h-20 me-7"/>
+                                        </div>
                                                 {
                                                     c.status === 'Y'
-
                                                     ?
-                                                        <>
-                                                        <div className="inline border ms-10 p-10 text-black">
-                                                    <span><img src={`http://localhost:3000${c.memberProfile}`}
-                                                               className="rounded-full w-12 inline"/></span>
-                                                            <span>댓글 번호 : {c.commentNo}</span>
-                                                            <span>작성일 : {new Date(c.modifyDate).toLocaleString('ko-kr', {
-                                                                year: "numeric",
-                                                                month: "long",
-                                                                day: "numeric",
-                                                                hour: "numeric",
-                                                                minute: "numeric",
-                                                                second: "numeric"
-                                                            })}
-                                                            </span>
-                                                                <span className="text-black">{c.memberId}</span>
-                                                            <span className="text-black">내용 : {c.content}</span>
+                                                        <div className="border rounded">
+                                                            <div className="text-black mt-3">
+                                                                <div className="flex justify-center items-center">
+                                                                    <img src={`http://localhost:3000${c.memberProfile}`}
+                                                                         style={{
+                                                                             width: "50px",
+                                                                             height: "50px",
+                                                                             borderRadius: "100%"
+                                                                         }}/>
+                                                                </div>
+                                                                <div
+                                                                    className="text-black font-bold text-center">{c.memberId}</div>
+                                                            </div>
+                                                            <div className="text-black text-3xl text-center my-5 px-5">
+                                                                {c.content}
+                                                            </div>
+                                                            <div
+                                                                className="text-sm text-center mb-2 grid grid-cols-3">
+                                                                <div></div>
+                                                                <div className="mb-1">{formatDate(c.modifyDate)}</div>
+                                                                {c.memberId === memberId.memberId
+                                                                    ?
+                                                                    <div className="flex justify-end items-center me-3">
+                                                                        <button
+                                                                            onClick={() => goDeleteComment(c.commentNo)}
+                                                                            className="ms-10 text-red-400 w-10 h-8 font-bold border px-1 rounded hover:bg-red-500 hover:text-white">삭제
+                                                                        </button>
+                                                                    </div>
+                                                                    :
+                                                                    null
+                                                                }
+                                                            </div>
                                                         </div>
-                                                        {c.memberId === memberId.memberId
-                                                                ?
-                                                                <button onClick={() => goDeleteComment(c.commentNo)}
-                                                                        className="bg-red-500 p-5 text-white font-bold">삭제</button>
-                                                                :
-                                                                null
-                                                        }
-                                                        </>
                                                         :
-                                                        <div className="inline border ms-10 p-10">
-                                                            삭제된 댓글입니다.
+                                                        <div
+                                                            className="flex justify-start items-center border rounded bg-gray-300">
+                                                            <div className="ms-5 py-24 text-black">삭제된 댓글입니다.</div>
                                                         </div>
                                                 }
-                                            </>
                                     </div>
                                 )
-                            })}</div>
-                        </div>
+                        })}
                     </div>
                 )
             })}

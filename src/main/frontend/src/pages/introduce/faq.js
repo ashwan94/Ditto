@@ -312,7 +312,7 @@ export default function Faq() {
 
 
             {/* 홍보 */}
-            <section className="do hj sp jr i pg rundry mt-14">
+            <section className="do hj sp jr i pg rundry mt-14 mb-10">
                 <div className="bb ze ki xn 2xl:ud-px-0 rounded-xl text-black py-5 border-2"
                      style={{backgroundColor: "#C1DDF2", display:"flex"}}>
                     <div className="ml-16 mt-56" style={{fontSize: "25px"}}>
