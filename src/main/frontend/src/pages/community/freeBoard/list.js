@@ -17,7 +17,7 @@ export default function List () {
 
     const [endPage, setEndPage] = useState(0);                          // 최대 페이지 번호
     const [pageNumList, setPageNumList] = useState([]);                  // 페이지 번호 리스트
-    const pageNumListSize = 5;                                                       // 페이지 번호 개수
+    const pageNumListSize = 10;                                                       // 페이지 번호 개수
     const boardType = "freeBoard";                                                    // URL 요청을 위한 게시판 종류
     // 현재 버튼이 몇번째 세트인지 나타내는 수
     const currentSet = Math.ceil(currentPage/pageNumListSize);
@@ -113,6 +113,11 @@ export default function List () {
         if(memberLog){
             setMemberId(JSON.parse(memberLog)); // 필요한 경우 memberId, memberNickname, memberAdmin 등에서 data 꺼내쓰기
         }
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'auto',
+        });
     }, []);
 
 
@@ -150,11 +155,15 @@ export default function List () {
         }
     }
     return (
-        <article className="mt-32 ml-32 mr-32">
+        <article className="mt-32 ml-32 mr-32 rundry">
             <div className="text-black">
                 <br/>
-                <div className="text-center text-4xl mb-10">자유게시판</div>
-                <hr className="hr1" noshade/>
+
+                <div className="text-center text-4xl mb-10">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4812/4812731.png" className="w-48" style={{display:"flex", margin:"auto"}}/>
+                    자유게시판
+                </div>
+
                 <span>총 {totalBoardListCount} 개의 게시물이 있습니다.</span>
                 <span className="right">
                     <select onChange={searchTypeOnChangeHandler}>
@@ -163,17 +172,19 @@ export default function List () {
                     </select>
                     <input
                         onChange={searchKeywordOnChangeHandler}
+                        style={{border: "0.5px solid black"}}
+                        className="rounded-xl"
                         type="text" value={searchWord}/>
-                    <button
-                        onClick={handleSearch}
-                        name="검색" className="gradient">
-                        검색
-                    </button>
+                      <button
+                          onClick={handleSearch}
+                          name="검색"
+                          className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 mb-1 ml-1 px-4 rounded-full">
+                검색        </button>
                 </span>
                 <br/>
                 <table>
                     <thead>
-                    <tr>
+                    <tr className="text-center">
                         <th className="small-col">번호</th>
                         <th className="large-col">제목</th>
                         <th className="sl-col">글쓴이</th>
@@ -230,35 +241,41 @@ export default function List () {
                     </tbody>
                 </table>
                 <br/>
-                <span className="right">
-                    <Link to={`/community/${boardType}/list`}><button className="greylist" onClick={allList}>목록</button></Link>
-                    <Link to={`/community/${boardType}/add`}><button className="gradient">글쓰기</button></Link>
-                </span>
             </div>
-            <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
-                     className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
 
-                    <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-                         aria-label="Pagination">
-                        <a
-                            onClick={goClickPrev}
-                            className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                        >
-                            <span className="sr-only">Previous</span>
-                            <img
-                                src="/images/chevron-left-solid.svg"
-                                className="h-5 w-5" aria-hidden="true"
-                            />
-                        </a>
-                        {
-                            pageNumList.map(((v, i) => {
-                                return (
-                                    <Link
-                                        className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                        key={`page` + i}
-                                        to={`/community/${boardType}/list`}
-                                        state={{currentPage:currentPage}}
-                                        onClick={() => {
+            <span className="right mt-3">
+                    <Link to={`/community/${boardType}/list`}><button
+                        className="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-1 mb-1 ml-1 px-4 rounded-full"
+                        onClick={allList}>목록</button></Link>
+                    <Link to={`/community/${boardType}/add`}><button
+                        className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 mb-1 ml-1 px-4 rounded-full">글쓰기</button></Link>
+            </span>
+
+
+            <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
+                 className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
+
+                <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                     aria-label="Pagination">
+                    <a
+                        onClick={goClickPrev}
+                        className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                    >
+                        <span className="sr-only">Previous</span>
+                        <img
+                            src="/images/chevron-left-solid.svg"
+                            className="h-5 w-5" aria-hidden="true"
+                        />
+                    </a>
+                    {
+                        pageNumList.map(((v, i) => {
+                            return (
+                                <Link
+                                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                    key={`page` + i}
+                                    to={`/community/${boardType}/list`}
+                                    state={{currentPage: currentPage}}
+                                    onClick={() => {
                                         // 버튼 클릭 시 현재 페이지 번호 변화
                                         setCurrentPage(v)
                                         // 버튼 클릭 시 페이지 변화시킨 후 윈도우 창 올리기
@@ -267,22 +284,22 @@ export default function List () {
                                             behavior: 'smooth',
                                         });
                                     }}>{v}</Link>
-                                )
-                            }))
-                        }
+                            )
+                        }))
+                    }
 
-                        <a
-                            onClick={goClickNext}
-                            className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                        >
-                            <span className="sr-only">Next</span>
-                            <img
-                                src="/images/chevron-right-solid.svg"
-                                className="h-5 w-5" aria-hidden="true"
-                            />
-                        </a>
-                    </nav>
-                </div>
+                    <a
+                        onClick={goClickNext}
+                        className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                    >
+                        <span className="sr-only">Next</span>
+                        <img
+                            src="/images/chevron-right-solid.svg"
+                            className="h-5 w-5" aria-hidden="true"
+                        />
+                    </a>
+                </nav>
+            </div>
         </article>
     );
 };

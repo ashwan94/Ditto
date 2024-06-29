@@ -269,6 +269,12 @@ export default function SignUp() {
         setUserInputCode(userInputCode);
     }, [userInputCode]);
 
+
+    useEffect(() => {
+        setDuplicatedId(false);
+        setDuplicatedNickname(false);
+    }, [memberNickname, memberId, memberPw, memberConfirmPw]);
+
     // 인증 번호 확인 이밴트 함수
     const checkVeridationCode = () => {
 
@@ -389,6 +395,12 @@ export default function SignUp() {
                                 className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
                                 maxLength="15"
                                 onChange={memberIdOnChangeHandler}
+                                onBlur={() => {setDuplicatedId(false);
+                                    setIdErrorMessage("아이디 중복확인이 필요합니다.");
+                                    const idErrorMessage = document.querySelector("#idErrorMessage")
+                                    idErrorMessage.style.color = "red";
+                                }
+                                }
                             />
                             <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
                                     onClick={checkMemberIdDuplicate}>중복 확인
@@ -427,6 +439,12 @@ export default function SignUp() {
                                 maxLength="8"
                                 className="hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40 w-72"
                                 onChange={memberNicknameOnChangeHandler}
+                                onBlur={() => {setDuplicatedNickname(false);
+                                    setNicknameErrorMessage("닉네임 중복확인이 필요합니다.");
+                                    const nicknameErrorMessage = document.querySelector("#nicknameErrorMessage")
+                                    nicknameErrorMessage.style.color = "red";
+                                }
+                            }
                             />
                             <button className="bg-blue-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
                                     onClick={checkMemberNicknameDuplicate}>중복 확인
@@ -448,6 +466,7 @@ export default function SignUp() {
                                 className="vd hh rg zk _g ch hm dm fm pl/50 xi mi sm xm pm dn/40"
                                 onChange={memberPwOnChangeHandler}
                                 onBlur={checkMemberPw}
+                                onBlur={checkPasswordConfirm}
                             />
                             <p id="pwErrorMessage" className="text-red">{pwErrorMessage}
                             </p>

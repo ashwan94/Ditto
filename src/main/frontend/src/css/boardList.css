@@ -20,7 +20,10 @@ table {
 }
 
 th {
-    background-color: #d3d3d3;
+    background-color: #e0e7ff;
+    color:black;
+    border-top : 1px solid #d3d3d3;
+
 }
 
 th, td {
