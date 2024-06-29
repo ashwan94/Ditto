@@ -156,7 +156,7 @@ export default function List () {
 
 
                 <div className="text-center text-4xl mb-10">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa9Kcxw9o3KHeZKJ0NDylq2MszcnXq8gJ3lA&s" className="w-48"
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSC4Fg7lReTSEUCcSPBbzNa7fhipRxY0BgAgg&s" className="w-48 py-5"
                          style={{display: "flex", margin: "auto"}}/>
                     팟캐스트
                 </div>
