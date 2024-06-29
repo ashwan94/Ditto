@@ -282,7 +282,7 @@ export default function List () {
                                             null
                                             :
                                             <div>
-                                                {v.memberId === memberId.memberId
+                                                {v.memberId === memberId.memberId && memberId.memberSub === 'Y'
                                                     ?
                                                     null
                                                     :

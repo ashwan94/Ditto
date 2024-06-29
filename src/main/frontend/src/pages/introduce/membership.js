@@ -61,8 +61,7 @@ export default function Membership() {
             const hours = String(date.getHours()).padStart(2, '0');
             const minutes = String(date.getMinutes()).padStart(2, '0');
             const seconds = String(date.getSeconds()).padStart(2, '0');
-
-            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            return `(${year}-${month}-${day} ${hours}:${minutes}:${seconds})`;
         };
 
 
@@ -74,7 +73,7 @@ export default function Membership() {
                 pay_method: 'card',
                 merchant_uid: `mid_${paymentTime}`, // 현재 시간
                 name: '한석줍쇼 1일 멤버십 이용권 구매', // 결제 품목 및 제목 지정
-                amount: `${amount}`, // 충전할 금액
+                amount: parseInt(`${amount}`), // 충전할 금액
                 buyer_email: '구매자 이메일',
                 buyer_name: `${nickname}`,
                 buyer_tel: '010-1222-1222',
@@ -94,14 +93,14 @@ export default function Membership() {
                     });
                     if (res.status == 200) {
                         // 결제 파트에서 결제금액 / 결제시간 / 회원ID 콘솔출력
-                        console.log("결제 금액: " + amount);
-                        console.log("결제 완료 시간: " + formatPaymentTime(paymentTime));
-                        console.log("회원 아이디 : " + memberId);
-
-                        if (window.confirm("마이페이지로 이동하시겠습니까?")) {
-                            window.location.href = '/mypage';
+                        const paymentHistory = {
+                            price : amount,
+                            memberId : memberId,
                         }
-
+                        goPay(paymentHistory)
+                        // console.log("결제 금액: " + amount);
+                        // console.log("결제 완료 시간: " + formatPaymentTime(paymentTime));
+                        // console.log("회원 아이디 : " + memberId);
 
                     } else {
                         alert("결제 실패");
@@ -113,6 +112,15 @@ export default function Membership() {
 
             }
         );
+    }
+
+    // 멤버십 결제 내역 입력
+    const goPay = async (data)=> {
+        console.log("결제 정보 : ", data);
+        const res = await axios.post("/payment/goPay", data)
+        if(res.status === 200){
+            window.location.href = '/mypage'; // 결제 완료 시 마이페이지로 이동
+        }
     }
 
 
