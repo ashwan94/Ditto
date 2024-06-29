@@ -788,10 +788,10 @@ export default function Mypage() {
                                     {activeTab === 'tab3' &&
                                         (
                                             <div id="tab3" className="tab-pane">
-                                                <div className="media mt25">
+                                                <div className="media mt25 text-center">
                                                     <button
                                                         onClick={deleteMember}
-                                                        className="bg-red-500 rounded-xl ms-2 text-white h-12 w-28 font-bold"
+                                                        className="bg-red-500 rounded-xl ms-2 text-white h-12 w-28 font-bold text-2xl"
                                                     > 회원 탈퇴
                                                     </button>
                                                 </div>

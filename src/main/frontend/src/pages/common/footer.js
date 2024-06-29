@@ -3,8 +3,9 @@ import React from 'react';
 const Footer = () => {
     return (
         <footer className="rundry">
+            <hr className="w-full hr1 mb-10"/>
             <div className="bb ze ki xn 2xl:ud-px-0">
-                <div className="ji gp">
+                <div className="mt-3">
                     <div className="tc uf ap gg fp">
                         <div className="my-12">
                             <div className="text-2xl mb-2 text-center text-black">이용 문의</div>

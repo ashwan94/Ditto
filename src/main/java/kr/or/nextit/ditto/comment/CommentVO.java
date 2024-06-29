@@ -18,4 +18,5 @@ public class CommentVO {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifyDate;   // 수정일
     private String status;              // 활성화
+    private String gptUsed;             // GPT 사용여부
 }

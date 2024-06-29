@@ -45,17 +45,15 @@
         LEFT JOIN
             MEMBER mb1 ON rb.MEMBER_ID = mb1.MEMBER_ID
         LEFT JOIN (
-            SELECT
-                COMMENT_NO, BOARD_NO, CONTENT, TYPE, MODIFY_DATE, STATUS, MEMBER_ID
-            FROM
-                COMMENT
-            ORDER BY
-                MODIFY_DATE DESC
-                    ) c ON rb.RELAY_BOARD_NO = c.BOARD_NO
+                SELECT
+                    COMMENT_NO, BOARD_NO, CONTENT, TYPE, MODIFY_DATE, STATUS, MEMBER_ID
+                FROM
+                    COMMENT
+                ) c ON rb.RELAY_BOARD_NO = c.BOARD_NO
         LEFT JOIN
             MEMBER mb2 ON c.MEMBER_ID = mb2.MEMBER_ID
         ORDER BY
-            rb.CREATE_DATE DESC
+            rb.RELAY_BOARD_NO DESC, c.MODIFY_DATE ASC
     </select>
 
 <!--  게시글 작성  -->

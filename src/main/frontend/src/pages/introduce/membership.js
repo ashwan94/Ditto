@@ -176,18 +176,17 @@ export default function Membership() {
                         </div>
 
 
-                        {/* 멤버십 가격 안내 화면 구역 */}
-                        <section className="rundry px-8 py-24 rounded-xl mt-44"
-                                 style={{backgroundColor: "lightblue", border: "2px solid black"}}>
-                            <div className="container mx-auto text-center">
-                                <h2 className="block antialiased tracking-normal text-4xl font-semibold leading-[1.3] text-black mb-4 rundry">멤버십
-                                    가격 안내</h2>
-                                <p className="block antialiased text-base leading-relaxed text-inherit mb-8 font-bold text-white ">
-                                    Check out our affordable pricing options for awesome environment.
-                                </p>
-                            </div>
-                            <div className="flex justify-center mt-24"
-                                 style={{display: "flex", alignItems: "center", textAlign: "center", margin: "auto"}}>
+                    {/* 멤버십 가격 안내 화면 구역 */}
+                    <section className="rundry px-8 py-24 rounded-xl" style={{backgroundColor: "lightblue", border:"2px solid black"}}>
+                        <div className="container mx-auto text-center">
+                            <h2 className="block antialiased tracking-normal text-4xl font-semibold leading-[1.3] text-black mb-4 rundry">멤버십
+                                가격 안내</h2>
+                            <p className="block antialiased text-base leading-relaxed text-inherit mb-8 font-bold text-white ">
+                                Check out our affordable pricing options for awesome environment.
+                            </p>
+                        </div>
+                        <div className="flex justify-center mt-24"
+                             style={{display: "flex", alignItems: "center", textAlign: "center", margin: "auto"}}>
 
 
                                 {/* 왼쪽 박스 */}
