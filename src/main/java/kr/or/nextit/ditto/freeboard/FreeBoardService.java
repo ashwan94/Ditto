@@ -24,16 +24,6 @@ public class FreeBoardService {
         return mapper.getBoardListCount(vo);
     }
 
-    // 제목으로 검색
-    public List<FreeBoardVO> searchBoardListByTitle(String searchWord){
-        return mapper.searchBoardListByTitle(searchWord);
-    }
-
-    // 작성자 이름으로 검색
-    public List<FreeBoardVO> searchBoardListByMemberId(String searchWord){
-        return mapper.searchBoardListByMemberId(searchWord);
-    }
-
     // 게시글 작성
     public int addBoard(FreeBoardVO post) {
         return mapper.addBoard(post);

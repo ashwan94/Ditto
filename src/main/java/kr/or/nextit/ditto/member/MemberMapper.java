@@ -1,6 +1,7 @@
 package kr.or.nextit.ditto.member;
 
 import kr.or.nextit.ditto.common.SearchVO;
+import kr.or.nextit.ditto.freeboard.FreeBoardVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,7 +21,8 @@ public interface MemberMapper {
     void updateMemberData(MemberVO post); // 마이페이지 회원정보 수정
     // 회원 멤버십 구독 가입
     void updateMemberSubscribe(String memberId);
-    List<MemberVO> adminPageMemberList(); // 관리자 페이지 회원 전체 조회
+    List<MemberVO> getMemberList(SearchVO vo); // 관리자 페이지 회원조회
+    int getMemberListCount(SearchVO vo); // 관리자 페이지 회원인원수
     void adminPageMemberDeleteY(MemberVO memberId); // 관리자 페이지 회원 비활성화
 
     void adminPageMemberDeleteN(MemberVO memberId); // 관리자 페이지 회원 활성화

@@ -31,21 +31,6 @@ public class FreeBoardController {
         return map;
     }
 
-    // TODO
-    // 검색 기능에 관련된 query 문 수정 => 게시판 작업하면서 고장난듯 | 06.27(목) | 안승환
-    // 게시글 검색
-    @PostMapping("/search")
-    public List<FreeBoardVO> searchBoardList(@RequestBody SearchVO searchVO) {
-        List<FreeBoardVO> vo = new ArrayList<FreeBoardVO>();
-        String searchType = searchVO.getSearchType();
-        String searchWord = searchVO.getSearchWord();
-        if ("아이디".equals(searchType)){
-            vo = freeBoardService.searchBoardListByMemberId(searchWord); // 아이디 기준 검색
-        }else if("제목".equals(searchType)){
-            vo = freeBoardService.searchBoardListByTitle(searchWord); // 제목 기준 검색
-        }
-        return vo;
-    }
 
     // TODO
     // 1. 자유게시판 조회수, 게시글 작성에 대해 Controller 에서 param, Mapping 정보를 변경하였으므로 수정 필요

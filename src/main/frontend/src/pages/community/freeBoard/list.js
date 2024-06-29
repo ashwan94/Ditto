@@ -26,9 +26,7 @@ export default function List () {
             {
                 params:{
                     firstRecordIndex:firstRecordIndex - 1,
-                    searchWord:searchWord,
-                    searchType:searchType,
-                    pageNumListSize:pageNumListSize,
+                    pageNumListSize:pageNumListSize
                 }
             })
         if (res.data) {
@@ -48,23 +46,26 @@ export default function List () {
 
     // 검색 기능에 대한 게시글 조회
     const handleSearch = async  () => {
-        const res =
-            await axios.post(`/${boardType}/search`, {
-                searchType : searchType,
-                searchWord : searchWord,
-            },{
-                headers: {
-                    "Content-Type": "application/json"
+        const firstRecordIndex = (currentPage - 1) * pageNumListSize + 1; // 시작 페이지
+        const res = await axios.get(`/${boardType}/list`,
+            {
+                params:{
+                    firstRecordIndex:firstRecordIndex - 1,
+                    searchWord:searchWord,
+                    searchType:searchType,
+                    pageNumListSize:pageNumListSize
                 }
             })
         if (res.data) {
-            setBoardList(res.data)
+            setBoardList(res.data.boardList);                  // 전체 게시글 목록
+            setTotalBoardListCount(res.data.boardListCount);   // 전체 게시글 개수(전체 페이지 번호를 위해 필요함)
         }
     }
 
-    // 빈 문자열로 검색 시 모든 게시글 조회
+    // 목록버튼클릭시 전체 목록 조회
     const allList = () =>{
         setSearchWord("")
+        getPageNumList(1);
         getData();
     }
 
@@ -94,7 +95,11 @@ export default function List () {
 
     // 사용자가 페이지 번호 클릭 시 실행
     useEffect(() => {
-        getData();
+        if (searchWord == ""){
+            getData();
+        }else {
+            handleSearch();
+        }
     }, [currentPage]);
 
     // 전체 페이지 번호 개수 구하기
@@ -116,6 +121,9 @@ export default function List () {
         }
     }, []);
 
+
+    const currentSet = Math.ceil(currentPage/pageNumListSize);
+
     // 이전 페이지 버튼
     const goClickPrev = () => {
         window.scrollTo({
@@ -123,14 +131,11 @@ export default function List () {
             behavior:'smooth',
         });
 
-        // TODO
-        // 이전 페이지 에러 해결
-        // 현상 : 1 page 외 다른 숫자 클릭 후 이전 버튼을 누르면 firstRecordIndex 가 -25 로 나와 에러 발생
-        if(currentPage > 1) {
+        if(currentSet > 1) {
             getPageNumList(pageNumList[0] - pageNumListSize);
         }else{
             getPageNumList(1);
-            return alert("1번째 페이지입니다.");
+            return alert("첫번째 페이지입니다.");
         }
     }
 
@@ -168,7 +173,7 @@ export default function List () {
                         onChange={searchKeywordOnChangeHandler}
                         type="text" value={searchWord}/>
                     <button
-                        onClick={handleSearch}
+                        onClick={()=> {getPageNumList(1); handleSearch(); }}
                         name="검색" className="gradient">
                         검색
                     </button>

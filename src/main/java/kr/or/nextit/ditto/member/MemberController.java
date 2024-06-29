@@ -3,6 +3,7 @@ package kr.or.nextit.ditto.member;
 
 import kr.or.nextit.ditto.file.FileController;
 import kr.or.nextit.ditto.common.SearchVO;
+import kr.or.nextit.ditto.freeboard.FreeBoardVO;
 import kr.or.nextit.ditto.rent.RentVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -169,8 +170,13 @@ public class MemberController {
 
     // 관리자 회원 정보 리스트
     @GetMapping("/adminMemberList")
-    public List<MemberVO> adminPageMemberList(){
-        return service.adminPageMemberList();
+    public HashMap<String, Object> getBoardList(SearchVO vo){
+        List<MemberVO> memberList = service.getMemberList(vo);
+        int memberListCount = service.getMemberListCount(vo);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("memberList", memberList);
+        map.put("memberListCount", memberListCount);
+        return map;
     }
 
     // 관리자 페이지 회원 비활성화

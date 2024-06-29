@@ -42,9 +42,15 @@ public class MemberService {
     public void updateMemberData(MemberVO post){
         mapper.updateMemberData(post); // 마이페이지 회원정보 수정
     }
-    public List<MemberVO> adminPageMemberList(){
-        return mapper.adminPageMemberList();
-    } // 관리자 페이지 회원 정보 리스트
+
+    // 관리자 페이지 회원 정보 리스트
+    public List<MemberVO> getMemberList(SearchVO vo){
+        return mapper.getMemberList(vo);
+    }
+    // 회원수 조회
+    public int getMemberListCount(SearchVO vo){
+        return mapper.getMemberListCount(vo);
+    }
     public void adminPageMemberDeleteY(MemberVO memberId){
         mapper.adminPageMemberDeleteY(memberId); // 관리자 페이지 회원 비활성화
     }

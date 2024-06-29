@@ -6,12 +6,10 @@ export default function AdminPage(){
 
     const [memberList, setMemberList] = useState([]) // 회원 정보 리스트
     const [freeBoardList, setFreeBoardList] = useState([])// 자유게시판 리스트
-    const [relayBoardList, setRelayBoardList] = useState([]) // 릴레이 소설게시판 리스트
     const [bookRentList, setBookRentList] = useState([]) // 도서 대여 이력 리스트
     const [podcastList, setPodcastList] = useState([]) // 팟캐스트 리스트
     const [showMemberList, setShowMemberList] = useState(false) // 회원 정보 화면표시
     const [showFreeBoardList, setShowFreeBoardList] = useState(false) // 자유게시판 화면표시
-    const [showRelayBoardList, setShowRelayBoardList] = useState(false) // 릴레이 소설 게시판 화면표시
     const [showBookList, setShowBookList] = useState(false) // 도서 대여 이력 화면표시
     const [showPodcastList, setShowPodcastList] = useState(false) // 팟캐스트 화면표시
     const [searchType, setSearchType] = useState("아이디") // 회원 정보 검색타입
@@ -19,6 +17,8 @@ export default function AdminPage(){
     const [memberSubChangeData, setMemberSubChangeData] = useState("Y") // 멤버십 상태 변경용
     const [memberDelete, setMemberDelete] = useState("Y") // 회원 활동 상태 변경용
     const boardType = "freeBoard"; // 자유게시판 타입
+
+    const memberDT = JSON.parse(sessionStorage.getItem("member"))
 
     // 페이징 처리
     const [totalBoardListCount, setTotalBoardListCount] = useState(0);  // 전체 게시글 개수
@@ -45,9 +45,17 @@ export default function AdminPage(){
     const getMemberData = async () => {
 
         try {
-            const resMem = await axios.get("/adminMemberList");
-
-            setMemberList(resMem.data)
+            const firstRecordIndex = (currentPage - 1) * pageNumListSize + 1; // 시작 페이지
+            const res = await axios.get("/adminMemberList",{
+                params:{
+                    firstRecordIndex:firstRecordIndex - 1,
+                    pageNumListSize:pageNumListSize
+                }
+            });
+            if (res.data) {
+                setMemberList(res.data.memberList)                // 전체 게시글 목록
+                setTotalBoardListCount(res.data.memberListCount);   // 전체 게시글 개수(전체 페이지 번호를 위해 필요함)
+            }
 
         } catch (error) {
             console.error("회원정보 에러", error);
@@ -62,26 +70,13 @@ export default function AdminPage(){
             {
                 params:{
                     firstRecordIndex:firstRecordIndex - 1,
-                    searchWord:searchWord,
-                    searchType:searchType,
-                    pageNumListSize:pageNumListSize,
+                    memberAdmin: memberDT.memberAdmin,
+                    pageNumListSize:pageNumListSize
                 }
             })
         if (res.data) {
             setFreeBoardList(res.data.boardList);                  // 전체 게시글 목록
             setTotalBoardListCount(res.data.boardListCount);   // 전체 게시글 개수(전체 페이지 번호를 위해 필요함)
-        }
-    }
-
-    // 릴레이 소설게시판 리스트 조회
-    const getRelayBoardData = async () => {
-        try {
-            const resRelayBoard = await axios.get("/adminRelayBoardList");
-
-            setRelayBoardList(resRelayBoard.data)
-
-        } catch (error) {
-            console.error("릴레이 소설 게시판 에러", error);
         }
     }
 
@@ -96,12 +91,14 @@ export default function AdminPage(){
         }
     }
 
+
+
     useEffect(() =>{
         setShowMemberList(true)
         getMemberData();
         getFreeBoardData();
-        getRelayBoardData();
         getBookRentData();
+
     },[])
 
     // 멤버 아이디로 회원 정보, 게시판, 도서 대여이력 검색
@@ -112,34 +109,37 @@ export default function AdminPage(){
                 searchMemberList()
             }else if (showFreeBoardList){
                 searchFreeBoardList()
-            }else if (showRelayBoardList){
-                searchRelayBoardList()
             }else if (showBookList){
                 searchBookList()
             }else if (showPodcastList){
                 searchPodcastList()
             }
+            getPageNumList(1)
             return;
         }
         getMemberData();
         getFreeBoardData();
-        getRelayBoardData();
         getBookRentData();
         searchPodcastList();
+        getPageNumList(1);
     }
 
     // 회원정보 검색요청
     const searchMemberList = async () => {
         try {
-            const res = await axios.post("/adminMemberListSearch",{
-                searchType: searchType,
-                searchWord : searchWord
-            },{
-                headers: {
-                    "Content-Type": "application/json"
+            const firstRecordIndex = (currentPage - 1) * pageNumListSize + 1; // 시작 페이지
+            const res = await axios.get("/adminMemberList",{
+                params:{
+                    firstRecordIndex:firstRecordIndex - 1,
+                    searchType: searchType,
+                    searchWord : searchWord,
+                    pageNumListSize: pageNumListSize
                 }
             });
-            setMemberList(res.data)
+            if (res.data) {
+                setMemberList(res.data.memberList)                // 전체 게시글 목록
+                setTotalBoardListCount(res.data.memberListCount);   // 전체 게시글 개수(전체 페이지 번호를 위해 필요함)
+            }
 
         } catch (error) {
             console.error("도서 대여 이력조회 에러", error);
@@ -148,35 +148,20 @@ export default function AdminPage(){
 
     // 자유게시판 검색요청
     const searchFreeBoardList = async  () => {
-        const res =
-            await axios.post("/freeBoard/search", {
-                searchType : searchType,
-                searchWord : searchWord,
-            },{
-                headers: {
-                    "Content-Type": "application/json"
+        const firstRecordIndex = (currentPage - 1) * pageNumListSize + 1; // 시작 페이지
+        const res = await axios.get("/freeBoard/list",
+            {
+                params:{
+                    firstRecordIndex:firstRecordIndex - 1,
+                    searchWord:searchWord,
+                    memberAdmin: memberDT.memberAdmin,
+                    searchType:searchType,
+                    pageNumListSize:pageNumListSize
                 }
             })
         if (res.data) {
-            setFreeBoardList(res.data)
-        }
-    }
-
-    // 릴레이 소설게시판 검색요청
-    const searchRelayBoardList = async () => {
-        try {
-            const res = await axios.post("/adminRelayBoardListSearch",{
-                searchType: searchType,
-                searchWord : searchWord
-            },{
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            setRelayBoardList(res.data)
-
-        } catch (error) {
-            console.error("도서 대여 이력조회 에러", error);
+            setFreeBoardList(res.data.boardList);                  // 전체 게시글 목록
+            setTotalBoardListCount(res.data.boardListCount);   // 전체 게시글 개수(전체 페이지 번호를 위해 필요함)
         }
     }
 
@@ -351,7 +336,11 @@ export default function AdminPage(){
 
     // 사용자가 페이지 번호 클릭 시 실행
     useEffect(() => {
-        getFreeBoardData();
+        if (searchWord == ""){
+            getFreeBoardData();
+        }else {
+            searchFreeBoardList();
+        }
     }, [currentPage]);
 
     // 전체 페이지 번호 개수 구하기
@@ -412,10 +401,10 @@ export default function AdminPage(){
                                 onClick={() => {
                                     setShowMemberList(true);
                                     setShowFreeBoardList(false);
-                                    setShowRelayBoardList(false);
                                     setShowBookList(false);
                                     setShowPodcastList(false);
                                     getMemberData();
+                                    getPageNumList(1);
                                     setSearchWord("");
                                     setSearchType("아이디");
                                 }}
@@ -424,10 +413,10 @@ export default function AdminPage(){
                                 onClick={() => {
                                     setShowMemberList(false);
                                     setShowFreeBoardList(true);
-                                    setShowRelayBoardList(false);
                                     setShowBookList(false);
                                     setShowPodcastList(false);
                                     getFreeBoardData();
+                                    getPageNumList(1);
                                     setSearchWord("");
                                     setSearchType("아이디");
                                 }}
@@ -436,22 +425,10 @@ export default function AdminPage(){
                                 onClick={() => {
                                     setShowMemberList(false);
                                     setShowFreeBoardList(false);
-                                    setShowRelayBoardList(true);
-                                    setShowBookList(false);
-                                    setShowPodcastList(false);
-                                    getRelayBoardData();
-                                    setSearchWord("");
-                                    setSearchType("아이디");
-                                }}
-                                className={`btn mt-1 text-lg leading-6 mx-3 ${showRelayBoardList ? 'text-blue-600' : 'text-gray-600'}`}>릴레이 소설게시판</span>
-                            <span
-                                onClick={() => {
-                                    setShowMemberList(false);
-                                    setShowFreeBoardList(false);
-                                    setShowRelayBoardList(false);
                                     setShowBookList(true);
                                     setShowPodcastList(false);
                                     getBookRentData();
+                                    getPageNumList(1);
                                     setSearchWord("");
                                     setSearchType("아이디");
                                 }}
@@ -460,10 +437,10 @@ export default function AdminPage(){
                                 onClick={() => {
                                     setShowMemberList(false);
                                     setShowFreeBoardList(false);
-                                    setShowRelayBoardList(false);
                                     setShowBookList(false);
                                     setShowPodcastList(true);
                                     // getPodcastData();
+                                    getPageNumList(1);
                                     setSearchWord("");
                                     setSearchType("아이디");
                                 }}
@@ -482,20 +459,6 @@ export default function AdminPage(){
                                         className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
                                     </button>
                                 </label>) : showFreeBoardList ? (
-                                <label className="float-right">
-                                    <select onChange={searchTypeOnChangeHandler}>
-                                        <option value="아이디">아이디</option>
-                                        <option value="제목">제목</option>
-                                    </select>
-                                    <input
-                                        type="text"
-                                        onChange={searchWordOnChangeHandler}
-                                        className="border" style={{borderRadius: "4px"}} value={searchWord}/>
-                                    <button
-                                        onClick={searchBtn}
-                                        className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
-                                    </button>
-                                </label>) : showRelayBoardList ? (
                                 <label className="float-right">
                                     <select onChange={searchTypeOnChangeHandler}>
                                         <option value="아이디">아이디</option>
@@ -600,7 +563,7 @@ export default function AdminPage(){
                                 </table>) : showFreeBoardList ? (
                                 // 자유게시판 리스트
                                 <table className="table-auto w-full border-collapse border border-gray-800">
-                                    <p>총 {totalBoardListCount} 개의 게시물이 있습니다.</p>
+                                    <p className="w-60">총 {totalBoardListCount} 개의 게시물이 있습니다.</p>
                                     <tr className="text-center">
                                         <td className="border border-gray-800 px-4 py-2">번호</td>
                                         <td className="border border-gray-800 px-4 py-2">제목</td>
@@ -616,47 +579,16 @@ export default function AdminPage(){
                                                     <td className="border border-gray-800 px-4 py-2">{v.freeBoardNo}</td>
                                                     <td className="border border-gray-800 px-4 py-2">{v.freeTitle}</td>
                                                     <td className="border border-gray-800 px-4 py-2">{v.memberId}</td>
-                                                    <td className="border border-gray-800 px-4 py-2">{v.createDate}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{new Date(v.createDate).toLocaleString('ko-kr', {
+                                                        month: "long",
+                                                        day: "numeric"
+                                                    })}</td>
                                                     <td className="border border-gray-800 px-4 py-2">{v.hits}</td>
                                                     <td className="border border-gray-800 px-4 py-2">{v.status == 'Y' ? (
                                                         <button className="text-red hover:bg-red-300" type="button">
                                                             활성화</button>) : (
                                                         <button className="text-red hover:bg-red-300" type="button">
                                                             비활성화</button>)}</td>
-                                                </tr>
-                                            )
-                                        )
-                                    ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
-                                </table>
-                            ) : showRelayBoardList ? (
-                                // 릴레이 소설게시판 리스트
-                                <table className="table-auto w-full border-collapse border border-gray-800">
-                                    <tr className="text-center">
-                                        <td className="border border-gray-800 px-4 py-2">회원번호</td>
-                                        <td className="border border-gray-800 px-4 py-2">아이디</td>
-                                        <td className="border border-gray-800 px-4 py-2">이름</td>
-                                        <td className="border border-gray-800 px-4 py-2">닉네임</td>
-                                        <td className="border border-gray-800 px-4 py-2">멤버십 구독여부</td>
-                                        <td className="border border-gray-800 px-4 py-2">전화번호</td>
-                                        <td className="border border-gray-800 px-4 py-2">활성화</td>
-                                        <td className="border border-gray-800 px-4 py-2">회원상태 변경</td>
-                                    </tr>
-                                    {memberList && memberList.length > 0 ? (
-                                        memberList.map((v, i) =>
-                                            (
-                                                <tr key={i} className="text-center">
-                                                    <td className="border border-gray-800 px-4 py-2">{v.memberNo}</td>
-                                                    <td className="border border-gray-800 px-4 py-2">{v.memberId}</td>
-                                                    <td className="border border-gray-800 px-4 py-2">{v.memberName}</td>
-                                                    <td className="border border-gray-800 px-4 py-2">{v.memberNickname}</td>
-                                                    <td className="border border-gray-800 px-4 py-2">{v.memberSub != 'N' ? "O" : "X"}</td>
-                                                    <td className="border border-gray-800 px-4 py-2">{v.memberTel}</td>
-                                                    <td className="border border-gray-800 px-4 py-2">{v.memberDelete == 'N' ? "Y" : "N"}</td>
-                                                    <td className="border border-gray-800 px-4 py-2">{v.memberDelete == 'N' ? (
-                                                        <button className="text-red" type="button">
-                                                            탈퇴</button>) : (
-                                                        <button className="text-red" type="button">회원
-                                                            활성화</button>)}</td>
                                                 </tr>
                                             )
                                         )
