@@ -12,4 +12,12 @@
         FROM
             SEAT
     </select>
+    <update id="goReservate" parameterType="int">
+        UPDATE
+            SEAT
+        SET
+            STATUS = 'N'
+        WHERE
+            SEAT_NO = #{seatNo}
+    </update>
 </mapper>

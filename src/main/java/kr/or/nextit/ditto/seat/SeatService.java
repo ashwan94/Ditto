@@ -13,4 +13,5 @@ public class SeatService {
     public List<SeatVO> selectSeat(){
         return mapper.selectSeat();
     }
+    void goReservate(int seatNo){mapper.goReservate(seatNo);}
 }

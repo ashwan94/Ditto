@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 // import {MQTTSub} from "../../js/mqtt";
 import {useEffect, useState} from "react";
 import mqtt from "mqtt";
@@ -42,15 +42,16 @@ export default function List(){
         client.end();
     });
 
+    // 로그인 회원 정보
+    const memberLog = sessionStorage.getItem("member");
+    const [member, setMember] = useState(memberLog);
+    const navigate = useNavigate();
+
     // DB 에서 가져온 SEAT Table
     const [seatList, setSeatList] = useState([]);
     const getSeatData = async () => {
         const res = await axios.get("/seat/list");
-
-
-
         setSeatList(res.data);
-        console.log("결과 : ", res.data);
     };
 
     // 브라우저 로딩 완료 시 DB 의 SEAT 에서 좌석 정보 가져옴
@@ -58,10 +59,32 @@ export default function List(){
         getSeatData();
     }, []);
 
-    //  사용자가 좌석 클릭 시 색상 변경
-    const [seatClick, setSeatClick] = useState(false);
-    const goChangeSeat = () => {
+    //  사용자가 좌석 클릭 시 상태 변경
+    const [seatNo, setSeatNo] = useState(0);            // DB 로 전송할 seatNo
+    const [seatClick, setSeatClick] = useState(false); // 예약할 좌석 선택 상태 값
+    const [seatIndex, setSeatIndex] = useState(0);      // map 함수 실행 시 선택된 index 파악을 위한 변수
+    const goChangeSeat = (e) => {
         setSeatClick(!seatClick);
+        setSeatNo(e);
+    }
+
+    // 선택한 좌석 예약하기
+    const goReservate = async () => {
+        if(!member){
+            alert("로그인이 필요한 서비스입니다.");
+            navigate("/signIn")
+            return;
+        }
+        const res = await axios.post("/seat/reservate", null,{
+            params:{
+                seatNo:seatNo,
+            }
+        })
+        if(res.status === 200){
+            alert("선택하신" + seatNo + "번 좌석 예약이 완료되었습니다.");
+            getSeatData();
+            setSeatClick(false);
+        }
     }
 
     // 좌석 배치도 로직
@@ -84,7 +107,17 @@ export default function List(){
         <main>
             <section className="gj do hj sp text-black">
                 <div className="grid place-items-center static">
-                    <div className="text-5xl">좌석 배치도</div>
+                    <div className="grid grid-cols-3">
+                        <div></div>
+                    <div className="text-5xl">
+                        <span>좌석 배치도</span>
+                    </div>
+                        <div className="text-end">
+                            <button
+                                onClick={goReservate}
+                                className="bg-blue-600 text-white rounded border text-white font-bold p-3 text-2xl">예약하기</button>
+                        </div>
+                    </div>
                     <div className="text-xl">예약할 좌석을 선택해주세요</div>
                     <img src="../../images/seat/seat_map.png" alt="좌석 배치도" className="w-7/12"/>
                     <div className="grid grid-cols-2 z-10 w-28 absolute transform -translate-x-60 -translate-y-28">
@@ -111,13 +144,21 @@ export default function List(){
                                                         <>
                                                             {v.status === 'Y' ?
                                                                 <>
-                                                                    {seatClick ?
-                                                                        <button className="relative text-center">
+                                                                    {seatClick && seatIndex === i ?
+                                                                        <button className="relative text-center"
+                                                                                onClick={() => {
+                                                                                    setSeatIndex(i);
+                                                                                    goChangeSeat(v.seatNo)
+                                                                                }}>
                                                                             <span className="absolute mt-3 text-black text-sm">{v.seatNo}</span>
                                                                             <img src="../../images/seat/left_clicked.png"/>
                                                                         </button>
                                                                         :
-                                                                        <button className="relative text-center">
+                                                                        <button className="relative text-center"
+                                                                                onClick={() => {
+                                                                                    setSeatIndex(i);
+                                                                                    goChangeSeat(v.seatNo)
+                                                                                }}>
                                                                             <span className="absolute mt-3 text-black text-sm">{v.seatNo}</span>
                                                                             <img src="../../images/seat/left_none.png"/>
                                                                         </button>
@@ -137,13 +178,21 @@ export default function List(){
                                                 <>
                                                     {v.status === 'Y' ?
                                                         <>
-                                                            {seatClick ?
-                                                                <button className="relative text-center">
+                                                            {seatClick && seatIndex === i ?
+                                                                <button className="relative text-center"
+                                                                        onClick={() => {
+                                                                            setSeatIndex(i);
+                                                                            goChangeSeat(v.seatNo)
+                                                                        }}>
                                                                     <span className="absolute mt-3 text-sm transform -translate-x-2">{v.seatNo}</span>
                                                                     <img src="../../images/seat/right_clicked.png"/>
                                                                 </button>
                                                                 :
-                                                                <button className="relative text-center">
+                                                                <button className="relative text-center"
+                                                                        onClick={() => {
+                                                                            setSeatIndex(i);
+                                                                            goChangeSeat(v.seatNo)
+                                                                        }}>
                                                                     <span className="absolute mt-3 text-black text-sm transform -translate-x-2">{v.seatNo}</span>
                                                                     <img src="../../images/seat/right_none.png"/>
                                                                 </button>
