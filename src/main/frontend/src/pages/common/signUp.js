@@ -325,7 +325,8 @@ export default function SignUp() {
         // DB에 쿼리 쏴서 insert 하기
         if (!duplicatedNickname && !duplicatedId && !checkCode
             && memberId != "" && memberName != "" && memberNickname != "" && memberPw != "" && memberConfirmPw != ""
-            && memberBirth != "" && memberTel != "" && memberAdd != "" && memberPostcode != "" && memberDetailAdd != "") {
+            && memberBirth != "" && memberTel != "" && memberAdd != "" && memberPostcode != "" && memberDetailAdd != ""
+        && idErrorMessage == "사용가능한 아이디입니다." && nicknameErrorMessage == "사용가능한 닉네임입니다." && pwConfirmErrorMessage == "") {
 
 
             // 여기서 쿼리 쏘기
