@@ -25,13 +25,13 @@ public class FreeBoardService {
     }
 
     // 제목으로 검색
-    public List<FreeBoardVO> searchBoardListByTitle(@Param("keyword") String keyword){
-        return mapper.searchBoardListByTitle(keyword);
+    public List<FreeBoardVO> searchBoardListByTitle(String searchWord){
+        return mapper.searchBoardListByTitle(searchWord);
     }
 
     // 작성자 이름으로 검색
-    public List<FreeBoardVO> searchBoardListByMemberId(@Param("keyword") String keyword){
-        return mapper.searchBoardListByMemberId(keyword);
+    public List<FreeBoardVO> searchBoardListByMemberId(String searchWord){
+        return mapper.searchBoardListByMemberId(searchWord);
     }
 
     // 게시글 작성

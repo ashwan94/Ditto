@@ -1,5 +1,6 @@
 import axios from "axios";
-import {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 
 export default function AdminPage(){
 
@@ -17,6 +18,15 @@ export default function AdminPage(){
     const [searchWord, setSearchWord] = useState("") // 회원 정보 검색키워드
     const [memberSubChangeData, setMemberSubChangeData] = useState("Y") // 멤버십 상태 변경용
     const [memberDelete, setMemberDelete] = useState("Y") // 회원 활동 상태 변경용
+    const boardType = "freeBoard"; // 자유게시판 타입
+
+    // 페이징 처리
+    const [totalBoardListCount, setTotalBoardListCount] = useState(0);  // 전체 게시글 개수
+    const [currentPage, setCurrentPage] = useState(1);                  // 현재 페이지 번호
+
+    const [endPage, setEndPage] = useState(0);                          // 최대 페이지 번호
+    const [pageNumList, setPageNumList] = useState([]);                  // 페이지 번호 리스트
+    const pageNumListSize = 10;
 
     // TODO 날짜 검색 타입클릭시 자동으로 날짜선택 열리도록 할수있나 알아보기
 
@@ -47,13 +57,19 @@ export default function AdminPage(){
 
     // 자유게시판 리스트 조회
     const getFreeBoardData = async () => {
-        try {
-            const resFreeBoard = await axios.get("/adminFreeBoardList");
-
-            setFreeBoardList(resFreeBoard.data)
-
-        } catch (error) {
-            console.error("자유게시판 에러", error);
+        const firstRecordIndex = (currentPage - 1) * pageNumListSize + 1; // 시작 페이지
+        const res = await axios.get("/freeBoard/list",
+            {
+                params:{
+                    firstRecordIndex:firstRecordIndex - 1,
+                    searchWord:searchWord,
+                    searchType:searchType,
+                    pageNumListSize:pageNumListSize,
+                }
+            })
+        if (res.data) {
+            setFreeBoardList(res.data.boardList);                  // 전체 게시글 목록
+            setTotalBoardListCount(res.data.boardListCount);   // 전체 게시글 개수(전체 페이지 번호를 위해 필요함)
         }
     }
 
@@ -131,20 +147,14 @@ export default function AdminPage(){
     }
 
     // 자유게시판 검색요청
-    const searchFreeBoardList = async () => {
-        try {
-            const res = await axios.post("/adminFreeBoardListSearch",{
-                searchType: searchType,
-                searchWord : searchWord
-            },{
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
+    const searchFreeBoardList = async  () => {
+        const res =
+            await axios.get("/freeBoard/search", {
+                searchType : searchType,
+                searchWord : searchWord,
+            })
+        if (res.data) {
             setFreeBoardList(res.data)
-
-        } catch (error) {
-            console.error("도서 대여 이력조회 에러", error);
         }
     }
 
@@ -323,6 +333,71 @@ export default function AdminPage(){
         }
     }
 
+    // 페이지 번호 그리기(번호 분할)
+    const getPageNumList = (startNum) => {
+        const list = [];
+        for(let i = startNum; i < (startNum + pageNumListSize); i++){
+            if(i <= endPage){
+                list.push(i)
+            }
+        }
+        setPageNumList(list);
+        setCurrentPage(startNum);
+    }
+
+    // 사용자가 페이지 번호 클릭 시 실행
+    useEffect(() => {
+        getFreeBoardData();
+    }, [currentPage]);
+
+    // 전체 페이지 번호 개수 구하기
+    useEffect(() => {
+        const endNum = Math.ceil(totalBoardListCount / pageNumListSize);
+        setEndPage(endNum)
+    }, [totalBoardListCount]);
+
+    // 페이지 개수 조회
+    useEffect(() => {
+        getPageNumList(currentPage);
+    }, [endPage]);
+
+    // 현재 버튼이 몇번째 세트인지 나타내는 수
+    const currentSet = Math.ceil(currentPage/pageNumListSize);
+
+    // 이전 페이지 버튼
+    const goClickPrev = () => {
+        window.scrollTo({
+            top:10,
+            behavior:'smooth',
+        });
+
+        if(currentSet > 1) {
+            getPageNumList(pageNumList[0] - pageNumListSize);
+        }else{
+            getPageNumList(1);
+            return alert("첫번째 페이지입니다.");
+        }
+    }
+
+    // 다음 페이지 버튼
+    const goClickNext = () => {
+        window.scrollTo({
+            top:10,
+            behavior:'smooth',
+        })
+
+        // currentPage 가 endPage 보다 작으면서, pageNumList[1,2,3,4,5] 길이(5) 와 pageNumListSize(5) 를
+        // 나눈 나머지가 0일 때 2가지 조건을 동시에 만족하면 'Next Button' 이 실행됨
+        // pageNumList.length % pageNumListSize == 0 의 의미는 마지막 page 가 아니라는 의미
+        // 그러나 위 조건만으로 실행시키기에 만약 마지막 page 의 pageNumList 가 5일 경우 동작하므로
+        // 또다른 조건인 currentPage < endPage 로 이를 보완하여 해결한다
+        if(currentPage < endPage && pageNumList.length % pageNumListSize == 0) {
+            getPageNumList(pageNumList[0] + pageNumListSize)
+        }else{
+            return alert("마지막 페이지입니다.");
+        }
+    }
+
     return (
         <main className="rundry">
             <section className="i pg fh rm ki xn vq gj qp gr hj rp hr ">
@@ -390,19 +465,19 @@ export default function AdminPage(){
                                 }}
                                 className={`btn mt-1 text-lg leading-6 mx-3 ${showPodcastList ? 'text-blue-600' : 'text-gray-600'}`}>팟캐스트</span>
                             {showMemberList ? (
-                            <label className="float-right">
-                                <select onChange={searchTypeOnChangeHandler}>
-                                    <option value="아이디">아이디</option>
-                                </select>
-                                <input
-                                    type="text"
-                                    onChange={searchWordOnChangeHandler}
-                                    className="border" style={{borderRadius: "4px"}} value={searchWord}/>
-                                <button
-                                    onClick={searchBtn}
-                                    className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
-                                </button>
-                            </label>) : showFreeBoardList ? (
+                                <label className="float-right">
+                                    <select onChange={searchTypeOnChangeHandler}>
+                                        <option value="아이디">아이디</option>
+                                    </select>
+                                    <input
+                                        type="text"
+                                        onChange={searchWordOnChangeHandler}
+                                        className="border" style={{borderRadius: "4px"}} value={searchWord}/>
+                                    <button
+                                        onClick={searchBtn}
+                                        className="ml-2 bg-blue-500 text-white w-14" style={{borderRadius: "4px"}}>검색
+                                    </button>
+                                </label>) : showFreeBoardList ? (
                                 <label className="float-right">
                                     <select onChange={searchTypeOnChangeHandler}>
                                         <option value="아이디">아이디</option>
@@ -439,7 +514,7 @@ export default function AdminPage(){
                                         <option value="반납예정일">반납예정일</option>
                                         <option value="실제반납일">실제반납일</option>
                                     </select>
-                                    {searchType == "아이디" || searchType == "도서명"? (
+                                    {searchType == "아이디" || searchType == "도서명" ? (
                                         <input
                                             type="text"
                                             onChange={searchWordOnChangeHandler}
@@ -481,143 +556,194 @@ export default function AdminPage(){
                                         <td class="border border-gray-800 px-4 py-2">아이디</td>
                                         <td class="border border-gray-800 px-4 py-2">이름</td>
                                         <td class="border border-gray-800 px-4 py-2">닉네임</td>
-                                        <td class="border border-gray-800 px-4 py-2 text-purple-700"><button onClick={memberSubChange}>멤버십</button></td>
+                                        <td class="border border-gray-800 px-4 py-2 text-purple-700">
+                                            <button onClick={memberSubChange}>멤버십</button>
+                                        </td>
                                         <td class="border border-gray-800 px-4 py-2">전화번호</td>
-                                        <td class="border border-gray-800 px-4 py-2 text-purple-700"><button onClick={memberStatusChange}>회원상태</button></td>
+                                        <td class="border border-gray-800 px-4 py-2 text-purple-700">
+                                            <button onClick={memberStatusChange}>회원상태</button>
+                                        </td>
                                     </tr>
-                                        {memberList && memberList.length > 0 ? (
-                                            memberList.map((v,i)=>
-                                                (
-                                                    <tr key={i} className="text-center">
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberNo}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberId}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberName}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberNickname}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberSub != 'N' ? (
-                                                            <button
-                                                                onClick={() => memberSubStatus(v.memberId,v.memberSub)}
-                                                                className="text-blue-600">구독중</button>
-                                                        ) : <button
-                                                                onClick={() => memberSubStatus(v.memberId,v.memberSub)}
-                                                                className="text-red">미가입</button>}
-                                                        </td>
-                                                        <td className="border border-gray-800 px-4 py-2">{formatPhoneNumber(v.memberTel)}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberDelete == 'N' ? (
-                                                            <button
-                                                                onClick={()=> memberDeleteY(v.memberId)}
-                                                                className="text-blue-600" type="button">
-                                                                활성화</button>) : (
-                                                            <button
-                                                                onClick={() => memberDeleteN(v.memberId)}
-                                                                className="text-red" type="button">정지</button>)}</td>
-                                                    </tr>
-                                                )
-                                            )
-                                        ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
-                                    </table>) : showFreeBoardList ? (
-                                            // 자유게시판 리스트
-                                            <table className="table-auto w-full border-collapse border border-gray-800">
-                                                <tr className="text-center">
-                                                    <td className="border border-gray-800 px-4 py-2">회원번호</td>
-                                                    <td className="border border-gray-800 px-4 py-2">아이디</td>
-                                                    <td className="border border-gray-800 px-4 py-2">이름</td>
-                                                    <td className="border border-gray-800 px-4 py-2">닉네임</td>
-                                                    <td className="border border-gray-800 px-4 py-2">멤버십 구독여부</td>
-                                                    <td className="border border-gray-800 px-4 py-2">전화번호</td>
-                                                    <td className="border border-gray-800 px-4 py-2">활성화</td>
-                                                    <td className="border border-gray-800 px-4 py-2">회원상태 변경</td>
+                                    {memberList && memberList.length > 0 ? (
+                                        memberList.map((v, i) =>
+                                            (
+                                                <tr key={i} className="text-center">
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberNo}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberId}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberName}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberNickname}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberSub != 'N' ? (
+                                                        <button
+                                                            onClick={() => memberSubStatus(v.memberId, v.memberSub)}
+                                                            className="text-blue-600">구독중</button>
+                                                    ) : <button
+                                                        onClick={() => memberSubStatus(v.memberId, v.memberSub)}
+                                                        className="text-red">미가입</button>}
+                                                    </td>
+                                                    <td className="border border-gray-800 px-4 py-2">{formatPhoneNumber(v.memberTel)}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberDelete == 'N' ? (
+                                                        <button
+                                                            onClick={() => memberDeleteY(v.memberId)}
+                                                            className="text-blue-600" type="button">
+                                                            활성화</button>) : (
+                                                        <button
+                                                            onClick={() => memberDeleteN(v.memberId)}
+                                                            className="text-red" type="button">정지</button>)}</td>
                                                 </tr>
-                                                {memberList && memberList.length > 0 ? (
-                                                    memberList.map((v, i) =>
-                                                        (
-                                                            <tr key={i} className="text-center">
-                                                                <td className="border border-gray-800 px-4 py-2">{v.memberNo}</td>
-                                                                <td className="border border-gray-800 px-4 py-2">{v.memberId}</td>
-                                                                <td className="border border-gray-800 px-4 py-2">{v.memberName}</td>
-                                                                <td className="border border-gray-800 px-4 py-2">{v.memberNickname}</td>
-                                                                <td className="border border-gray-800 px-4 py-2">{v.memberSub != 'N' ? "O" : "X"}</td>
-                                                                <td className="border border-gray-800 px-4 py-2">{v.memberTel}</td>
-                                                                <td className="border border-gray-800 px-4 py-2">{v.memberDelete == 'N' ? "Y" : "N"}</td>
-                                                                <td className="border border-gray-800 px-4 py-2">{v.memberDelete == 'N' ? (
-                                                                    <button className="text-red hover:bg-red-300" type="button">
-                                                                        탈퇴</button>) : (
-                                                                    <button className="text-red hover:bg-red-300" type="button">회원
-                                                                        활성화</button>)}</td>
-                                                            </tr>
-                                                        )
-                                                    )
-                                                ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
-                                    </table>
-                                    ) : showRelayBoardList ? (
-                                    // 릴레이 소설게시판 리스트
-                                    <table className="table-auto w-full border-collapse border border-gray-800">
-                                        <tr className="text-center">
-                                            <td className="border border-gray-800 px-4 py-2">회원번호</td>
-                                            <td className="border border-gray-800 px-4 py-2">아이디</td>
-                                            <td className="border border-gray-800 px-4 py-2">이름</td>
-                                            <td className="border border-gray-800 px-4 py-2">닉네임</td>
-                                            <td className="border border-gray-800 px-4 py-2">멤버십 구독여부</td>
-                                            <td className="border border-gray-800 px-4 py-2">전화번호</td>
-                                            <td className="border border-gray-800 px-4 py-2">활성화</td>
-                                            <td className="border border-gray-800 px-4 py-2">회원상태 변경</td>
-                                        </tr>
-                                        {memberList && memberList.length > 0 ? (
-                                            memberList.map((v, i) =>
-                                                (
-                                                    <tr key={i} className="text-center">
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberNo}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberId}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberName}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberNickname}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberSub != 'N' ? "O" : "X"}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberTel}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberDelete == 'N' ? "Y" : "N"}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.memberDelete == 'N' ? (
-                                                            <button className="text-red" type="button">
-                                                                탈퇴</button>) : (
-                                                            <button className="text-red" type="button">회원
-                                                                활성화</button>)}</td>
-                                                    </tr>
-                                                )
                                             )
-                                        ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
-                                    </table>
-                                    ) : showBookList ? (
-                                    // 도서 대여 이력 리스트
-                                    <table className="table-auto w-full border-collapse border border-gray-800">
-                                        <tr className="text-center">
-                                            <td className="border border-gray-800 px-4 py-2">도서 번호</td>
-                                            <td className="border border-gray-800 px-4 py-2">도서명</td>
-                                            <td className="border border-gray-800 px-4 py-2">대여일</td>
-                                            <td className="border border-gray-800 px-4 py-2">반납예정일</td>
-                                            <td className="border border-gray-800 px-4 py-2">실제 반납일</td>
-                                            <td className="border border-gray-800 px-4 py-2">회원 아이디</td>
-                                            <td
-                                                className="border border-gray-800 px-4 py-2 text-purple-700">
-                                                <button onClick={rentDelaySearch}>연체여부</button></td>
-                                        </tr>
-                                        {/* 도서대여 이력이 한개이상 존재 할때나옴 */}
-                                        {bookRentList && bookRentList.length > 0 ? (
-                                            bookRentList.map((v, i) =>
-                                                (
-                                                    <tr key={i} className="text-center">
-                                                        <td className="border border-gray-800 px-4 py-2">{v.bookNo}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.bookName}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.rentStart}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.rentEnd}</td>
-                                                        <td className="border border-gray-800 px-4 py-2">{v.rentReturn}</td>
-                                                        <td className="border border-gray-800 px-4 py-2"><button className="text-blue-500 hover:bg-blue-100" onClick={()=> idClick(v.memberId)}>{v.memberId}</button></td>
-                                                        <td className="border border-gray-800 px-4 py-2 text-red">{v.rentDelay == 'Y' ? 'Y' : null}</td>
-                                                    </tr>
-                                                )
+                                        )
+                                    ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
+                                </table>) : showFreeBoardList ? (
+                                // 자유게시판 리스트
+                                <table className="table-auto w-full border-collapse border border-gray-800">
+                                    <p>총 {totalBoardListCount} 개의 게시물이 있습니다.</p>
+                                    <tr className="text-center">
+                                        <td className="border border-gray-800 px-4 py-2">번호</td>
+                                        <td className="border border-gray-800 px-4 py-2">제목</td>
+                                        <td className="border border-gray-800 px-4 py-2">아이디</td>
+                                        <td className="border border-gray-800 px-4 py-2">작성일</td>
+                                        <td className="border border-gray-800 px-4 py-2">조회수</td>
+                                        <td className="border border-gray-800 px-4 py-2">삭제</td>
+                                    </tr>
+                                    {freeBoardList && freeBoardList.length > 0 ? (
+                                        freeBoardList.map((v, i) =>
+                                            (
+                                                <tr key={i} className="text-center">
+                                                    <td className="border border-gray-800 px-4 py-2">{v.freeBoardNo}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.freeTitle}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberId}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.createDate}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.hits}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.status == 'Y' ? (
+                                                        <button className="text-red hover:bg-red-300" type="button">
+                                                            활성화</button>) : (
+                                                        <button className="text-red hover:bg-red-300" type="button">
+                                                            비활성화</button>)}</td>
+                                                </tr>
                                             )
-                                        ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
-                                    </table>
-                                    ) : null}
-                                    < /div>
-                                </div>
-                            </div>
-                        </section>
-                    </main>
-                    )
-                }
+                                        )
+                                    ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
+                                </table>
+                            ) : showRelayBoardList ? (
+                                // 릴레이 소설게시판 리스트
+                                <table className="table-auto w-full border-collapse border border-gray-800">
+                                    <tr className="text-center">
+                                        <td className="border border-gray-800 px-4 py-2">회원번호</td>
+                                        <td className="border border-gray-800 px-4 py-2">아이디</td>
+                                        <td className="border border-gray-800 px-4 py-2">이름</td>
+                                        <td className="border border-gray-800 px-4 py-2">닉네임</td>
+                                        <td className="border border-gray-800 px-4 py-2">멤버십 구독여부</td>
+                                        <td className="border border-gray-800 px-4 py-2">전화번호</td>
+                                        <td className="border border-gray-800 px-4 py-2">활성화</td>
+                                        <td className="border border-gray-800 px-4 py-2">회원상태 변경</td>
+                                    </tr>
+                                    {memberList && memberList.length > 0 ? (
+                                        memberList.map((v, i) =>
+                                            (
+                                                <tr key={i} className="text-center">
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberNo}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberId}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberName}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberNickname}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberSub != 'N' ? "O" : "X"}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberTel}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberDelete == 'N' ? "Y" : "N"}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberDelete == 'N' ? (
+                                                        <button className="text-red" type="button">
+                                                            탈퇴</button>) : (
+                                                        <button className="text-red" type="button">회원
+                                                            활성화</button>)}</td>
+                                                </tr>
+                                            )
+                                        )
+                                    ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
+                                </table>
+                            ) : showBookList ? (
+                                // 도서 대여 이력 리스트
+                                <table className="table-auto w-full border-collapse border border-gray-800">
+                                    <tr className="text-center">
+                                        <td className="border border-gray-800 px-4 py-2">도서 번호</td>
+                                        <td className="border border-gray-800 px-4 py-2">도서명</td>
+                                        <td className="border border-gray-800 px-4 py-2">대여일</td>
+                                        <td className="border border-gray-800 px-4 py-2">반납예정일</td>
+                                        <td className="border border-gray-800 px-4 py-2">실제 반납일</td>
+                                        <td className="border border-gray-800 px-4 py-2">회원 아이디</td>
+                                        <td
+                                            className="border border-gray-800 px-4 py-2 text-purple-700">
+                                            <button onClick={rentDelaySearch}>연체여부</button>
+                                        </td>
+                                    </tr>
+                                    {/* 도서대여 이력이 한개이상 존재 할때나옴 */}
+                                    {bookRentList && bookRentList.length > 0 ? (
+                                        bookRentList.map((v, i) =>
+                                            (
+                                                <tr key={i} className="text-center">
+                                                    <td className="border border-gray-800 px-4 py-2">{v.bookNo}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.bookName}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.rentStart}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.rentEnd}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.rentReturn}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">
+                                                        <button className="text-blue-500 hover:bg-blue-100"
+                                                                onClick={() => idClick(v.memberId)}>{v.memberId}</button>
+                                                    </td>
+                                                    <td className="border border-gray-800 px-4 py-2 text-red">{v.rentDelay == 'Y' ? 'Y' : null}</td>
+                                                </tr>
+                                            )
+                                        )
+                                    ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
+                                </table>
+                            ) : null}
+                        < /div>
+                        <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
+                             className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
+                            <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                                 aria-label="Pagination">
+                                <a
+                                    onClick={goClickPrev}
+                                    className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                >
+                                    <span className="sr-only">Previous</span>
+                                    <img
+                                        src="/images/chevron-left-solid.svg"
+                                        className="h-5 w-5" aria-hidden="true"
+                                    />
+                                </a>
+                                {
+                                    pageNumList.map(((v, i) => {
+                                        return (
+                                            <Link
+                                                className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                                key={`page` + i}
+                                                state={{currentPage: currentPage}}
+                                                onClick={() => {
+                                                    // 버튼 클릭 시 현재 페이지 번호 변화
+                                                    setCurrentPage(v)
+                                                    // 버튼 클릭 시 페이지 변화시킨 후 윈도우 창 올리기
+                                                    window.scrollTo({
+                                                        top: 0,
+                                                        behavior: 'smooth',
+                                                    });
+                                                }}>{v}</Link>
+                                        )
+                                    }))
+                                }
+
+                                <a
+                                    onClick={goClickNext}
+                                    className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                >
+                                    <span className="sr-only">Next</span>
+                                    <img
+                                        src="/images/chevron-right-solid.svg"
+                                        className="h-5 w-5" aria-hidden="true"
+                                    />
+                                </a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    )
+}

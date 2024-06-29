@@ -33,12 +33,12 @@ public class FreeBoardController {
     // 검색 기능에 관련된 query 문 수정 => 게시판 작업하면서 고장난듯 | 06.27(목) | 안승환
     // 게시글 검색
     @GetMapping("/search")
-    public List<FreeBoardVO> searchBoardList(String keyword, String type) {
+    public List<FreeBoardVO> searchBoardList(String searchWord, String searchType) {
         List<FreeBoardVO> vo;
-        if ("글쓴이".equals(type)){
-            vo = freeBoardService.searchBoardListByMemberId(keyword); // 제목 기준 검색
+        if ("아이디".equals(searchType)){
+            vo = freeBoardService.searchBoardListByMemberId(searchWord); // 제목 기준 검색
         }else{
-            vo = freeBoardService.searchBoardListByTitle(keyword); // 검색어 기준 검색
+            vo = freeBoardService.searchBoardListByTitle(searchWord); // 검색어 기준 검색
         }
         return vo;
     }
@@ -72,4 +72,5 @@ public class FreeBoardController {
     public void deletePost(@RequestParam int freeBoardNo) {
         freeBoardService.deletePost(freeBoardNo);
     }
+
 }

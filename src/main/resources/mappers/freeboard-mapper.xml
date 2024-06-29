@@ -53,7 +53,7 @@
             #{firstRecordIndex}, #{pageNumListSize}
     </select>
 
-<!--  전체 게시글 개수 조회  -->
+    <!--  전체 게시글 개수 조회  -->
     <select id="getBoardListCount" parameterType="searchVO" resultType="int">
         SELECT
             COUNT(FREE_BOARD_NO)
@@ -155,4 +155,5 @@
         WHERE
             FREE_BOARD_NO = #{freeBoardNo}
     </update>
+
 </mapper>

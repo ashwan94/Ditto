@@ -159,7 +159,7 @@ export default function List () {
                 <span className="right">
                     <select onChange={searchTypeOnChangeHandler}>
                         <option value="제목">제목</option>
-                        <option value="글쓴이">글쓴이</option>
+                        <option value="아이디">아이디</option>
                     </select>
                     <input
                         onChange={searchKeywordOnChangeHandler}
@@ -176,7 +176,7 @@ export default function List () {
                     <tr>
                         <th className="small-col">번호</th>
                         <th className="large-col">제목</th>
-                        <th className="sl-col">글쓴이</th>
+                        <th className="sl-col">아이디</th>
                         <th className="middle-col">작성일</th>
                         <th className="small-col">조회수</th>
                         {memberId && memberId.memberAdmin === 'ADMIN' ?
@@ -236,53 +236,52 @@ export default function List () {
                 </span>
             </div>
             <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
-                     className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
+                 className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
+                <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                     aria-label="Pagination">
+                    <a
+                        onClick={goClickPrev}
+                        className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                    >
+                        <span className="sr-only">Previous</span>
+                        <img
+                            src="/images/chevron-left-solid.svg"
+                            className="h-5 w-5" aria-hidden="true"
+                        />
+                    </a>
+                    {
+                        pageNumList.map(((v, i) => {
+                            return (
+                                <Link
+                                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                    key={`page` + i}
+                                    to={`/community/${boardType}/list`}
+                                    state={{currentPage:currentPage}}
+                                    onClick={() => {
+                                    // 버튼 클릭 시 현재 페이지 번호 변화
+                                    setCurrentPage(v)
+                                    // 버튼 클릭 시 페이지 변화시킨 후 윈도우 창 올리기
+                                    window.scrollTo({
+                                        top: 0,
+                                        behavior: 'smooth',
+                                    });
+                                }}>{v}</Link>
+                            )
+                        }))
+                    }
 
-                    <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-                         aria-label="Pagination">
-                        <a
-                            onClick={goClickPrev}
-                            className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                        >
-                            <span className="sr-only">Previous</span>
-                            <img
-                                src="/images/chevron-left-solid.svg"
-                                className="h-5 w-5" aria-hidden="true"
-                            />
-                        </a>
-                        {
-                            pageNumList.map(((v, i) => {
-                                return (
-                                    <Link
-                                        className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                        key={`page` + i}
-                                        to={`/community/${boardType}/list`}
-                                        state={{currentPage:currentPage}}
-                                        onClick={() => {
-                                        // 버튼 클릭 시 현재 페이지 번호 변화
-                                        setCurrentPage(v)
-                                        // 버튼 클릭 시 페이지 변화시킨 후 윈도우 창 올리기
-                                        window.scrollTo({
-                                            top: 0,
-                                            behavior: 'smooth',
-                                        });
-                                    }}>{v}</Link>
-                                )
-                            }))
-                        }
-
-                        <a
-                            onClick={goClickNext}
-                            className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                        >
-                            <span className="sr-only">Next</span>
-                            <img
-                                src="/images/chevron-right-solid.svg"
-                                className="h-5 w-5" aria-hidden="true"
-                            />
-                        </a>
-                    </nav>
-                </div>
+                    <a
+                        onClick={goClickNext}
+                        className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                    >
+                        <span className="sr-only">Next</span>
+                        <img
+                            src="/images/chevron-right-solid.svg"
+                            className="h-5 w-5" aria-hidden="true"
+                        />
+                    </a>
+                </nav>
+            </div>
         </article>
     );
 };
