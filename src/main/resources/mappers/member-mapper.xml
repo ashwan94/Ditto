@@ -143,14 +143,15 @@
             A.MEMBER_DELETE
         FROM
             MEMBER A
-        WHERE
-            <if test=" searchWord != null and searchWord != '' ">
+        <where>
+            <if test="searchWord != null and searchWord != ''">
                 <choose>
-                    <when test="searchType == '아이디' ">
+                    <when test="searchType == '아이디'">
                         A.MEMBER_ID LIKE CONCAT('%', #{searchWord}, '%')
                     </when>
                 </choose>
             </if>
+        </where>
         LIMIT
             #{firstRecordIndex}, #{pageNumListSize}
     </select>
@@ -160,15 +161,15 @@
             COUNT(MEMBER_NO)
         FROM
             MEMBER
-        WHERE
-            <if test=" searchWord != null and searchWord != '' ">
-                <!-- 검색버튼 클릭시 type 별로 검색 searchWord의 글자가 포함된 데이터만 조회 -->
+        <where>
+            <if test="searchWord != null and searchWord != ''">
                 <choose>
-                    <when test="searchType == '아이디' ">
+                    <when test="searchType == '아이디'">
                         MEMBER_ID LIKE CONCAT('%', #{searchWord}, '%')
                     </when>
                 </choose>
             </if>
+        </where>
     </select>
     <!-- 관리자 페이지 회원정보 비활성화 -->
     <update id="adminPageMemberDeleteY" parameterType="memberVO">

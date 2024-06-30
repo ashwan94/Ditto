@@ -42,6 +42,9 @@
             </if>
             <if test="searchWord != null and searchWord != ''">
                 <trim prefix="AND" prefixOverrides="AND |OR">
+                    <if test="memberAdmin == 'MEMBER'">
+                        AND
+                    </if>
                     <choose>
                         <when test="searchType == '아이디'">
                             a.MEMBER_ID LIKE CONCAT('%', #{searchWord}, '%')
@@ -76,16 +79,19 @@
             FREE_BOARD
         <where>
             <if test="memberAdmin == 'MEMBER'">
-                a.STATUS = 'Y'
+                STATUS = 'Y'
             </if>
             <if test="searchWord != null and searchWord != ''">
                 <trim prefix="AND" prefixOverrides="AND |OR">
+                    <if test="memberAdmin == 'MEMBER'">
+                        AND
+                    </if>
                     <choose>
                         <when test="searchType == '아이디'">
-                            a.MEMBER_ID LIKE CONCAT('%', #{searchWord}, '%')
+                            MEMBER_ID LIKE CONCAT('%', #{searchWord}, '%')
                         </when>
                         <when test="searchType == '제목'">
-                            a.FREE_TITLE LIKE CONCAT('%', #{searchWord}, '%')
+                            FREE_TITLE LIKE CONCAT('%', #{searchWord}, '%')
                         </when>
                     </choose>
                 </trim>

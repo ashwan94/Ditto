@@ -95,10 +95,9 @@ export default function AdminPage(){
 
     useEffect(() =>{
         setShowMemberList(true)
-        getMemberData();
         getFreeBoardData();
         getBookRentData();
-
+        getMemberData();
     },[])
 
     // 멤버 아이디로 회원 정보, 게시판, 도서 대여이력 검색
@@ -116,12 +115,18 @@ export default function AdminPage(){
             }
             getPageNumList(1)
             return;
+        }else {
+            if(showMemberList){
+                getMemberData();
+            }else if (showFreeBoardList){
+                getFreeBoardData();
+            }else if (showBookList){
+                getBookRentData();
+            }else if (showPodcastList){
+                searchPodcastList()
+            }
+            getPageNumList(1)
         }
-        getMemberData();
-        getFreeBoardData();
-        getBookRentData();
-        searchPodcastList();
-        getPageNumList(1);
     }
 
     // 회원정보 검색요청

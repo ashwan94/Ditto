@@ -170,7 +170,7 @@ public class MemberController {
 
     // 관리자 회원 정보 리스트
     @GetMapping("/adminMemberList")
-    public HashMap<String, Object> getBoardList(SearchVO vo){
+    public HashMap<String, Object> getMemberList(SearchVO vo){
         List<MemberVO> memberList = service.getMemberList(vo);
         int memberListCount = service.getMemberListCount(vo);
         HashMap<String, Object> map = new HashMap<>();
