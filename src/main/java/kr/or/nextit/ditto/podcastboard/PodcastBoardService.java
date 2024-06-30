@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -57,5 +58,24 @@ public class PodcastBoardService {
     // 게시글 삭제
     public void deletePost(int podcastBoardNo){
         mapper.deletePost(podcastBoardNo);
+    }
+
+    // 어드민 페이지 팟캐스트 리스트 조회
+    public List<PodcastBoardVO> adminPodcastList(){
+        return mapper.adminPodcastList();
+    }
+
+    // 관리자 페이지 팟캐스트 게시글 상태변경
+    public void adminPodcastStatusUpdate(PodcastBoardVO vo){
+        if (Objects.equals(vo.getStatus(),"Y")){
+            vo.setStatus("N");
+        }else {
+            vo.setStatus("Y");
+        }
+        mapper.adminPodcastStatusUpdate(vo);
+    }
+    // 관리자 페이지 팟캐스트 총시간 많은순 정렬
+    public List<PodcastBoardVO> adminPodcastListOrderBy(PodcastBoardVO vo){
+        return mapper.adminPodcastListOrderBy(vo);
     }
 }

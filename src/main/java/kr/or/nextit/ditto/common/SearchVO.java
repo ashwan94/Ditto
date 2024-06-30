@@ -9,4 +9,5 @@ public class SearchVO {
 	private int firstRecordIndex;
 	private int lastRecordIndex;
 	private int pageNumListSize;
+	private String memberAdmin;
 }

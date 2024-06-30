@@ -36,8 +36,26 @@
             a.FREE_BOARD_NO = c.BOARD_NO
         AND
             c.STATUS = 'Y'
-        WHERE
-            a.STATUS = 'Y'
+        <where>
+            <if test="memberAdmin == 'MEMBER'">
+                a.STATUS = 'Y'
+            </if>
+            <if test="searchWord != null and searchWord != ''">
+                <trim prefix="AND" prefixOverrides="AND |OR">
+                    <if test="memberAdmin == 'MEMBER'">
+                        AND
+                    </if>
+                    <choose>
+                        <when test="searchType == '아이디'">
+                            a.MEMBER_ID LIKE CONCAT('%', #{searchWord}, '%')
+                        </when>
+                        <when test="searchType == '제목'">
+                            a.FREE_TITLE LIKE CONCAT('%', #{searchWord}, '%')
+                        </when>
+                    </choose>
+                </trim>
+            </if>
+        </where>
         GROUP BY
             a.FREE_BOARD_NO,
             a.MEMBER_ID,
@@ -53,48 +71,32 @@
             #{firstRecordIndex}, #{pageNumListSize}
     </select>
 
-<!--  전체 게시글 개수 조회  -->
+    <!--  전체 게시글 개수 조회  -->
     <select id="getBoardListCount" parameterType="searchVO" resultType="int">
         SELECT
             COUNT(FREE_BOARD_NO)
         FROM
             FREE_BOARD
-        WHERE
-            STATUS = 'Y'
-    </select>
-
-    <!-- 제목에 검색어가 포함된 게시물을 조회하는 SQL 쿼리 -->
-    <select id="searchBoardListByTitle" resultMap="freeBoardResultMap">
-        SELECT
-            a.FREE_BOARD_NO,
-            a.FREE_TITLE,
-            a.MEMBER_ID,
-            a.CREATE_DATE,
-            a.MODIFY_DATE,
-            a.HITS
-        FROM
-            FREE_BOARD a
-        WHERE
-            a.FREE_TITLE LIKE CONCAT('%', #{keyword}, '%')
-        AND
-            a.STATUS = 'Y'
-    </select>
-
-    <!-- 아이디가 검색어에 포함되있는경우 -->
-    <select id="searchBoardListByMemberId" resultMap="freeBoardResultMap">
-        SELECT
-            a.FREE_BOARD_NO,
-            a.FREE_TITLE,
-            a.MEMBER_ID,
-            a.CREATE_DATE,
-            a.MODIFY_DATE,
-            a.HITS
-        FROM
-            FREE_BOARD a
-        WHERE
-            a.MEMBER_ID LIKE CONCAT('%', #{keyword}, '%')
-        AND
-            a.STATUS = 'Y'
+        <where>
+            <if test="memberAdmin == 'MEMBER'">
+                STATUS = 'Y'
+            </if>
+            <if test="searchWord != null and searchWord != ''">
+                <trim prefix="AND" prefixOverrides="AND |OR">
+                    <if test="memberAdmin == 'MEMBER'">
+                        AND
+                    </if>
+                    <choose>
+                        <when test="searchType == '아이디'">
+                            MEMBER_ID LIKE CONCAT('%', #{searchWord}, '%')
+                        </when>
+                        <when test="searchType == '제목'">
+                            FREE_TITLE LIKE CONCAT('%', #{searchWord}, '%')
+                        </when>
+                    </choose>
+                </trim>
+            </if>
+        </where>
     </select>
 
 <!--  상세 게시글 조회  -->
@@ -152,6 +154,25 @@
             FREE_BOARD
         SET
             STATUS = 'N'
+        WHERE
+            FREE_BOARD_NO = #{freeBoardNo}
+    </update>
+
+    <!-- 관리자 페이지 Y인 게시글 비활성화 -->
+    <update id="adminfreeBoardStatusY" parameterType="freeBoardVO">
+        UPDATE
+            FREE_BOARD
+        SET
+            STATUS = 'N'
+        WHERE
+            FREE_BOARD_NO = #{freeBoardNo}
+    </update>
+    <!-- 관리자 페이지 N인 게시글 활성화 -->
+    <update id="adminfreeBoardStatusN" parameterType="freeBoardVO">
+        UPDATE
+            FREE_BOARD
+        SET
+            STATUS = 'Y'
         WHERE
             FREE_BOARD_NO = #{freeBoardNo}
     </update>

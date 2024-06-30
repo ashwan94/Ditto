@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -22,16 +23,6 @@ public class FreeBoardService {
     // 모든 게시글 개수 조회
     public int getBoardListCount(SearchVO vo){
         return mapper.getBoardListCount(vo);
-    }
-
-    // 제목으로 검색
-    public List<FreeBoardVO> searchBoardListByTitle(@Param("keyword") String keyword){
-        return mapper.searchBoardListByTitle(keyword);
-    }
-
-    // 작성자 이름으로 검색
-    public List<FreeBoardVO> searchBoardListByMemberId(@Param("keyword") String keyword){
-        return mapper.searchBoardListByMemberId(keyword);
     }
 
     // 게시글 작성
@@ -57,5 +48,15 @@ public class FreeBoardService {
     // 게시글 삭제
     public void deletePost(int freeBoardNo){
         mapper.deletePost(freeBoardNo);
+    }
+
+    // Y인 게시글 비활성화 진행
+    public void adminfreeBoardStatusY(FreeBoardVO freeBoardNo){
+        mapper.adminfreeBoardStatusY(freeBoardNo);
+    }
+
+    // N인 게시글 활성화 진행
+    public void adminfreeBoardStatusN(FreeBoardVO freeBoardNo){
+        mapper.adminfreeBoardStatusN(freeBoardNo);
     }
 }

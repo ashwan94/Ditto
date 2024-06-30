@@ -7,7 +7,7 @@ export default function List () {
     // State 에 대한 Hook
     const [boardList, setBoardList] = useState([]);                       // 전체 게시글 리스트
     const [searchWord, setSearchWord] = useState(null);                           // 검색어
-    const [searchType, setSearchType] = useState("freeTitle");           // 검색 타입
+    const [searchType, setSearchType] = useState("제목");           // 검색 타입
     const [memberId, setMemberId] = useState(null);                               // 로그인한 회원 정보
 
     // 페이징 처리
@@ -29,9 +29,7 @@ export default function List () {
             {
                 params:{
                     firstRecordIndex:firstRecordIndex - 1,
-                    searchWord:searchWord,
-                    searchType:searchType,
-                    pageNumListSize:pageNumListSize,
+                    pageNumListSize:pageNumListSize
                 }
             })
         if (res.data) {
@@ -51,20 +49,26 @@ export default function List () {
 
     // 검색 기능에 대한 게시글 조회
     const handleSearch = async  () => {
-        const data = {
-            searchType : searchType,
-            searchWord : searchWord,
-        }
-        const res =
-            await axios.get(`/${boardType}/search`, data)
+        const firstRecordIndex = (currentPage - 1) * pageNumListSize + 1; // 시작 페이지
+        const res = await axios.get(`/${boardType}/list`,
+            {
+                params:{
+                    firstRecordIndex:firstRecordIndex - 1,
+                    searchWord:searchWord,
+                    searchType:searchType,
+                    pageNumListSize:pageNumListSize
+                }
+            })
         if (res.data) {
-            setBoardList(res.data)
+            setBoardList(res.data.boardList);                  // 전체 게시글 목록
+            setTotalBoardListCount(res.data.boardListCount);   // 전체 게시글 개수(전체 페이지 번호를 위해 필요함)
         }
     }
 
-    // 빈 문자열로 검색 시 모든 게시글 조회
+    // 목록버튼클릭시 전체 목록 조회
     const allList = () =>{
         setSearchWord("")
+        getPageNumList(1);
         getData();
     }
 
@@ -94,8 +98,11 @@ export default function List () {
 
     // 사용자가 페이지 번호 클릭 시 실행
     useEffect(() => {
-        getData();
-
+        if (searchWord == ""){
+            getData();
+        }else {
+            handleSearch();
+        }
     }, [currentPage]);
 
     // 전체 페이지 번호 개수 구하기
@@ -120,7 +127,6 @@ export default function List () {
             behavior: 'auto',
         });
     }, []);
-
 
     // 이전 페이지 버튼
     const goClickPrev = () => {
@@ -169,18 +175,18 @@ export default function List () {
                 <span className="right">
                     <select onChange={searchTypeOnChangeHandler}>
                         <option value="제목">제목</option>
-                        <option value="글쓴이">글쓴이</option>
+                        <option value="아이디">아이디</option>
                     </select>
                     <input
                         onChange={searchKeywordOnChangeHandler}
                         style={{border: "0.5px solid black"}}
                         className="rounded-xl"
                         type="text" value={searchWord}/>
-                      <button
-                          onClick={handleSearch}
-                          name="검색"
-                          className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 mb-1 ml-1 px-4 rounded-full">
-                검색        </button>
+                    <button
+                        onClick={()=> {getPageNumList(1); handleSearch(); }}
+                        name="검색" className="gradient">
+                        검색
+                    </button>
                 </span>
                 <br/>
                 <table>
@@ -188,7 +194,7 @@ export default function List () {
                     <tr className="text-center">
                         <th className="small-col">번호</th>
                         <th className="large-col">제목</th>
-                        <th className="sl-col">글쓴이</th>
+                        <th className="sl-col">아이디</th>
                         <th className="middle-col">작성일</th>
                         <th className="small-col">조회수</th>
                         {memberId && memberId.memberAdmin === 'ADMIN' ?
@@ -255,7 +261,6 @@ export default function List () {
 
             <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
                  className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
-
                 <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
                      aria-label="Pagination">
                     <a
@@ -275,16 +280,16 @@ export default function List () {
                                     className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                                     key={`page` + i}
                                     to={`/community/${boardType}/list`}
-                                    state={{currentPage: currentPage}}
+                                    state={{currentPage:currentPage}}
                                     onClick={() => {
-                                        // 버튼 클릭 시 현재 페이지 번호 변화
-                                        setCurrentPage(v)
-                                        // 버튼 클릭 시 페이지 변화시킨 후 윈도우 창 올리기
-                                        window.scrollTo({
-                                            top: 0,
-                                            behavior: 'smooth',
-                                        });
-                                    }}>{v}</Link>
+                                    // 버튼 클릭 시 현재 페이지 번호 변화
+                                    setCurrentPage(v)
+                                    // 버튼 클릭 시 페이지 변화시킨 후 윈도우 창 올리기
+                                    window.scrollTo({
+                                        top: 0,
+                                        behavior: 'smooth',
+                                    });
+                                }}>{v}</Link>
                             )
                         }))
                     }

@@ -132,26 +132,26 @@
     </update>
 
     <!-- 관리자 페이지 전체 회원정보 조회 -->
-    <select id="adminPageMemberList" resultType="memberVO">
+    <select id="getMemberList" resultType="memberVO">
         SELECT
-        A.MEMBER_NO,
-        A.MEMBER_ID,
-        A.MEMBER_NAME,
-        A.MEMBER_NICKNAME,
-        A.MEMBER_SUB,
-        A.MEMBER_TEL,
-        A.MEMBER_DELETE
+            A.MEMBER_NO,
+            A.MEMBER_ID,
+            A.MEMBER_NAME,
+            A.MEMBER_NICKNAME,
+            A.MEMBER_SUB,
+            A.MEMBER_TEL,
+            A.MEMBER_DELETE
         FROM
-        MEMBER A
+            MEMBER A
     </select>
     <!-- 관리자 페이지 회원정보 비활성화 -->
     <update id="adminPageMemberDeleteY" parameterType="memberVO">
         UPDATE
-        MEMBER A
+            MEMBER A
         SET
-        A.MEMBER_DELETE = 'Y'
+            A.MEMBER_DELETE = 'Y'
         WHERE
-        A.MEMBER_ID = #{memberId}
+            A.MEMBER_ID = #{memberId}
     </update>
     <!-- 관리자 페이지 회원정보 활성화 -->
     <update id="adminPageMemberDeleteN" parameterType="memberVO">
@@ -186,20 +186,20 @@
         WHERE
         A.MEMBER_ID = #{memberId}
     </select>
-    <!-- 관리자 페이지 맴버십 검색어로 조회 -->
+    <!-- 관리자 페이지 검색어로 조회 -->
     <select id="adminPageSearchMemberIdData" parameterType="string" resultType="memberVO">
         SELECT
-        A.MEMBER_NO,
-        A.MEMBER_ID,
-        A.MEMBER_NAME,
-        A.MEMBER_NICKNAME,
-        A.MEMBER_SUB,
-        A.MEMBER_TEL,
-        A.MEMBER_DELETE
+            A.MEMBER_NO,
+            A.MEMBER_ID,
+            A.MEMBER_NAME,
+            A.MEMBER_NICKNAME,
+            A.MEMBER_SUB,
+            A.MEMBER_TEL,
+            A.MEMBER_DELETE
         FROM
-        MEMBER A
+            MEMBER A
         WHERE
-        A.MEMBER_ID LIKE CONCAT('%', #{searchWord}, '%')
+            A.MEMBER_ID LIKE CONCAT('%', #{searchWord}, '%')
     </select>
     <!-- 관리자 페이지 멤버십 OX 정렬 조회 -->
     <select id="adminPageMemberSubChangeOX" parameterType="memberVO" resultType="memberVO">

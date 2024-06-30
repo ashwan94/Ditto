@@ -1,11 +1,13 @@
 package kr.or.nextit.ditto.freeboard;
 
 import kr.or.nextit.ditto.common.SearchVO;
+import kr.or.nextit.ditto.member.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,19 +31,6 @@ public class FreeBoardController {
         return map;
     }
 
-    // TODO
-    // 검색 기능에 관련된 query 문 수정 => 게시판 작업하면서 고장난듯 | 06.27(목) | 안승환
-    // 게시글 검색
-    @GetMapping("/search")
-    public List<FreeBoardVO> searchBoardList(String keyword, String type) {
-        List<FreeBoardVO> vo;
-        if ("글쓴이".equals(type)){
-            vo = freeBoardService.searchBoardListByMemberId(keyword); // 제목 기준 검색
-        }else{
-            vo = freeBoardService.searchBoardListByTitle(keyword); // 검색어 기준 검색
-        }
-        return vo;
-    }
 
     // TODO
     // 1. 자유게시판 조회수, 게시글 작성에 대해 Controller 에서 param, Mapping 정보를 변경하였으므로 수정 필요
@@ -62,6 +51,7 @@ public class FreeBoardController {
         return ResponseEntity.ok(post.getFreeBoardNo());
     }
 
+    // 게시글 수정
     @PostMapping("/update")
     public void updatePost(@RequestBody FreeBoardVO vo) {
         freeBoardService.updatePost(vo);
@@ -72,4 +62,16 @@ public class FreeBoardController {
     public void deletePost(@RequestParam int freeBoardNo) {
         freeBoardService.deletePost(freeBoardNo);
     }
+
+    // Y인 게시글 비활성화 진행
+    @PostMapping("/statusY")
+    public void adminfreeBoardStatusY(@RequestBody FreeBoardVO freeBoardNo){
+        freeBoardService.adminfreeBoardStatusY(freeBoardNo);
+    }
+    // N인 게시글 활성화 진행
+    @PostMapping("/statusN")
+    public void adminfreeBoardStatusN(@RequestBody FreeBoardVO freeBoardNo){
+        freeBoardService.adminfreeBoardStatusN(freeBoardNo);
+    }
+
 }

@@ -24,4 +24,5 @@ public class PodcastBoardVO {
     private String onair; // BEFORE : 방송 전, LIVE : 방송 중, FINISH : 방송 종료
     private int liveTime; // 방송 시간
     private int commentCount; // 1 게시글 당 댓글 개수
+    private String podcastOrder;
 }
