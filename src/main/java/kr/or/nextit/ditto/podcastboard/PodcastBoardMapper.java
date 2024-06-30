@@ -17,4 +17,8 @@ public interface PodcastBoardMapper {
     int addBoard(PodcastBoardVO post);     // 게시글 쓰기
     void updatePost(PodcastBoardVO vo);    // 게시글 수정
     void deletePost(int podcastBoardNo);   // 게시글 삭제
+    List<PodcastBoardVO> adminPodcastList(); // 어드민 페이지 팟캐스트 리스트 조회
+    void adminPodcastStatusUpdate(PodcastBoardVO vo); // 관리자 페이지 팟캐스트 게시글 상태 변경
+    List<PodcastBoardVO> adminPodcastListOrderBy(PodcastBoardVO vo); // 관리자 페이지 팟캐스트 총시간 많은순 정렬
+
 }

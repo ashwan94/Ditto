@@ -158,4 +158,22 @@
             FREE_BOARD_NO = #{freeBoardNo}
     </update>
 
+    <!-- 관리자 페이지 Y인 게시글 비활성화 -->
+    <update id="adminfreeBoardStatusY" parameterType="freeBoardVO">
+        UPDATE
+            FREE_BOARD
+        SET
+            STATUS = 'N'
+        WHERE
+            FREE_BOARD_NO = #{freeBoardNo}
+    </update>
+    <!-- 관리자 페이지 N인 게시글 활성화 -->
+    <update id="adminfreeBoardStatusN" parameterType="freeBoardVO">
+        UPDATE
+            FREE_BOARD
+        SET
+            STATUS = 'Y'
+        WHERE
+            FREE_BOARD_NO = #{freeBoardNo}
+    </update>
 </mapper>

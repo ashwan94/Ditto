@@ -169,14 +169,9 @@ public class MemberController {
     }
 
     // 관리자 회원 정보 리스트
-    @GetMapping("/adminMemberList")
-    public HashMap<String, Object> getMemberList(SearchVO vo){
-        List<MemberVO> memberList = service.getMemberList(vo);
-        int memberListCount = service.getMemberListCount(vo);
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("memberList", memberList);
-        map.put("memberListCount", memberListCount);
-        return map;
+    @PostMapping("/adminMemberList")
+    public List<MemberVO> getMemberList(MemberVO vo){
+        return service.getMemberList(vo);
     }
 
     // 관리자 페이지 회원 비활성화

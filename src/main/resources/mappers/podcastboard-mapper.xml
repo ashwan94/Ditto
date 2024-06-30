@@ -161,4 +161,51 @@
         WHERE
             PODCAST_BOARD_NO = #{podcastBoardNo}
     </update>
+
+    <!-- 관리자 페이지 팟캐스트 리스트 조회 -->
+    <select id="adminPodcastList" resultType="podcastBoardVO">
+        SELECT
+            a.PODCAST_BOARD_NO,
+            a.PODCAST_TITLE,
+            a.MEMBER_ID,
+            a.MODIFY_DATE,
+            a.LIVE_TIME,
+            a.ONAIR,
+            a.HITS,
+            a.STATUS
+        FROM
+            PODCAST_BOARD a
+    </select>
+    <!-- 관리자 페이지 팟캐스트 게시글 상태변경 -->
+    <update id="adminPodcastStatusUpdate" parameterType="podcastBoardVO">
+        UPDATE
+            PODCAST_BOARD
+        SET
+            STATUS = #{status}
+        WHERE
+            PODCAST_BOARD_NO = #{podcastBoardNo}
+    </update>
+    <!-- 관리자 페이지 팟캐스트 리스트 총시간 많은순 정렬 -->
+    <select id="adminPodcastListOrderBy" resultType="podcastBoardVO">
+        SELECT
+            a.PODCAST_BOARD_NO,
+            a.PODCAST_TITLE,
+            a.MEMBER_ID,
+            a.MODIFY_DATE,
+            a.LIVE_TIME,
+            a.ONAIR,
+            a.HITS,
+            a.STATUS
+        FROM
+            PODCAST_BOARD a
+        ORDER BY
+            <choose>
+                <when test="podcastOrder == 'ASC' ">
+                    a.LIVE_TIME ASC
+                </when>
+                <otherwise>
+                    a.LIVE_TIME DESC
+                </otherwise>
+            </choose>
+    </select>
 </mapper>

@@ -44,13 +44,10 @@ public class MemberService {
     }
 
     // 관리자 페이지 회원 정보 리스트
-    public List<MemberVO> getMemberList(SearchVO vo){
+    public List<MemberVO> getMemberList(MemberVO vo){
         return mapper.getMemberList(vo);
     }
-    // 회원수 조회
-    public int getMemberListCount(SearchVO vo){
-        return mapper.getMemberListCount(vo);
-    }
+
     public void adminPageMemberDeleteY(MemberVO memberId){
         mapper.adminPageMemberDeleteY(memberId); // 관리자 페이지 회원 비활성화
     }

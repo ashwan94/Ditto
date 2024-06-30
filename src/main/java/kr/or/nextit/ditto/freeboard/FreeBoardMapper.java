@@ -16,4 +16,7 @@ public interface FreeBoardMapper {
     void updatePost(FreeBoardVO vo);    // 게시글 수정
     void deletePost(int freeBoardNo);   // 게시글 삭제
 
+    void adminfreeBoardStatusY(FreeBoardVO freeBoardNo); // Y인 게시글 비활성화 진행
+    void adminfreeBoardStatusN(FreeBoardVO freeBoardNo); // N인 게시글 활성화 진행
+
 }

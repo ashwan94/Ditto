@@ -51,6 +51,7 @@ public class FreeBoardController {
         return ResponseEntity.ok(post.getFreeBoardNo());
     }
 
+    // 게시글 수정
     @PostMapping("/update")
     public void updatePost(@RequestBody FreeBoardVO vo) {
         freeBoardService.updatePost(vo);
@@ -60,6 +61,17 @@ public class FreeBoardController {
     @GetMapping("/delete")
     public void deletePost(@RequestParam int freeBoardNo) {
         freeBoardService.deletePost(freeBoardNo);
+    }
+
+    // Y인 게시글 비활성화 진행
+    @PostMapping("/statusY")
+    public void adminfreeBoardStatusY(@RequestBody FreeBoardVO freeBoardNo){
+        freeBoardService.adminfreeBoardStatusY(freeBoardNo);
+    }
+    // N인 게시글 활성화 진행
+    @PostMapping("/statusN")
+    public void adminfreeBoardStatusN(@RequestBody FreeBoardVO freeBoardNo){
+        freeBoardService.adminfreeBoardStatusN(freeBoardNo);
     }
 
 }

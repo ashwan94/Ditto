@@ -16,6 +16,7 @@ export default function AdminPage(){
     const [searchWord, setSearchWord] = useState("") // 회원 정보 검색키워드
     const [memberSubChangeData, setMemberSubChangeData] = useState("Y") // 멤버십 상태 변경용
     const [memberDelete, setMemberDelete] = useState("Y") // 회원 활동 상태 변경용
+    const [podcastOrder, setPodcastOrder] = useState("ASC") // 총시간순 정렬
     const boardType = "freeBoard"; // 자유게시판 타입
 
     const memberDT = JSON.parse(sessionStorage.getItem("member"))
@@ -45,18 +46,8 @@ export default function AdminPage(){
     const getMemberData = async () => {
 
         try {
-            const firstRecordIndex = (currentPage - 1) * pageNumListSize + 1; // 시작 페이지
-            const res = await axios.get("/adminMemberList",{
-                params:{
-                    firstRecordIndex:firstRecordIndex - 1,
-                    pageNumListSize:pageNumListSize
-                }
-            });
-            if (res.data) {
-                setMemberList(res.data.memberList)                // 전체 게시글 목록
-                setTotalBoardListCount(res.data.memberListCount);   // 전체 게시글 개수(전체 페이지 번호를 위해 필요함)
-            }
-
+            const res = await axios.post("/adminMemberList");
+            setMemberList(res.data)                // 전체 게시글 목록
         } catch (error) {
             console.error("회원정보 에러", error);
         }
@@ -91,13 +82,24 @@ export default function AdminPage(){
         }
     }
 
+    // 관리자 페이지 팟캐스트 리스트 조회
+    const getPodcastData = async () => {
+        try {
+            const res = await axios.post("/podcastBoard/adminPodcast");
+            setPodcastList(res.data)
+        } catch (error) {
+            console.error("도서 대여 이력조회 에러", error);
+        }
+    }
+
 
 
     useEffect(() =>{
         setShowMemberList(true)
+        getMemberData();
         getFreeBoardData();
         getBookRentData();
-        getMemberData();
+        getPodcastData();
     },[])
 
     // 멤버 아이디로 회원 정보, 게시판, 도서 대여이력 검색
@@ -115,36 +117,27 @@ export default function AdminPage(){
             }
             getPageNumList(1)
             return;
-        }else {
-            if(showMemberList){
-                getMemberData();
-            }else if (showFreeBoardList){
-                getFreeBoardData();
-            }else if (showBookList){
-                getBookRentData();
-            }else if (showPodcastList){
-                searchPodcastList()
-            }
-            getPageNumList(1)
         }
+        getMemberData();
+        getFreeBoardData();
+        getBookRentData();
+        getPodcastData()
+        getPageNumList(1)
     }
 
     // 회원정보 검색요청
     const searchMemberList = async () => {
         try {
-            const firstRecordIndex = (currentPage - 1) * pageNumListSize + 1; // 시작 페이지
-            const res = await axios.get("/adminMemberList",{
-                params:{
-                    firstRecordIndex:firstRecordIndex - 1,
+            const res = await axios.post("/adminMemberListSearch",{
                     searchType: searchType,
                     searchWord : searchWord,
-                    pageNumListSize: pageNumListSize
+                },{
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
                 }
-            });
-            if (res.data) {
-                setMemberList(res.data.memberList)                // 전체 게시글 목록
-                setTotalBoardListCount(res.data.memberListCount);   // 전체 게시글 개수(전체 페이지 번호를 위해 필요함)
-            }
+            );
+            setMemberList(res.data) // 회원정보 검색요청
 
         } catch (error) {
             console.error("도서 대여 이력조회 에러", error);
@@ -191,9 +184,9 @@ export default function AdminPage(){
     // 팟캐스트 검색요청
     const searchPodcastList = async () => {
         try {
-            const res = await axios.post("/adminPodcastListSearch",{
+            const res = await axios.post("/podcastBoard/adminPodcast",{
                 searchType: searchType,
-                searchWord : searchWord
+                searchWord : searchWord,
             },{
                 headers: {
                     "Content-Type": "application/json"
@@ -202,7 +195,7 @@ export default function AdminPage(){
             setPodcastList(res.data)
 
         } catch (error) {
-            console.error("도서 대여 이력조회 에러", error);
+            console.error("팟캐스트 리스트 조회 에러", error);
         }
     }
 
@@ -292,6 +285,7 @@ export default function AdminPage(){
         }else {
             setMemberSubChangeData("Y")
         }
+        setSearchWord("")
         try {
             const res = await axios.post("/memberSubChangeOX",{
                 memberSub: memberSubChangeData
@@ -313,6 +307,7 @@ export default function AdminPage(){
         }else {
             setMemberDelete("N")
         }
+        setSearchWord("")
         try {
             const res = await axios.post("/memberStatusChangeOX", {
                 memberDelete: memberDelete
@@ -396,6 +391,71 @@ export default function AdminPage(){
         }
     }
 
+
+    // 자유게시판 비활성화 진행
+    const freeBoardStatusY = async (no) => {
+        try{
+            await axios.post("/freeBoard/statusY", {
+                freeBoardNo : no,
+            },{
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            searchBtn();
+        }catch (error){
+            console.log("게시글 비활성화 진행중 에러야!", error)
+        }
+        searchBtn();
+    }
+
+    // 자유게시판 활성화 진행
+    const freeBoardStatusN = async (no) => {
+        try{
+            await axios.post("/freeBoard/statusN",{
+                freeBoardNo : no,
+            },{
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            searchBtn();
+        }catch (error){
+            console.log("게시글 활성화 진행중 에러야!", error)
+        }
+        searchBtn();
+    }
+
+    // 팟캐스트 활성화 비활성화 업데이트
+    const updatePodcastStatus = async (no,sts) => {
+        try {
+            const res = await axios.post("/podcastBoard/updatePodcastStatus",{
+                podcastBoardNo : no,
+                status : sts
+            })
+        }catch (error){
+            console.log("팟캐스트 리스트 업데이트 에러야", error)
+        }
+        getPodcastData();
+    }
+
+    //팟캐스트 리스트 총시간순 정렬
+    const orderByPodcastTime = async () => {
+        if (podcastOrder == "ASC"){
+            setPodcastOrder("DESC")
+        }else {
+            setPodcastOrder("ASC")
+        }
+        try {
+            const res = await axios.post("/podcastBoard/adminPodcastOrderBy",{
+                podcastOrder: podcastOrder
+            });
+            setPodcastList(res.data)
+        } catch (error) {
+            console.error("팟캐스트 리스트 오름차순 정렬 조회 에러", error);
+        }
+    }
+
     return (
         <main className="rundry">
             <section className="i pg fh rm ki xn vq gj qp gr hj rp hr ">
@@ -409,7 +469,6 @@ export default function AdminPage(){
                                     setShowBookList(false);
                                     setShowPodcastList(false);
                                     getMemberData();
-                                    getPageNumList(1);
                                     setSearchWord("");
                                     setSearchType("아이디");
                                 }}
@@ -433,7 +492,6 @@ export default function AdminPage(){
                                     setShowBookList(true);
                                     setShowPodcastList(false);
                                     getBookRentData();
-                                    getPageNumList(1);
                                     setSearchWord("");
                                     setSearchType("아이디");
                                 }}
@@ -444,8 +502,7 @@ export default function AdminPage(){
                                     setShowFreeBoardList(false);
                                     setShowBookList(false);
                                     setShowPodcastList(true);
-                                    // getPodcastData();
-                                    getPageNumList(1);
+                                    getPodcastData();
                                     setSearchWord("");
                                     setSearchType("아이디");
                                 }}
@@ -504,11 +561,13 @@ export default function AdminPage(){
                                 </label>) : showPodcastList ? (
                                 <label className="float-right">
                                     <select onChange={searchTypeOnChangeHandler}>
+                                        <option value="아이디">아이디</option>
                                         <option value="생성일">생성일</option>
                                         <option value="수정일">수정일</option>
                                     </select>
                                     <input
                                         type="text"
+                                        readOnly="true"
                                         onChange={searchWordOnChangeHandler}
                                         className="border" style={{borderRadius: "4px"}} value={searchWord}/>
                                     <button
@@ -590,9 +649,9 @@ export default function AdminPage(){
                                                     })}</td>
                                                     <td className="border border-gray-800 px-4 py-2">{v.hits}</td>
                                                     <td className="border border-gray-800 px-4 py-2">{v.status == 'Y' ? (
-                                                        <button className="text-red hover:bg-red-300" type="button">
+                                                        <button onClick={() => freeBoardStatusY(v.freeBoardNo)} className="text-blue-500" type="button">
                                                             활성화</button>) : (
-                                                        <button className="text-red hover:bg-red-300" type="button">
+                                                        <button onClick={() => freeBoardStatusN(v.freeBoardNo)} className="text-red" type="button">
                                                             비활성화</button>)}</td>
                                                 </tr>
                                             )
@@ -634,54 +693,87 @@ export default function AdminPage(){
                                         )
                                     ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
                                 </table>
-                            ) : null}
-                        < /div>
-                        <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
-                             className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
-                            <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-                                 aria-label="Pagination">
-                                <a
-                                    onClick={goClickPrev}
-                                    className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                >
-                                    <span className="sr-only">Previous</span>
-                                    <img
-                                        src="/images/chevron-left-solid.svg"
-                                        className="h-5 w-5" aria-hidden="true"
-                                    />
-                                </a>
-                                {
-                                    pageNumList.map(((v, i) => {
-                                        return (
-                                            <Link
-                                                className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                                key={`page` + i}
-                                                state={{currentPage: currentPage}}
-                                                onClick={() => {
-                                                    // 버튼 클릭 시 현재 페이지 번호 변화
-                                                    setCurrentPage(v)
-                                                    // 버튼 클릭 시 페이지 변화시킨 후 윈도우 창 올리기
-                                                    window.scrollTo({
-                                                        top: 0,
-                                                        behavior: 'smooth',
-                                                    });
-                                                }}>{v}</Link>
+                            ) : showPodcastList ? (
+                                // 팟캐스트 리스트
+                                <table className="table-auto w-full border-collapse border border-gray-800">
+                                    <tr className="text-center">
+                                        <td className="border border-gray-800 px-4 py-2">번호</td>
+                                        <td className="border border-gray-800 px-4 py-2">제목</td>
+                                        <td className="border border-gray-800 px-4 py-2">아이디</td>
+                                        <td className="border border-gray-800 px-4 py-2">방송생성일</td>
+                                        <td className="border border-gray-800 px-4 py-2 text-purple-700"><button onClick={orderByPodcastTime}>총 방송시간</button></td>
+                                        <td className="border border-gray-800 px-4 py-2">ONAIR</td>
+                                        <td className="border border-gray-800 px-4 py-2">조회수</td>
+                                        <td className="border border-gray-800 px-4 py-2">삭제</td>
+                                    </tr>
+                                    {/* 도서대여 이력이 한개이상 존재 할때나옴 */}
+                                    {podcastList && podcastList.length > 0 ? (
+                                        podcastList.map((v, i) =>
+                                            (
+                                                <tr key={i} className="text-center">
+                                                    <td className="border border-gray-800 px-4 py-2">{v.podcastBoardNo}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.podcastTitle}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.memberId}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.modifyDate}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.liveTime}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.onair}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">{v.hits}</td>
+                                                    <td className="border border-gray-800 px-4 py-2">
+                                                        <button className={`${v.status == 'Y' ? "text-blue-500" : "text-red-500"}`} onClick={() => updatePodcastStatus(v.podcastBoardNo,v.status)}>{v.status}</button>
+                                                    </td>
+                                                </tr>
+                                            )
                                         )
-                                    }))
-                                }
+                                    ) : (<td className="text-red text-center" colSpan="7">검색된 정보가 없습니다.</td>)}
+                                </table>) : null}
+                        < /div>
+                        {showFreeBoardList ? (
+                            <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}
+                                 className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-5 sm:px-6">
+                                <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                                     aria-label="Pagination">
+                                    <a
+                                        onClick={goClickPrev}
+                                        className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                    >
+                                        <span className="sr-only">Previous</span>
+                                        <img
+                                            src="/images/chevron-left-solid.svg"
+                                            className="h-5 w-5" aria-hidden="true"
+                                        />
+                                    </a>
+                                    {
+                                        pageNumList.map(((v, i) => {
+                                            return (
+                                                <Link
+                                                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                                    key={`page` + i}
+                                                    state={{currentPage: currentPage}}
+                                                    onClick={() => {
+                                                        // 버튼 클릭 시 현재 페이지 번호 변화
+                                                        setCurrentPage(v)
+                                                        // 버튼 클릭 시 페이지 변화시킨 후 윈도우 창 올리기
+                                                        window.scrollTo({
+                                                            top: 0,
+                                                            behavior: 'smooth',
+                                                        });
+                                                    }}>{v}</Link>
+                                            )
+                                        }))
+                                    }
 
-                                <a
-                                    onClick={goClickNext}
-                                    className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                >
-                                    <span className="sr-only">Next</span>
-                                    <img
-                                        src="/images/chevron-right-solid.svg"
-                                        className="h-5 w-5" aria-hidden="true"
-                                    />
-                                </a>
-                            </nav>
-                        </div>
+                                    <a
+                                        onClick={goClickNext}
+                                        className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                    >
+                                        <span className="sr-only">Next</span>
+                                        <img
+                                            src="/images/chevron-right-solid.svg"
+                                            className="h-5 w-5" aria-hidden="true"
+                                        />
+                                    </a>
+                                </nav>
+                            </div>) : null}
                     </div>
                 </div>
             </section>

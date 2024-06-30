@@ -72,4 +72,25 @@ public class PodcastBoardController {
     public void deletePost(@RequestParam int podcastBoardNo) {
         podcastBoardService.deletePost(podcastBoardNo);
     }
+
+
+    // 관리자 페이지 팟캐스트 리스트 조회
+    @PostMapping("/adminPodcast")
+    public List<PodcastBoardVO> adminPodcastList(){
+        return podcastBoardService.adminPodcastList();
+    }
+
+    // 관리자 페이지 팟캐스트 게시글 상태 변경
+    @PostMapping("/updatePodcastStatus")
+    public void adminPodcastStatusUpdate(@RequestBody PodcastBoardVO vo){
+        podcastBoardService.adminPodcastStatusUpdate(vo);
+    }
+
+    // 관리자 페이지 팟캐스트 총시간 많은 순서로 정렬
+    @PostMapping("/adminPodcastOrderBy")
+    public List<PodcastBoardVO> adminPodcastListOrderBy(@RequestBody PodcastBoardVO vo){
+        return podcastBoardService.adminPodcastListOrderBy(vo);
+    }
+
+
 }
