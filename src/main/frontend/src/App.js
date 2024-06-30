@@ -27,6 +27,7 @@
   import AdminPage from "./pages/common/adminPage";
   import Footer from "./pages/common/footer";
   import "./css/style.css";
+  import Floor from "./pages/introduce/floor";
 
   function App() {
     return (
@@ -59,6 +60,7 @@
             <Route path="/book/view" element={<BookView/>}/>
             <Route path="/seat/list" element={<SeatList />} />
             <Route path="/adminPage" element={<AdminPage />} />
+            <Route path="/floor" element={<Floor />} />
           </Routes>
           <KaKaoTalk />
           <Footer />

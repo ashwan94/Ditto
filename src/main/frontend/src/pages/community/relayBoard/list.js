@@ -199,19 +199,38 @@ export default function List () {
     }, []);
 
     return (
-        <article className="mt-32 ml-32 mr-32 p-5">
+        <article className="mt-32 ml-32 mr-32 p-5 rundry text-black">
             <br/>
-            <div className="text-center text-4xl mb-10">릴레이 소설</div>
-            <hr className="hr1" noshade/>
+            <div className="text-center text-4xl mb-10 border-b py-5 border-gray-200">
+                <img src="https://cdn-icons-png.flaticon.com/512/5190/5190722.png"
+                     className="w-48 py-5"
+                     style={{display: "flex", margin: "auto"}}/>
+                릴레이 소설
+            </div>
+
+
             <div className="text-center mt-5">
-                <button onClick={goAdd}
-                        className="border border-blue-500 w-96 h-20 text-blue-500 hover:bg-blue-500 hover:text-white font-bold p-2 text-4xl rounded">첫
-                    글 쓰기
-                </button>
+
+                <div> 여러 사람의 손을 거친 소설은 어떻게 마무리될까요?<br />
+                    자유롭고 두서없이 완성해나가는 릴레이 소설에 참여해보세요! </div>
+
+                <div className="mt-5 mb-5 py-3 bg-gray-50 border-dashed border-2">
+                    <p>릴레이 소설 게시판 규칙 안내</p>
+                    <p>1. 인당 N개의 댓글을 작성할 수 있습니다.</p>
+                    <p>2. 노란색 배경의 글에는 더이상 댓글을 작성할 수 없습니다.</p>
+                    <p>3. 하늘색 배경의 글은 릴레이 소설이 진행중입니다.</p>
+
+                    <button onClick={goAdd}
+                            className="mb-4 mt-5 border border-blue-500 w-96 h-20 text-blue-500 hover:bg-blue-500 hover:text-white font-bold p-2 text-4xl rounded">
+                        첫 글 쓰기
+                    </button>
+                </div>
+
+
             </div>
             <div className="my-5">
                 {memberId.memberSub === 'Y' && addBtn
-                ?
+                    ?
                     <div className="border rounded bg-blue-100 mx-80">
                     {memberId
                         ? <>
@@ -254,7 +273,7 @@ export default function List () {
                 null
                 }
             </div>
-            <hr className="my-5"/>
+
             {boardList && boardList.map((v, i) => {
                 return(
                     <div key={i} className="my-5 text-black">

@@ -107,6 +107,7 @@ const Header = () => {
                 <ul className="a">
                   <li><Link to="/membershipInfo" className="xl">멤버십 소개</Link></li>
                   <li><Link to="/faq" className="xl">FAQ</Link></li>
+                  <li><Link to="/floor" className="xl">입점 기업 리스트 / 층별 안내</Link></li>
                 </ul>
               </li>
               <li className="c i" x-data="{ dropdown: false }">
